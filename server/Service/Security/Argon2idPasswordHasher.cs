@@ -2,10 +2,9 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
-using Microsoft.AspNetCore.Identity;
 
 namespace Service.Security;
-
+/*
 public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class
 {
     private const string Name = "argon2id";
@@ -61,3 +60,4 @@ public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser 
         return areSame;
     }
 }
+*/
