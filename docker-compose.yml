@@ -1,13 +1,12 @@
 services:
   db:
     image: postgres:16-alpine
+    container_name: lotterydb
     environment:
       - POSTGRES_USER=testuser
       - POSTGRES_PASSWORD=testpass
-      - POSTGRES_DB=testdb
+      - POSTGRES_DB=Dead_Pigeon
     ports:
       - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-volumes:
-  postgres_data:
+      - ./docker/init:/docker-entrypoint-initdb.d/
