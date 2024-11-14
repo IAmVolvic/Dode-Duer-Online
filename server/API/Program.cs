@@ -20,13 +20,24 @@ public class Program
         DotNetEnv.Env.Load();
         
         // ===================== * DB CONNECTIONS * ===================== //
-        string connectionString = $"HOST={Environment.GetEnvironmentVariable("DB-IP")};" +
-                                  $"UID={Environment.GetEnvironmentVariable("DB-TYPE")};" +
-                                  $"PORT={Environment.GetEnvironmentVariable("DB-PORT")};" +
-                                  $"DB={Environment.GetEnvironmentVariable("DB-DBNAME")};" +
-                                  $"PWD={Environment.GetEnvironmentVariable("DB-PASSWORD")}";
         
-        builder.Configuration["ConnectionStrings:AppDb"] = connectionString;
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+        
+        var appDbConnectionString = builder.Configuration.GetConnectionString("AppDb")
+            .Replace("{DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST") ?? "")
+            .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME") ?? "")
+            .Replace("{DB_USER}", Environment.GetEnvironmentVariable("DB_USER") ?? "")
+            .Replace("{DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "")
+            .Replace("{DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT") ?? "");
+        
+        builder.Configuration["ConnectionStrings:AppDb"] = appDbConnectionString;
+        
+        
+        
         
         // ===================== * -- * ===================== //
         //builder.AddPgContainer();

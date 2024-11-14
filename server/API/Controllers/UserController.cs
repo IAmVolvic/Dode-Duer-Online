@@ -10,8 +10,7 @@ public class UserController
     [HttpGet]
     public ActionResult<string> ExampleCode()
     {
-        string exampleVar = Environment.GetEnvironmentVariable("Example");
-        return "Worked: " + exampleVar;
+        return "Worked:";
     }
     
 }
