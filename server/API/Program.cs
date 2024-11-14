@@ -17,7 +17,18 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        DotNetEnv.Env.Load();
+        
+        // ===================== * DB CONNECTIONS * ===================== //
+        string connectionString = $"HOST={Environment.GetEnvironmentVariable("DB-IP")};" +
+                                  $"UID={Environment.GetEnvironmentVariable("DB-TYPE")};" +
+                                  $"PORT={Environment.GetEnvironmentVariable("DB-PORT")};" +
+                                  $"DB={Environment.GetEnvironmentVariable("DB-DBNAME")};" +
+                                  $"PWD={Environment.GetEnvironmentVariable("DB-PASSWORD")}";
+        
+        builder.Configuration["ConnectionStrings:AppDb"] = connectionString;
+        
+        // ===================== * -- * ===================== //
         //builder.AddPgContainer();
         // var options = builder.Configuration.GetSection(nameof(AppOptions)).Get<AppOptions>()!;
 
