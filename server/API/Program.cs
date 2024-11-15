@@ -73,6 +73,7 @@ public class Program
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer
+        builder.Services.AddOpenApiDocument();
     }
 
     private static void ConfigureMiddleware(WebApplication app)
@@ -84,17 +85,7 @@ public class Program
         // ===================== * SWAGGER (API Documentation) * ===================== //
         app.UseOpenApi();
         app.UseSwaggerUi();
-
-        // Remove Authorization header for Swagger requests
-        app.Use(async (context, next) =>
-        {
-            if (context.Request.Path.StartsWithSegments("/swagger"))
-            {
-                context.Request.Headers["Authorization"] = string.Empty;
-            }
-            await next();
-        });
-
+        
         // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();
         app.UseAuthorization();
