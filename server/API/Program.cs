@@ -1,4 +1,8 @@
 using API.Extensions;
+using DataAccess;
+using DataAccess.Interfaces;
+using DataAccess.Models;
+using DataAccess.Repositories;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +12,8 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using Service;
 using Service.Security;
+using Service.Services;
+using Service.Services.Interfaces;
 using Service.Validators;
 
 namespace API;
@@ -18,83 +24,68 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        //builder.AddPgContainer();
-        // var options = builder.Configuration.GetSection(nameof(AppOptions)).Get<AppOptions>()!;
+        // ===================== * ENVIRONMENT VARIABLES * ===================== //
+        DotNetEnv.Env.Load();
 
-        //DB CONTEXT INIT
-        /*
-        builder.Services.AddDbContext<>(config =>
-        {
-            config.UseNpgsql(options.DbConnectionString);
-            config.EnableSensitiveDataLogging();
-        });
-        */
-        //builder.Services.AddScoped<IHospitalService, HospitalService>();
+        // ===================== * CONFIGURATION SETUP * ===================== //
+        ConfigureConfiguration(builder);
 
-        #region Security
-        //RASMUS SECIURITY SECTION 
-        
-        /*
-        builder
-            .Services.AddIdentityApiEndpoints<User>()
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<HospitalContext>();
-        builder
-            .Services.AddAuthentication(config =>
-            {
-                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(o => { o.TokenValidationParameters = JwtTokenClaimService.ValidationParameters(options); });
-        builder.Services.AddAuthorization(options =>
-        {
-            options.FallbackPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .Build();
-            options.DefaultPolicy = new AuthorizationPolicyBuilder()
-                .RequireAuthenticatedUser()
-                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
-                .Build();
+        // ===================== * DEPENDENCY INJECTION * ===================== //
+        ConfigureServices(builder);
 
-        });
-        builder.Services.AddScoped<ITokenClaimsService, JwtTokenClaimService>();
-        */
-        #endregion
-
-        builder.Services.AddControllers();
-        builder.Services.AddEndpointsApiExplorer(); // Add this line
-        // I DONT KNOW WHAT ABOUT THIS PART, SOMETHING WITH SECURITY
-        
-        /*
-        builder.Services.AddOpenApiDocument(configuration =>
-        {
-            {
-                configuration.AddSecurity("JWT", Enumerable.Empty<string>(), new OpenApiSecurityScheme
-                {
-                    Type = OpenApiSecuritySchemeType.ApiKey,
-                    Scheme = "Bearer ",
-                    Name = "Authorization",
-                    In = OpenApiSecurityApiKeyLocation.Header,
-                    Description = "Type into the textbox: Bearer {your JWT token}."
-                });
-                //configuration.AddTypeToSwagger<T>(); //If you need to add some type T to the Swagger known types
-                configuration.DocumentProcessors.Add(new MakeAllPropertiesRequiredProcessor());
-
-                configuration.OperationProcessors.Add(new AspNetCoreOperationSecurityScopeProcessor("JWT"));
-            }
-        });
-        */
-
+        // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
         var app = builder.Build();
+        ConfigureMiddleware(app);
 
+        app.Run();
+    }
+
+    private static void ConfigureConfiguration(WebApplicationBuilder builder)
+    {
+        builder.Configuration
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables();
+
+        // Build the connection string dynamically using environment variables
+        var appDbConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+            .Replace("{DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST"))
+            .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME"))
+            .Replace("{DB_USER}", Environment.GetEnvironmentVariable("DB_USER"))
+            .Replace("{DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD"))
+            .Replace("{DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT"));
+
+        builder.Configuration["ConnectionStrings:DefaultConnection"] = appDbConnectionString;
+    }
+
+    private static void ConfigureServices(WebApplicationBuilder builder)
+    {
+        // ===================== * DATABASE CONTEXT * ===================== //
+        builder.Services.AddDbContext<LotteryContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+        // ===================== * REPOSITORIES & SERVICES * ===================== //
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+        // ===================== * MVC & API SUPPORT * ===================== //
+        builder.Services.AddControllers();
+        builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer
+    }
+
+    private static void ConfigureMiddleware(WebApplication app)
+    {
+        // ===================== * MIDDLEWARE SETUP * ===================== //
         app.UseHttpsRedirection();
-
         app.UseRouting();
 
+        // ===================== * SWAGGER (API Documentation) * ===================== //
         app.UseOpenApi();
         app.UseSwaggerUi();
+
+        // Remove Authorization header for Swagger requests
         app.Use(async (context, next) =>
         {
             if (context.Request.Path.StartsWithSegments("/swagger"))
@@ -103,27 +94,16 @@ public class Program
             }
             await next();
         });
+
+        // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();
         app.UseAuthorization();
+
+        // ===================== * CORS CONFIGURATION * ===================== //
         app.UseCors(config => config.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 
-       
+        // ===================== * STATUS CODE HANDLING & ROUTES * ===================== //
         app.MapControllers();
         app.UseStatusCodePages();
-        //CREATING SCOPES 
-        /*
-        using (var scope = app.Services.CreateScope())
-        {
-            var context = scope.ServiceProvider.GetRequiredService<>();
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
-            var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            if (!roleManager.RoleExistsAsync(Role.Reader).GetAwaiter().GetResult())
-            {
-                 roleManager.CreateAsync(new IdentityRole(Role.Reader)).GetAwaiter().GetResult();
-            }            File.WriteAllText("current_db.sql", context.Database.GenerateCreateScript());
-        }
-        */
-        app.Run();
     }
 }

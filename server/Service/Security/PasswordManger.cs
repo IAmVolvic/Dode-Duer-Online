@@ -2,18 +2,18 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text;
 using Konscious.Security.Cryptography;
+using Microsoft.AspNetCore.Identity;
 
 namespace Service.Security;
-/*
-public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser : class
-{
-    private const string Name = "argon2id";
 
+public class PasswordManger<TUser> : IPasswordHasher<TUser> where TUser : class
+{
     public string HashPassword(TUser user, string password)
     {
-        var salt = RandomNumberGenerator.GetBytes(128 / 8);
+        var saltCount = Int32.Parse(Environment.GetEnvironmentVariable("PM_BYTES_SIZE_A")!) / Int32.Parse(Environment.GetEnvironmentVariable("PM_BYTES_SIZE_B")!);
+        var salt = RandomNumberGenerator.GetBytes(saltCount);
         var hash = GenerateHash(password, salt);
-        return $"{Name}${Encode(salt)}${Encode(hash)}";
+        return $"{Environment.GetEnvironmentVariable("PM_SALT")!}${Encode(salt)}${Encode(hash)}";
     }
 
     public PasswordVerificationResult VerifyHashedPassword(TUser user, string hashedPassword, string providedPassword)
@@ -32,9 +32,9 @@ public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser 
         using var hashAlgo = new Argon2id(Encoding.UTF8.GetBytes(password))
         {
             Salt = salt,
-            MemorySize = 12288,
-            Iterations = 3,
-            DegreeOfParallelism = 1
+            MemorySize = Int32.Parse(Environment.GetEnvironmentVariable("PM_SALT_MEMORYSIZE")!),
+            Iterations = Int32.Parse(Environment.GetEnvironmentVariable("PM_ITERATIONS")!),
+            DegreeOfParallelism = Int32.Parse(Environment.GetEnvironmentVariable("PM_DEGREEOFPARALLELISM")!)
         };
         return hashAlgo.GetBytes(256 / 8);
     }
@@ -49,8 +49,7 @@ public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser 
         return Convert.ToBase64String(value);
     }
 
-    // Compares two byte arrays for equality. The method is specifically written so that the loop is not optimized.
-    // From: https://github.com/aspnet/AspNetIdentity/blob/main/src/Microsoft.AspNet.Identity.Core/Crypto.cs
+   
     [MethodImpl(MethodImplOptions.NoOptimization)]
     private static bool ByteArraysEqual(byte[] a, byte[] b)
     {
@@ -60,4 +59,3 @@ public class Argon2idPasswordHasher<TUser> : IPasswordHasher<TUser> where TUser 
         return areSame;
     }
 }
-*/
