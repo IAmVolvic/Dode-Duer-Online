@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using API.Extensions;
 using DataAccess;
 using DataAccess.Interfaces;
@@ -36,7 +37,7 @@ public class Program
         // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
         var app = builder.Build();
         ConfigureMiddleware(app);
-
+        
         app.Run();
     }
 
@@ -69,7 +70,8 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+        builder.Services.AddScoped<IJWTManager, JWTManager>();
+        
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer

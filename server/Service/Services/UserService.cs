@@ -1,6 +1,7 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
+using Service.Security;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
 
@@ -10,14 +11,16 @@ public class UserService : IUserService
 {
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IUserRepository _repository;
+    private readonly IJWTManager _jwtManager;
     
-    public UserService(IPasswordHasher<User> passwordHasher, IUserRepository userRepository)
+    public UserService(IPasswordHasher<User> passwordHasher, IJWTManager jwtManager, IUserRepository userRepository)
     {
         _passwordHasher = passwordHasher;
         _repository = userRepository;
+        _jwtManager = jwtManager;
     }
 
-    public User CreateNewUser(UserSignupDTO newUser)
+    public string CreateNewUser(UserSignupDTO newUser)
     {
         Guid userId = Guid.NewGuid();
         var user = new User
@@ -30,7 +33,25 @@ public class UserService : IUserService
             Role = "User"
         };
         user.Passwordhash = _passwordHasher.HashPassword(user, newUser.Password); // Need to pass the user into this
-        
-        return _repository.CreateUserDB(user);
+
+        if (EmailExists(newUser.Email))
+        {
+            throw new Exception("Email already exists");
+        }
+
+        _repository.CreateUserDB(user);
+        return _jwtManager.CreateJWT(user);
+    }
+
+
+    public Boolean Login(string JWT)
+    {
+        Console.Write(_jwtManager.IsJWTValid(JWT));
+        return true;
+    }
+    
+    private bool EmailExists(string email)
+    {
+        return _repository.EmailAlreadyExists(email);
     }
 }

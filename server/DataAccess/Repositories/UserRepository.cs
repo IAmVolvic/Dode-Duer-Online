@@ -11,4 +11,9 @@ public class UserRepository(LotteryContext context) : IUserRepository
         context.SaveChanges();
         return newUser;
     }
+
+    public Boolean EmailAlreadyExists(string email)
+    {
+        return context.Users.Any(u => u.Email == email);
+    }
 }

@@ -6,5 +6,6 @@ namespace Service.Services.Interfaces;
 
 public interface IUserService
 {
-    public User CreateNewUser(UserSignupDTO newUser);
+    public string CreateNewUser(UserSignupDTO newUser);
+    public Boolean Login(string JWT);
 }

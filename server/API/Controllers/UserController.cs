@@ -14,15 +14,21 @@ public class UserController(IUserService service): ControllerBase
     [Route("signup")]
     public ActionResult<User> Signup([FromBody] UserSignupDTO data)
     {
-        return service.CreateNewUser(data);
+        try
+        {
+            var newUser = service.CreateNewUser(data);
+            return Ok(newUser);
+        } catch(Exception e) {
+            return BadRequest( "Request Failed: " + e.Message );
+        }
     }
     
     
     [HttpPost]
     [Route("login")]
-    public ActionResult<string> ExampleLogin()
+    public ActionResult<string> ExampleLogin([FromBody] string data)
     {
-        return "Worked:";
+        service.Login(data);
+        return Ok("Bob");
     }
-    
 }
