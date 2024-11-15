@@ -4,7 +4,7 @@ CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
                        Email VARCHAR(255) UNIQUE NOT NULL,
-                       PasswordHash BYTEA NOT NULL,
+                       PasswordHash VARCHAR(255) NOT NULL,
                        Balance DECIMAL(10, 2) DEFAULT 0,
                        Role VARCHAR(255) DEFAULT 'User',
                        Status VARCHAR(255)  DEFAULT 'Active'

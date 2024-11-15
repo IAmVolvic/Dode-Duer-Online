@@ -11,7 +11,7 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public byte[] Passwordhash { get; set; } = null!;
+    public string Passwordhash { get; set; } = null!;
 
     public decimal? Balance { get; set; }
 

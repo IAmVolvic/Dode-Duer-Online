@@ -1,4 +1,8 @@
 using API.Extensions;
+using DataAccess;
+using DataAccess.Interfaces;
+using DataAccess.Models;
+using DataAccess.Repositories;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -8,6 +12,8 @@ using NSwag;
 using NSwag.Generation.Processors.Security;
 using Service;
 using Service.Security;
+using Service.Services;
+using Service.Services.Interfaces;
 using Service.Validators;
 
 namespace API;
@@ -21,20 +27,38 @@ public class Program
         
         // ===================== * DB CONNECTIONS * ===================== //
         
-        builder.Configuration
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
-            .AddEnvironmentVariables();
+        // builder.Configuration
+        //     .SetBasePath(Directory.GetCurrentDirectory())
+        //     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        //     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+        //     .AddEnvironmentVariables();
+        //
+        // var appDbConnectionString = builder.Configuration.GetConnectionString("DbConnectionString")
+        //     .Replace("{DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST"))
+        //     .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME"))
+        //     .Replace("{DB_USER}", Environment.GetEnvironmentVariable("DB_USER"))
+        //     .Replace("{DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD"))
+        //     .Replace("{DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT"));
+        //
+        // builder.Configuration["ConnectionStrings:DbConnectionString"] = appDbConnectionString;
         
-        var appDbConnectionString = builder.Configuration.GetConnectionString("AppDb")
-            .Replace("{DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST") ?? "")
-            .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME") ?? "")
-            .Replace("{DB_USER}", Environment.GetEnvironmentVariable("DB_USER") ?? "")
-            .Replace("{DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "")
-            .Replace("{DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT") ?? "");
         
-        builder.Configuration["ConnectionStrings:AppDb"] = appDbConnectionString;
+        // builder.Configuration
+        //     .SetBasePath(Directory.GetCurrentDirectory())
+        //     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        //     .AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true)
+        //     .AddEnvironmentVariables();
+        //
+        // var appDbConnectionString = builder.Configuration.GetConnectionString("AppDb")
+        //     .Replace("{DB_HOST}", Environment.GetEnvironmentVariable("DB_HOST")!)
+        //     .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME")!)
+        //     .Replace("{DB_USER}", Environment.GetEnvironmentVariable("DB_USER")!)
+        //     .Replace("{DB_PASSWORD}", Environment.GetEnvironmentVariable("DB_PASSWORD")!)
+        //     .Replace("{DB_PORT}", Environment.GetEnvironmentVariable("DB_PORT")!);
+        //
+        // builder.Configuration["ConnectionStrings:AppDb"] = appDbConnectionString;
+        //
+        // builder.Services.AddDbContext<LotteryContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppDb")));
         
         
         
@@ -84,7 +108,16 @@ public class Program
         builder.Services.AddScoped<ITokenClaimsService, JwtTokenClaimService>();
         */
         #endregion
+        
+        // ===================== * SCOPES * ===================== //
+        builder.Services.AddDbContext<LotteryContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+        builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        builder.Services.AddScoped<IUserRepository, UserRepository>();
+        
+        
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Add this line
         // I DONT KNOW WHAT ABOUT THIS PART, SOMETHING WITH SECURITY
