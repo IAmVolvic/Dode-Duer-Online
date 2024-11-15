@@ -14,8 +14,7 @@ public class UserController(IUserService service): ControllerBase
     [Route("signup")]
     public ActionResult<User> Signup([FromBody] UserSignupDTO data)
     {
-        var cool = service.CreateNewUser(data);
-        return Ok("Worked "+ cool.Passwordhash);
+        return service.CreateNewUser(data);
     }
     
     
