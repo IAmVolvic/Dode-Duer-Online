@@ -39,7 +39,7 @@ public class UserService : IUserService
             throw new Exception("Email already exists");
         }
 
-        _repository.CreateUserDB(user);
+        //_repository.CreateUserDB(user);
         return _jwtManager.CreateJWT(user);
     }
 
