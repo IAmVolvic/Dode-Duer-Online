@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Service.TransferModels.Requests;
 
-public class UserSignupDTO
+public class UserSignupRequestDTO
 {
     [Required(ErrorMessage = "Name is required.")]
     public string Name { get; set; } = null!;

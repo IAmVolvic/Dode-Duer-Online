@@ -1,8 +1,10 @@
+using API.Exceptions;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
+using Service.TransferModels.Responses;
 
 namespace API.Controllers;
 
@@ -12,14 +14,18 @@ public class UserController(IUserService service): ControllerBase
 {
     [HttpPost]
     [Route("signup")]
-    public ActionResult<User> Signup([FromBody] UserSignupDTO data)
+    public ActionResult<UserSignupResponseDTO> Signup([FromBody] UserSignupRequestDTO request)
     {
         try
         {
-            var newUser = service.CreateNewUser(data);
-            return Ok(newUser);
-        } catch(Exception e) {
-            return BadRequest( "Request Failed: " + e.Message );
+            var response = service.CreateNewUser(request);
+            return Ok(response);
+        }
+        catch (ErrorExcep ex)
+        {
+            var errorResponse = new ErrorResponseDTO();
+            errorResponse.AddError(ex.Source, ex.Description);
+            return BadRequest(errorResponse);
         }
     }
     

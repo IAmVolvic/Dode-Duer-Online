@@ -1,21 +1,13 @@
-using System.IdentityModel.Tokens.Jwt;
-using API.Extensions;
+using API.Exceptions;
 using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using Service;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
-using Service.Validators;
 
 namespace API;
 

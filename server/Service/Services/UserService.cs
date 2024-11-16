@@ -1,9 +1,11 @@
+using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Identity;
 using Service.Security;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
+using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
@@ -20,7 +22,7 @@ public class UserService : IUserService
         _jwtManager = jwtManager;
     }
 
-    public string CreateNewUser(UserSignupDTO newUser)
+    public UserSignupResponseDTO CreateNewUser(UserSignupRequestDTO newUser)
     {
         Guid userId = Guid.NewGuid();
         var user = new User
@@ -36,11 +38,11 @@ public class UserService : IUserService
 
         if (EmailExists(newUser.Email))
         {
-            throw new Exception("Email already exists");
+            throw new ErrorExcep("Email", "Email already exists");
         }
 
-        //_repository.CreateUserDB(user);
-        return _jwtManager.CreateJWT(user);
+        var createdUser = _repository.CreateUserDB(user);
+        return UserSignupResponseDTO.FromEntity(createdUser, _jwtManager);
     }
 
 
