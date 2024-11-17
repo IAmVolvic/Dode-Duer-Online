@@ -9,4 +9,5 @@ public interface IUserService
 {
     public UserResponseDTO Signup(UserSignupRequestDTO newUser);
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest);
+    public void IsUserAuthenticated(string jwtToken);
 }

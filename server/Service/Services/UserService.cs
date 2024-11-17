@@ -63,6 +63,17 @@ public class UserService : IUserService
        
        return UserResponseDTO.FromEntity(userData, _jwtManager);
     }
+
+
+    public void IsUserAuthenticated(string jwtToken)
+    {
+        var jwtData = _jwtManager.IsJWTValid(jwtToken);
+
+        if (jwtData == null)
+        {
+            throw new ErrorException("Authentication", "Authentication failed due to invalid token");
+        }
+    }
     
     
     private bool EmailExists(string email)

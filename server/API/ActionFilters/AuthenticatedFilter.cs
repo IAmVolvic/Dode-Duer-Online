@@ -1,10 +1,11 @@
 using API.Attributes;
 using API.Exceptions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Service.Services.Interfaces;
 
 namespace API.ActionFilters;
 
-public class AuthenticatedFilter : IActionFilter
+public class AuthenticatedFilter(IUserService userService) : IActionFilter
 {
     public void OnActionExecuting(ActionExecutingContext context)
     {
@@ -21,9 +22,8 @@ public class AuthenticatedFilter : IActionFilter
             {
                 throw new ErrorException("Authentication", "Authentication token is missing or invalid.");
             }
-            
-            // Todo
-            // Check if the JWT is valid
+           
+            userService.IsUserAuthenticated(cookies["Authentication"]);
         }
     }
 

@@ -63,8 +63,6 @@ public class JWTManager : IJWTManager
         
         var result = tokenHandler.ValidateTokenAsync(token, validationParameters).Result;
         
-        Console.WriteLine(result.IsValid);
-        
         if (result.IsValid)
         {
             return new ClaimsPrincipal(result.ClaimsIdentity);
