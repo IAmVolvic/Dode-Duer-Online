@@ -13,9 +13,7 @@ public class OLDProgram
         config.EnableSensitiveDataLogging();
     });
     */
-    //builder.Services.AddScoped<IHospitalService, HospitalService>();
-
-    
+   
     
     #region Security
     //RASMUS SECIURITY SECTION 

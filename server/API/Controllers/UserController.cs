@@ -1,8 +1,8 @@
-using DataAccess.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
+using API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
+using Service.TransferModels.Responses;
 
 namespace API.Controllers;
 
@@ -12,17 +12,16 @@ public class UserController(IUserService service): ControllerBase
 {
     [HttpPost]
     [Route("signup")]
-    public ActionResult<User> Signup([FromBody] UserSignupDTO data)
+    public ActionResult<UserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
     {
-        return service.CreateNewUser(data);
+        return Ok(service.Signup(request));
     }
     
     
     [HttpPost]
     [Route("login")]
-    public ActionResult<string> ExampleLogin()
+    public ActionResult<UserResponseDTO> PLogin([FromBody] UserLoginRequestDTO data)
     {
-        return "Worked:";
+        return Ok(service.Login(data));
     }
-    
 }

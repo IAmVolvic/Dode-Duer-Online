@@ -1,20 +1,13 @@
-using API.Extensions;
-using DataAccess;
+using API.ActionFilters;
+using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using NSwag;
-using NSwag.Generation.Processors.Security;
-using Service;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
-using Service.Validators;
 
 namespace API;
 
@@ -36,7 +29,7 @@ public class Program
         // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
         var app = builder.Build();
         ConfigureMiddleware(app);
-
+        
         app.Run();
     }
 
@@ -62,17 +55,32 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
-        builder.Services.AddDbContext<LotteryContext>(options =>
+        builder.Services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+        builder.Services.AddDbContext<GameContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
+        // ===================== * CONTROLLERS & MVC * ===================== //
+        builder.Services.AddControllersWithViews(options =>
+        {
+            options.Filters.AddService<AuthenticatedFilter>();
+        });
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<ExceptionFilter>(); // This registers the exception filter
+        });
+        
         // ===================== * REPOSITORIES & SERVICES * ===================== //
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+        builder.Services.AddScoped<IJWTManager, JWTManager>();
+        builder.Services.AddScoped<AuthenticatedFilter>();
+        
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer
+        builder.Services.AddOpenApiDocument();
     }
 
     private static void ConfigureMiddleware(WebApplication app)
@@ -84,17 +92,7 @@ public class Program
         // ===================== * SWAGGER (API Documentation) * ===================== //
         app.UseOpenApi();
         app.UseSwaggerUi();
-
-        // Remove Authorization header for Swagger requests
-        app.Use(async (context, next) =>
-        {
-            if (context.Request.Path.StartsWithSegments("/swagger"))
-            {
-                context.Request.Headers["Authorization"] = string.Empty;
-            }
-            await next();
-        });
-
+        
         // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();
         app.UseAuthorization();

@@ -1,9 +1,8 @@
 using System.ComponentModel.DataAnnotations;
-using DataAccess.Models;
 
 namespace Service.TransferModels.Requests;
 
-public class UserSignupDTO
+public class UserSignupRequestDTO
 {
     [Required(ErrorMessage = "Name is required.")]
     public string Name { get; set; } = null!;
@@ -12,7 +11,8 @@ public class UserSignupDTO
     [EmailAddress(ErrorMessage = "Invalid email format.")]
     public string Email { get; set; } = null!;
     
-    [Required(ErrorMessage = "Users password is required.")]
+    [Required(ErrorMessage = "User password is required.")]
     [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
+    [MaxLength(32, ErrorMessage = "Password must be between 6 and 32 characters.")]
     public string Password { get; set; } = null!;
 }
