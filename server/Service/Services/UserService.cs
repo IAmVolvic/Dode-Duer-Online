@@ -68,10 +68,28 @@ public class UserService : IUserService
     public void IsUserAuthenticated(string jwtToken)
     {
         var jwtData = _jwtManager.IsJWTValid(jwtToken);
-
+    
         if (jwtData == null)
         {
             throw new ErrorException("Authentication", "Authentication failed due to invalid token");
+        }
+    }
+
+    
+    public void IsUserAuthorized(string[] roles, string jwtToken)
+    {
+        var jwtData = _jwtManager.IsJWTValid(jwtToken);
+        var uuidClaim = jwtData.Claims.FirstOrDefault(claim => claim.Type == "uuid");
+        var userData = _repository.GetUserById(uuidClaim.Value);
+        
+        if (userData == null)
+        {
+            throw new ErrorException("User", "User does not exist");
+        }
+        
+        if (!roles.Contains(userData.Role))
+        {
+            throw new ErrorException("Authorization", "User does not have the required role.");
         }
     }
     

@@ -10,7 +10,16 @@ public class TestController : ControllerBase
     [HttpGet]
     [Route("auth")]
     [Authenticated]
-    public ActionResult<Boolean> GText([FromQuery] string example)
+    public ActionResult<Boolean> ExcampleAuthenticated()
+    {
+        return Ok(true);
+    }
+    
+    
+    [HttpGet]
+    [Route("admin")]
+    [Rolepolicy("Admin")]
+    public ActionResult<Boolean> ExcampleAuthenticatedWithRole()
     {
         return Ok(true);
     }

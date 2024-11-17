@@ -26,9 +26,7 @@ public class JWTManager : IJWTManager
             Audience = jtwAudience,
             Claims = new Dictionary<string, object>
             {
-                ["UUID"] = user.Id,
-                [JwtRegisteredClaimNames.Name] = user.Name,
-                [JwtRegisteredClaimNames.Email] = user.Email
+                ["uuid"] = user.Id,
             },
             IssuedAt = null,
             NotBefore = DateTime.UtcNow,
@@ -47,7 +45,6 @@ public class JWTManager : IJWTManager
     {
         var securityKey =  new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtToken));
         var tokenHandler = new JsonWebTokenHandler();
-
       
         var validationParameters = new TokenValidationParameters
         {
