@@ -1,5 +1,4 @@
-using API.Exceptions;
-using DataAccess;
+using API.ActionFilters;
 using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
@@ -56,23 +55,29 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
-        /*builder.Services.AddDbContext<LotteryContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));*/
         builder.Services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-    
         builder.Services.AddDbContext<GameContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-        
         builder.Services.AddDbContext<JWTBlacklistContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
         
-
+        // ===================== * CONTROLLERS & MVC * ===================== //
+        builder.Services.AddControllersWithViews(options =>
+        {
+            options.Filters.AddService<AuthenticatedFilter>();
+        });
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add<ExceptionFilter>(); // This registers the exception filter
+        });
+        
         // ===================== * REPOSITORIES & SERVICES * ===================== //
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
+        builder.Services.AddScoped<AuthenticatedFilter>();
         
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();

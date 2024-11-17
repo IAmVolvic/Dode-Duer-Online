@@ -38,27 +38,27 @@ public class UserService : IUserService
 
         if (EmailExists(newUser.Email))
         {
-            throw new ErrorExcep("Email", "Email already exists");
+            throw new ErrorException("Email", "Email already exists");
         }
 
         var createdUser = _repository.CreateUserDB(user);
         return UserResponseDTO.FromEntity(createdUser, _jwtManager);
     }
 
-
+    
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
     {
        var userData = _repository.GetUserByEmail(userLoginRequest.Email);
        
        if (userData == null)
        {
-           throw new ErrorExcep("User", "User does not exist");
+           throw new ErrorException("User", "User does not exist");
        }
 
        if (_passwordHasher.VerifyHashedPassword(userData, userData.Passwordhash, userLoginRequest.Password) ==
            PasswordVerificationResult.Failed)
        {
-           throw new ErrorExcep("Password", "Password does not match");
+           throw new ErrorException("Password", "Password does not match");
        }
        
        return UserResponseDTO.FromEntity(userData, _jwtManager);
