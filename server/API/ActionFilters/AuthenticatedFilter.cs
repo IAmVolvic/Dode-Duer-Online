@@ -20,7 +20,7 @@ public class AuthenticatedFilter(IUserService userService) : IActionFilter
             var cookies = context.HttpContext.Request.Cookies;
             if (!cookies.TryGetValue("Authentication", out var accessToken) || string.IsNullOrEmpty(accessToken))
             {
-                throw new ErrorException("Authentication", "Authentication token is missing or invalid.");
+                throw new ErrorException("Authentication", "Missing authentication token.");
             }
            
             userService.IsUserAuthenticated(cookies["Authentication"]);
