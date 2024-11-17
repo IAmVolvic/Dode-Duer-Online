@@ -10,7 +10,7 @@ public class TestController : ControllerBase
     [HttpGet]
     [Route("auth")]
     [Authenticated]
-    public ActionResult<Boolean> ExcampleAuthenticated()
+    public ActionResult<Boolean> ExampleAuthenticated()
     {
         return Ok(true);
     }
@@ -19,7 +19,7 @@ public class TestController : ControllerBase
     [HttpGet]
     [Route("admin")]
     [Rolepolicy("Admin")]
-    public ActionResult<Boolean> ExcampleAuthenticatedWithRole()
+    public ActionResult<Boolean> ExampleAuthenticatedWithRole()
     {
         return Ok(true);
     }
