@@ -4,7 +4,7 @@ using Service.Security;
 
 namespace Service.TransferModels.Responses;
 
-public class UserSignupResponseDTO
+public class UserResponseDTO
 {
     [Required(ErrorMessage = "UserId is required.")]
     public string Id { get; set; } = null!;
@@ -13,9 +13,9 @@ public class UserSignupResponseDTO
     public string JWT { get; set; } = null!;
 
     
-    public static UserSignupResponseDTO FromEntity(User user, IJWTManager jwtManager)
+    public static UserResponseDTO FromEntity(User user, IJWTManager jwtManager)
     {
-        return new UserSignupResponseDTO
+        return new UserResponseDTO
         {
             Id = user.Id.ToString(),
             JWT = jwtManager.CreateJWT(user)

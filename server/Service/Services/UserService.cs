@@ -22,7 +22,7 @@ public class UserService : IUserService
         _jwtManager = jwtManager;
     }
 
-    public UserSignupResponseDTO CreateNewUser(UserSignupRequestDTO newUser)
+    public UserResponseDTO Signup(UserSignupRequestDTO newUser)
     {
         Guid userId = Guid.NewGuid();
         var user = new User
@@ -42,15 +42,28 @@ public class UserService : IUserService
         }
 
         var createdUser = _repository.CreateUserDB(user);
-        return UserSignupResponseDTO.FromEntity(createdUser, _jwtManager);
+        return UserResponseDTO.FromEntity(createdUser, _jwtManager);
     }
 
 
-    public Boolean Login(string JWT)
+    public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
     {
-        Console.Write(_jwtManager.IsJWTValid(JWT));
-        return true;
+       var userData = _repository.GetUserByEmail(userLoginRequest.Email);
+       
+       if (userData == null)
+       {
+           throw new ErrorExcep("User", "User does not exist");
+       }
+
+       if (_passwordHasher.VerifyHashedPassword(userData, userData.Passwordhash, userLoginRequest.Password) ==
+           PasswordVerificationResult.Failed)
+       {
+           throw new ErrorExcep("Password", "Password does not match");
+       }
+       
+       return UserResponseDTO.FromEntity(userData, _jwtManager);
     }
+    
     
     private bool EmailExists(string email)
     {

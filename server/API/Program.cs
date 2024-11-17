@@ -1,5 +1,6 @@
 using API.Exceptions;
 using DataAccess;
+using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
@@ -55,8 +56,17 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
-        builder.Services.AddDbContext<LotteryContext>(options =>
+        /*builder.Services.AddDbContext<LotteryContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));*/
+        builder.Services.AddDbContext<UserContext>(options =>
             options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    
+        builder.Services.AddDbContext<GameContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
+        builder.Services.AddDbContext<JWTBlacklistContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+        
 
         // ===================== * REPOSITORIES & SERVICES * ===================== //
         builder.Services.AddScoped<IUserService, UserService>();

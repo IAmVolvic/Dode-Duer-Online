@@ -14,11 +14,11 @@ public class UserController(IUserService service): ControllerBase
 {
     [HttpPost]
     [Route("signup")]
-    public ActionResult<UserSignupResponseDTO> Signup([FromBody] UserSignupRequestDTO request)
+    public ActionResult<UserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
     {
         try
         {
-            var response = service.CreateNewUser(request);
+            var response = service.Signup(request);
             return Ok(response);
         }
         catch (ErrorExcep ex)
@@ -32,9 +32,18 @@ public class UserController(IUserService service): ControllerBase
     
     [HttpPost]
     [Route("login")]
-    public ActionResult<string> ExampleLogin([FromBody] string data)
+    public ActionResult<UserResponseDTO> PLogin([FromBody] UserLoginRequestDTO data)
     {
-        service.Login(data);
-        return Ok("Bob");
+        try
+        {
+            var response = service.Login(data);
+            return Ok(response);
+        }
+        catch (ErrorExcep ex)
+        {
+            var errorResponse = new ErrorResponseDTO();
+            errorResponse.AddError(ex.Source, ex.Description);
+            return BadRequest(errorResponse);
+        }
     }
 }
