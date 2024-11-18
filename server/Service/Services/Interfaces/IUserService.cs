@@ -1,5 +1,3 @@
-using DataAccess.Models;
-using Microsoft.AspNetCore.Identity;
 using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 
@@ -9,6 +7,4 @@ public interface IUserService
 {
     public UserResponseDTO Signup(UserSignupRequestDTO newUser);
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest);
-    public void IsUserAuthenticated(string jwtToken);
-    public void IsUserAuthorized(string[] roles, string jwtToken);
 }

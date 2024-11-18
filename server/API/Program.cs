@@ -16,7 +16,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-
+        // ===================== * API TESTS * ===================== //
+        var coreTests = new CoreTest();
+        
         // ===================== * ENVIRONMENT VARIABLES * ===================== //
         DotNetEnv.Env.Load();
 
@@ -72,6 +74,7 @@ public class Program
         
         // ===================== * REPOSITORIES & SERVICES * ===================== //
         builder.Services.AddScoped<IUserService, UserService>();
+        builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();

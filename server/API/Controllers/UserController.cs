@@ -1,3 +1,4 @@
+using API.Attributes;
 using API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
@@ -23,5 +24,15 @@ public class UserController(IUserService service): ControllerBase
     public ActionResult<UserResponseDTO> PLogin([FromBody] UserLoginRequestDTO data)
     {
         return Ok(service.Login(data));
+    }
+    
+    
+    [HttpGet]
+    [Route("@me")]
+    [Authenticated]
+    public ActionResult<AuthorizedUserResponseDTO> GGetUser()
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(authUser);
     }
 }

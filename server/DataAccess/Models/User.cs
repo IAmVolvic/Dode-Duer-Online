@@ -13,11 +13,11 @@ public partial class User
 
     public string Passwordhash { get; set; } = null!;
 
-    public decimal? Balance { get; set; }
+    public decimal Balance { get; set; }
 
-    public string? Role { get; set; }
+    public string Role { get; set; }
 
-    public string? Status { get; set; }
+    public string Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 
