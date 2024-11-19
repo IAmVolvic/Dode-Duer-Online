@@ -5,7 +5,6 @@ using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ProjectTests;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -14,37 +13,24 @@ namespace API;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var coreTests = new CoreTests();
         
-        try
-        {
-            // ===================== * API TESTS * ===================== //
-           // await coreTests.RunAllTests();
+        // ===================== * ENVIRONMENT VARIABLES * ===================== //
+        DotNetEnv.Env.Load();
 
-            // ===================== * ENVIRONMENT VARIABLES * ===================== //
-            DotNetEnv.Env.Load();
+        // ===================== * CONFIGURATION SETUP * ===================== //
+        ConfigureConfiguration(builder);
 
-            // ===================== * CONFIGURATION SETUP * ===================== //
-            ConfigureConfiguration(builder);
+        // ===================== * DEPENDENCY INJECTION * ===================== //
+        ConfigureServices(builder);
 
-            // ===================== * DEPENDENCY INJECTION * ===================== //
-            ConfigureServices(builder);
-
-            // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
-            var app = builder.Build();
-            ConfigureMiddleware(app);
-        
-            app.Run();
-        }
-        catch (Exception ex)
-        {
-            // If any test fails, prevent the app from running
-            Console.WriteLine($"Test execution failed: {ex.Message}");
-            Environment.Exit(1); // Exit with a non-zero code to indicate failure
-        }
+        // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
+        var app = builder.Build();
+        ConfigureMiddleware(app);
+    
+        app.Run();
     }
 
     

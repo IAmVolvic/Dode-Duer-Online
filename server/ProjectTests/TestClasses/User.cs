@@ -2,22 +2,25 @@ using System.Net;
 using System.Net.Http.Json;
 using DataAccess.Contexts;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using PgCtx;
 using Service.Security;
 using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 using Xunit;
+using Program = API.Program;
 
 namespace ProjectTests.TestClasses;
 
-public class User : WebApplicationFactory<Program>
+public class User
 {
     private readonly PgCtxSetup<UserContext> _pgCtxSetup = new();
     private readonly IJWTManager _jwtManager = new JWTManager();
+    private readonly WebApplicationFactory<Program> _factory;
     
     public User()
     {
+        // Initialize the WebApplicationFactory with your application class (Program.cs or Startup.cs)
+        _factory = new WebApplicationFactory<Program>();
         Environment.SetEnvironmentVariable("DefaultConnection", _pgCtxSetup._postgres.GetConnectionString());
     }
     
@@ -32,7 +35,7 @@ public class User : WebApplicationFactory<Program>
             Password = "password"
         };
         
-        var client = CreateClient();
+        var client = _factory.CreateClient();
         
         // Sim a request and get response
         var response = await client.PostAsJsonAsync("/User/signup", createNewUser);

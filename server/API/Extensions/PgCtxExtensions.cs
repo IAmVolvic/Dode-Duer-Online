@@ -1,5 +1,3 @@
-
-using PgCtx;
 using Service;
 
 namespace API.Extensions;
