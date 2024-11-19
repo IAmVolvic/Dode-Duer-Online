@@ -5,6 +5,7 @@ using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using ProjectTests;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -16,12 +17,12 @@ public class Program
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        var coreTests = new ProjectTests.ProjectTests();
+        var coreTests = new CoreTests();
         
         try
         {
             // ===================== * API TESTS * ===================== //
-            //await coreTests.RunAllTests();
+           // await coreTests.RunAllTests();
 
             // ===================== * ENVIRONMENT VARIABLES * ===================== //
             DotNetEnv.Env.Load();
