@@ -13,28 +13,40 @@ namespace API;
 
 public class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        // ===================== * API TESTS * ===================== //
-        var coreTests = new CoreTest();
+        var coreTests = new ProjectTests.ProjectTests();
         
-        // ===================== * ENVIRONMENT VARIABLES * ===================== //
-        DotNetEnv.Env.Load();
+        try
+        {
+            // ===================== * API TESTS * ===================== //
+            //await coreTests.RunAllTests();
 
-        // ===================== * CONFIGURATION SETUP * ===================== //
-        ConfigureConfiguration(builder);
+            // ===================== * ENVIRONMENT VARIABLES * ===================== //
+            DotNetEnv.Env.Load();
 
-        // ===================== * DEPENDENCY INJECTION * ===================== //
-        ConfigureServices(builder);
+            // ===================== * CONFIGURATION SETUP * ===================== //
+            ConfigureConfiguration(builder);
 
-        // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
-        var app = builder.Build();
-        ConfigureMiddleware(app);
+            // ===================== * DEPENDENCY INJECTION * ===================== //
+            ConfigureServices(builder);
+
+            // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
+            var app = builder.Build();
+            ConfigureMiddleware(app);
         
-        app.Run();
+            app.Run();
+        }
+        catch (Exception ex)
+        {
+            // If any test fails, prevent the app from running
+            Console.WriteLine($"Test execution failed: {ex.Message}");
+            Environment.Exit(1); // Exit with a non-zero code to indicate failure
+        }
     }
 
+    
     private static void ConfigureConfiguration(WebApplicationBuilder builder)
     {
         builder.Configuration
@@ -54,6 +66,7 @@ public class Program
         builder.Configuration["ConnectionStrings:DefaultConnection"] = appDbConnectionString;
     }
 
+    
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
@@ -86,6 +99,7 @@ public class Program
         builder.Services.AddOpenApiDocument();
     }
 
+    
     private static void ConfigureMiddleware(WebApplication app)
     {
         // ===================== * MIDDLEWARE SETUP * ===================== //
