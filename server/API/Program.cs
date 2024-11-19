@@ -74,8 +74,11 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IGameService, GameService>();
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AuthenticatedFilter>();
+        
         
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();
