@@ -7,3 +7,4 @@ riderModule.iml
 3rd_sem_template.sln.DotSettings.user
 server/.env
 server/API/.env
+server/ApiIntegrationTests/.env
