@@ -10,7 +10,7 @@ namespace API.Controllers;
 public class GameController(IGameService gameService) : ControllerBase
 {
     [HttpPost]
-    [Route("newgame")]
+    [Route("NewGame")]
     public ActionResult<GameResponseDTO> NewGame([FromBody] int prize)
     {
         return Ok(gameService.NewGame(prize));
