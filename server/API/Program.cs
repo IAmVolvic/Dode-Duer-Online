@@ -58,9 +58,9 @@ public class Program
     {
         // ===================== * DATABASE CONTEXT * ===================== //
         builder.Services.AddDbContext<UserContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddDbContext<GameContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
         
         // ===================== * CONTROLLERS & MVC * ===================== //
         builder.Services.AddControllersWithViews(options =>
@@ -77,8 +77,11 @@ public class Program
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
+        builder.Services.AddScoped<IGameService, GameService>();
+        builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AuthenticatedFilter>();
+        
         
         // ===================== * MVC & API SUPPORT * ===================== //
         builder.Services.AddControllers();
