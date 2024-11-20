@@ -20,12 +20,14 @@ public class GameApiTest : WebApplicationFactory<Program>
     public GameApiTest(ITestOutputHelper output)
     {
         DotNetEnv.Env.Load();
-        string connectionString = Environment.GetEnvironmentVariable("DefaultConnection")!;
-        _pgCtxSetup = new PgCtxSetup<GameContext>(connectionString);
-        if (string.IsNullOrEmpty(connectionString))
-        {
-            throw new InvalidOperationException("The 'DefaultConnection' environment variable is not set. " + Environment.GetEnvironmentVariable("DefaultConnection"));
-        }
+        // string connectionString = Environment.GetEnvironmentVariable("DefaultConnection")!;
+        _pgCtxSetup = new PgCtxSetup<GameContext>();
+        Environment.SetEnvironmentVariable("TestDb",_pgCtxSetup._postgres.GetConnectionString());
+        
+        // if (string.IsNullOrEmpty(connectionString))
+        // {
+        //     throw new InvalidOperationException("The 'DefaultConnection' environment variable is not set. " + Environment.GetEnvironmentVariable("DefaultConnection"));
+        // }
         _output = output;
     }
     

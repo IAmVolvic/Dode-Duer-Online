@@ -56,9 +56,9 @@ public class Program
     {
         // ===================== * DATABASE CONTEXT * ===================== //
         builder.Services.AddDbContext<UserContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
         builder.Services.AddDbContext<GameContext>(options =>
-            options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
         
         // ===================== * CONTROLLERS & MVC * ===================== //
         builder.Services.AddControllersWithViews(options =>
