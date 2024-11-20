@@ -26,7 +26,6 @@
       <ProjectReference Include="..\API\API.csproj" />
       <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
       <ProjectReference Include="..\Service\Service.csproj" />
-        <None Include=".env" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
