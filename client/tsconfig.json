@@ -25,23 +25,14 @@
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "src",
+    "baseUrl": "./src",
     "paths": {
-      "/src/*": [
-        "*"
-      ]
+      "@*": ["./*"]
     }
   },
   "include": [
-    "src/**/*",
-    "*.js",
-    "*.ts",
-    "*.tsx",
-    ".eslintrc.cjs"
-  ],
-  "exclude": [
-    "node_modules"
-  ],
+    "src"
+, "FOR LATER"  ],
   "references": [
 
   ]

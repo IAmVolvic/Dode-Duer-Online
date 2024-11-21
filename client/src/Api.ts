@@ -9,90 +9,95 @@
  * ---------------------------------------------------------------
  */
 
-export interface Patient {
+export interface CustomerDto {
   /** @format int32 */
   id?: number;
   name?: string;
-  /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
-  diagnoses?: Diagnosis[];
-  patientTreatments?: PatientTreatment[];
+  address?: string;
+  phone?: string;
+  email?: string;
 }
 
-export interface Diagnosis {
-  /** @format int32 */
-  id?: number;
-  /** @format int32 */
-  patientId?: number;
-  /** @format int32 */
-  diseaseId?: number;
-  /** @format date-time */
-  diagnosisDate?: string | null;
-  /** @format int32 */
-  doctorId?: number;
-  disease?: Disease;
-  doctor?: Doctor;
-  patient?: Patient;
+export interface CreateCustomerDto {
+  /** @minLength 1 */
+  name: string;
+  /**
+   * @format email
+   * @minLength 1
+   */
+  email: string;
 }
 
-export interface Disease {
-  /** @format int32 */
-  id?: number;
+export interface GetCustomerDto {
+  /**
+   * @format email
+   * @minLength 1
+   */
+  email: string;
+}
+
+export interface UpdateCustomerDto {
+  /**
+   * @format int32
+   * @min 1
+   * @max 2147483647
+   */
+  id: number;
   name?: string;
-  severity?: string;
-  diagnoses?: Diagnosis[];
+  address?: string;
+  /** @format phone */
+  phone?: string;
+  /** @format email */
+  email?: string;
 }
 
-export interface Doctor {
-  /** @format int32 */
-  id?: number;
-  name?: string;
-  specialty?: string;
-  /** @format int32 */
-  yearsExperience?: number | null;
-  diagnoses?: Diagnosis[];
-}
-
-export interface PatientTreatment {
+export interface OrderDto {
   /** @format int32 */
   id?: number;
   /** @format int32 */
-  patientId?: number;
-  /** @format int32 */
-  treatmentId?: number;
-  /** @format date-time */
-  startDate?: string | null;
-  /** @format date-time */
-  endDate?: string | null;
-  patient?: Patient;
-  treatment?: Treatment;
-}
-
-export interface Treatment {
-  /** @format int32 */
-  id?: number;
-  name?: string;
+  customerId?: number;
   /** @format double */
-  cost?: number;
-  patientTreatments?: PatientTreatment[];
+  totalAmount?: number;
+  orderEntries?: OrderEntryDto[];
+  status?: string | null;
 }
 
-export interface CreatePatientDto {
-  name?: string;
-  /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
+export interface OrderEntryDto {
+  /** @format int32 */
+  quantity?: number;
+  /** @format int32 */
+  productId?: number | null;
 }
 
-export interface UpdatePatientDto {
+export interface PaperDto {
+  /** @format int32 */
+  id?: number;
   name?: string;
-  /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
+  discontinued?: boolean;
+  /** @format int32 */
+  stock?: number;
+  /** @format double */
+  price?: number;
+  properties?: PropertyDto[];
+}
+
+export interface PropertyDto {
+  /** @format int32 */
+  id?: number;
+  propertyName?: string;
+}
+
+export interface CreatePaperDto {
+  name?: string;
+  /** @format int32 */
+  stock?: number;
+  /** @format double */
+  price?: number;
+  properties?: PropertyDto[];
+}
+
+export interface CreatePropertyDto {
+  propertyName?: string;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -235,17 +240,17 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl http://localhost:5000
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  customer = {
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientCreatePatient
-     * @request POST:/api/Patient
+     * @tags Customer
+     * @name CustomerCreateCustomer
+     * @request POST:/Customer/signup
      */
-    patientCreatePatient: (data: CreatePatientDto, params: RequestParams = {}) =>
-      this.request<Patient, any>({
-        path: `/api/Patient`,
+    customerCreateCustomer: (data: CreateCustomerDto, params: RequestParams = {}) =>
+      this.request<CustomerDto, any>({
+        path: `/Customer/signup`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -256,13 +261,130 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientUpdatePatient
-     * @request PUT:/api/Patient
+     * @tags Customer
+     * @name CustomerLoginCustomer
+     * @request POST:/Customer/login
      */
-    patientUpdatePatient: (data: UpdatePatientDto, params: RequestParams = {}) =>
-      this.request<Patient, any>({
-        path: `/api/Patient`,
+    customerLoginCustomer: (data: GetCustomerDto, params: RequestParams = {}) =>
+      this.request<CustomerDto, any>({
+        path: `/Customer/login`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Customer
+     * @name CustomerUpdateCustomer
+     * @request PATCH:/Customer/update
+     */
+    customerUpdateCustomer: (data: UpdateCustomerDto, params: RequestParams = {}) =>
+      this.request<CustomerDto, any>({
+        path: `/Customer/update`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  order = {
+    /**
+     * No description
+     *
+     * @tags Order
+     * @name OrderCreateOrder
+     * @request POST:/Order
+     */
+    orderCreateOrder: (data: OrderDto, params: RequestParams = {}) =>
+      this.request<OrderDto, any>({
+        path: `/Order`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Order
+     * @name OrderGetOrders
+     * @request GET:/Order
+     */
+    orderGetOrders: (params: RequestParams = {}) =>
+      this.request<OrderDto[], any>({
+        path: `/Order`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Order
+     * @name OrderChangeOrderStatus
+     * @request PUT:/Order
+     */
+    orderChangeOrderStatus: (data: OrderDto, params: RequestParams = {}) =>
+      this.request<OrderDto, any>({
+        path: `/Order`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  paper = {
+    /**
+     * No description
+     *
+     * @tags Paper
+     * @name PaperCreatePaper
+     * @request POST:/Paper/Create
+     */
+    paperCreatePaper: (data: CreatePaperDto, params: RequestParams = {}) =>
+      this.request<PaperDto, any>({
+        path: `/Paper/Create`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Paper
+     * @name PaperGetPaper
+     * @request GET:/Paper/Get/{id}
+     */
+    paperGetPaper: (id: number, params: RequestParams = {}) =>
+      this.request<PaperDto, any>({
+        path: `/Paper/Get/${id}`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Paper
+     * @name PaperUpdateDiscontinued
+     * @request PUT:/Paper/Update/{id}/Discontinued
+     */
+    paperUpdateDiscontinued: (id: number, data: boolean, params: RequestParams = {}) =>
+      this.request<PaperDto, any>({
+        path: `/Paper/Update/${id}/Discontinued`,
         method: "PUT",
         body: data,
         type: ContentType.Json,
@@ -273,29 +395,71 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientGetAllPatients
-     * @request GET:/api/Patient
+     * @tags Paper
+     * @name PaperUpdateRestock
+     * @request PUT:/Paper/Update/{id}/Restock
      */
-    patientGetAllPatients: (
+    paperUpdateRestock: (id: number, data: number, params: RequestParams = {}) =>
+      this.request<PaperDto, any>({
+        path: `/Paper/Update/${id}/Restock`,
+        method: "PUT",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  products = {
+    /**
+     * No description
+     *
+     * @tags Products
+     * @name ProductsGetAllProducts
+     * @request GET:/Products
+     */
+    productsGetAllProducts: (
       query?: {
-        /**
-         * @format int32
-         * @default 10
-         */
-        limit?: number;
-        /**
-         * @format int32
-         * @default 0
-         */
-        startAt?: number;
+        search?: string;
       },
       params: RequestParams = {},
     ) =>
-      this.request<Patient[], any>({
-        path: `/api/Patient`,
+      this.request<PaperDto[], any>({
+        path: `/Products`,
         method: "GET",
         query: query,
+        format: "json",
+        ...params,
+      }),
+  };
+  property = {
+    /**
+     * No description
+     *
+     * @tags Property
+     * @name PropertyCreateProperty
+     * @request POST:/Property/Create
+     */
+    propertyCreateProperty: (data: CreatePropertyDto, params: RequestParams = {}) =>
+      this.request<PropertyDto, any>({
+        path: `/Property/Create`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Property
+     * @name PropertyGetAllProperties
+     * @request GET:/Property/Get
+     */
+    propertyGetAllProperties: (params: RequestParams = {}) =>
+      this.request<PropertyDto[], any>({
+        path: `/Property/Get`,
+        method: "GET",
         format: "json",
         ...params,
       }),
