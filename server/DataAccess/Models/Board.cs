@@ -11,13 +11,15 @@ public partial class Board
 
     public Guid Gameid { get; set; }
 
-    public decimal Price { get; set; }
+    public Guid Priceid { get; set; }
 
     public DateOnly Dateofpurchase { get; set; }
 
     public virtual ICollection<Chosennumber> Chosennumbers { get; set; } = new List<Chosennumber>();
 
     public virtual Game Game { get; set; } = null!;
+
+    public virtual Price Price { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
 }

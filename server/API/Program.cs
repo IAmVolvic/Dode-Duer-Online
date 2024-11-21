@@ -79,6 +79,9 @@ public class Program
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IGameService, GameService>();
         builder.Services.AddScoped<IGameRepository, GameRepository>();
+        builder.Services.AddScoped<IPriceRepository, PriceRepository>();
+        builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+        builder.Services.AddScoped<IBoardService, BoardService>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AuthenticatedFilter>();
         

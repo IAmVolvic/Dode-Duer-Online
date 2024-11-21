@@ -14,6 +14,7 @@ public class GameContext : DbContext
     public DbSet<Board> Boards { get; set; }
     public DbSet<Chosennumber> Chosennumbers { get; set; }
     public DbSet<Winner> Winners { get; set; }
+    public virtual DbSet<Price> Prices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -31,24 +32,48 @@ public class GameContext : DbContext
         modelBuilder.Entity<Board>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("board_pkey");
+
             entity.ToTable("board");
-            entity.Property(e => e.Id).ValueGeneratedNever().HasColumnName("id");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
             entity.Property(e => e.Dateofpurchase).HasColumnName("dateofpurchase");
             entity.Property(e => e.Gameid).HasColumnName("gameid");
-            entity.Property(e => e.Price).HasPrecision(10, 2).HasColumnName("price");
+            entity.Property(e => e.Priceid).HasColumnName("priceid");
             entity.Property(e => e.Userid).HasColumnName("userid");
 
-            entity.HasOne(d => d.Game)
-                  .WithMany(p => p.Boards)
-                  .HasForeignKey(d => d.Gameid)
-                  .OnDelete(DeleteBehavior.ClientSetNull)
-                  .HasConstraintName("board_gameid_fkey");
+            entity.HasOne(d => d.Game).WithMany(p => p.Boards)
+                .HasForeignKey(d => d.Gameid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("board_gameid_fkey");
 
-            entity.HasOne(d => d.User)
-                  .WithMany(p => p.Boards)
-                  .HasForeignKey(d => d.Userid)
-                  .OnDelete(DeleteBehavior.ClientSetNull)
-                  .HasConstraintName("board_userid_fkey");
+            entity.HasOne(d => d.Price).WithMany(p => p.Boards)
+                .HasForeignKey(d => d.Priceid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("board_priceid_fkey");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Boards)
+                .HasForeignKey(d => d.Userid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("board_userid_fkey");
+        });
+        
+        modelBuilder.Entity<Price>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("prices_pkey");
+
+            entity.ToTable("prices");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+            entity.Property(e => e.Numbers)
+                .HasPrecision(10, 2)
+                .HasColumnName("numbers");
+            entity.Property(e => e.Price1)
+                .HasPrecision(10, 2)
+                .HasColumnName("price");
         });
 
         modelBuilder.Entity<Chosennumber>(entity =>

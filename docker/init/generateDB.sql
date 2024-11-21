@@ -9,7 +9,11 @@ CREATE TABLE Users (
                        Role VARCHAR(255) DEFAULT 'User',
                        Status VARCHAR(255)  DEFAULT 'Active'
 );
-
+CREATE TABLE Prices (
+                        Id UUID PRIMARY KEY ,
+                        Price DECIMAL(10, 2) NOT NULL,
+                        Numbers DECIMAL(10, 2) NOT NULL
+);
 CREATE TABLE Game (
                       Id UUID PRIMARY KEY,
                       PrizePool DECIMAL(10, 2),
@@ -22,10 +26,11 @@ CREATE TABLE Board (
                        Id UUID PRIMARY KEY,
                        UserId UUID NOT NULL,
                        GameId UUID NOT NULL,
-                       Price DECIMAL(10, 2) NOT NULL,
+                       PriceId UUID NOT NULL,
                        DateOfPurchase DATE NOT NULL,
                        FOREIGN KEY (UserId) REFERENCES Users(Id),
-                       FOREIGN KEY (GameId) REFERENCES Game(Id)
+                       FOREIGN KEY (GameId) REFERENCES Game(Id),
+                       FOREIGN KEY (PriceId) REFERENCES Prices(Id)
 );
 
 CREATE TABLE Transactions (
@@ -51,3 +56,5 @@ CREATE TABLE Winners (
                          FOREIGN KEY (GameId) REFERENCES Game(Id),
                          FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
+
+
