@@ -7,317 +7,18 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000"
+      "url": "http://localhost:5001"
     }
   ],
   "paths": {
-    "/Customer/signup": {
+    "/Game/NewGame": {
       "post": {
         "tags": [
-          "Customer"
+          "Game"
         ],
-        "operationId": "Customer_CreateCustomer",
+        "operationId": "Game_NewGame",
         "requestBody": {
-          "x-name": "data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateCustomerDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Customer/login": {
-      "post": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_LoginCustomer",
-        "requestBody": {
-          "x-name": "data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/GetCustomerDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Customer/update": {
-      "patch": {
-        "tags": [
-          "Customer"
-        ],
-        "operationId": "Customer_UpdateCustomer",
-        "requestBody": {
-          "x-name": "data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateCustomerDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CustomerDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Order": {
-      "post": {
-        "tags": [
-          "Order"
-        ],
-        "operationId": "Order_CreateOrder",
-        "requestBody": {
-          "x-name": "orderDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrderDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
-                }
-              }
-            }
-          }
-        }
-      },
-      "get": {
-        "tags": [
-          "Order"
-        ],
-        "operationId": "Order_GetOrders",
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/OrderDto"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "Order"
-        ],
-        "operationId": "Order_ChangeOrderStatus",
-        "requestBody": {
-          "x-name": "orderDto",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/OrderDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Paper/Create": {
-      "post": {
-        "tags": [
-          "Paper"
-        ],
-        "operationId": "Paper_CreatePaper",
-        "requestBody": {
-          "x-name": "data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreatePaperDto"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaperDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Paper/Get/{id}": {
-      "get": {
-        "tags": [
-          "Paper"
-        ],
-        "operationId": "Paper_GetPaper",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 1
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaperDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Paper/Update/{id}/Discontinued": {
-      "put": {
-        "tags": [
-          "Paper"
-        ],
-        "operationId": "Paper_UpdateDiscontinued",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          }
-        ],
-        "requestBody": {
-          "x-name": "discontinued",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "boolean"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/PaperDto"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Paper/Update/{id}/Restock": {
-      "put": {
-        "tags": [
-          "Paper"
-        ],
-        "operationId": "Paper_UpdateRestock",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            },
-            "x-position": 2
-          }
-        ],
-        "requestBody": {
-          "x-name": "restock",
+          "x-name": "prize",
           "content": {
             "application/json": {
               "schema": {
@@ -335,7 +36,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PaperDto"
+                  "$ref": "#/components/schemas/GameResponseDTO"
                 }
               }
             }
@@ -343,32 +44,19 @@
         }
       }
     },
-    "/Products": {
+    "/Test/auth": {
       "get": {
         "tags": [
-          "Products"
+          "Test"
         ],
-        "operationId": "Products_GetAllProducts",
-        "parameters": [
-          {
-            "name": "search",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            },
-            "x-position": 1
-          }
-        ],
+        "operationId": "Test_ExampleAuthenticated",
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PaperDto"
-                  }
+                  "type": "boolean"
                 }
               }
             }
@@ -376,18 +64,38 @@
         }
       }
     },
-    "/Property/Create": {
+    "/Test/admin": {
+      "get": {
+        "tags": [
+          "Test"
+        ],
+        "operationId": "Test_ExampleAuthenticatedWithRole",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/signup": {
       "post": {
         "tags": [
-          "Property"
+          "User"
         ],
-        "operationId": "Property_CreateProperty",
+        "operationId": "User_PSignup",
         "requestBody": {
-          "x-name": "data",
+          "x-name": "request",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreatePropertyDto"
+                "$ref": "#/components/schemas/UserSignupRequestDTO"
               }
             }
           },
@@ -400,7 +108,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/PropertyDto"
+                  "$ref": "#/components/schemas/UserResponseDTO"
                 }
               }
             }
@@ -408,22 +116,51 @@
         }
       }
     },
-    "/Property/Get": {
-      "get": {
+    "/User/login": {
+      "post": {
         "tags": [
-          "Property"
+          "User"
         ],
-        "operationId": "Property_GetAllProperties",
+        "operationId": "User_PLogin",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserLoginRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PropertyDto"
-                  }
+                  "$ref": "#/components/schemas/UserResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/@me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GGetUser",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizedUserResponseDTO"
                 }
               }
             }
@@ -434,34 +171,48 @@
   },
   "components": {
     "schemas": {
-      "CustomerDto": {
+      "GameResponseDTO": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32"
+            "type": "string",
+            "format": "guid"
           },
-          "name": {
-            "type": "string"
+          "date": {
+            "type": "string",
+            "format": "date"
           },
-          "address": {
-            "type": "string"
-          },
-          "phone": {
-            "type": "string"
-          },
-          "email": {
+          "status": {
             "type": "string"
           }
         }
       },
-      "CreateCustomerDto": {
+      "UserResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "jwt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "jwt": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "UserSignupRequestDTO": {
         "type": "object",
         "additionalProperties": false,
         "required": [
           "name",
-          "email"
+          "email",
+          "password"
         ],
         "properties": {
           "name": {
@@ -472,166 +223,56 @@
             "type": "string",
             "format": "email",
             "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 6
           }
         }
       },
-      "GetCustomerDto": {
+      "UserLoginRequestDTO": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-          "email"
+          "email",
+          "password"
         ],
         "properties": {
           "email": {
             "type": "string",
             "format": "email",
             "minLength": 1
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 6
           }
         }
       },
-      "UpdateCustomerDto": {
+      "AuthorizedUserResponseDTO": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "id"
-        ],
         "properties": {
           "id": {
-            "type": "integer",
-            "format": "int32",
-            "maximum": 2147483647.0,
-            "minimum": 1.0
+            "type": "string",
+            "format": "guid"
           },
           "name": {
             "type": "string"
           },
-          "address": {
+          "email": {
             "type": "string"
           },
-          "phone": {
-            "type": "string",
-            "format": "phone"
-          },
-          "email": {
-            "type": "string",
-            "format": "email"
-          }
-        }
-      },
-      "OrderDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "customerId": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "totalAmount": {
+          "balance": {
             "type": "number",
-            "format": "double"
+            "format": "decimal"
           },
-          "orderEntries": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/OrderEntryDto"
-            }
+          "role": {
+            "type": "string"
           },
           "status": {
-            "type": "string",
-            "nullable": true
-          }
-        }
-      },
-      "OrderEntryDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "quantity": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "productId": {
-            "type": "integer",
-            "format": "int32",
-            "nullable": true
-          }
-        }
-      },
-      "PaperDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
-            "type": "string"
-          },
-          "discontinued": {
-            "type": "boolean"
-          },
-          "stock": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "properties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PropertyDto"
-            }
-          }
-        }
-      },
-      "PropertyDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "propertyName": {
-            "type": "string"
-          }
-        }
-      },
-      "CreatePaperDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "stock": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "properties": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/PropertyDto"
-            }
-          }
-        }
-      },
-      "CreatePropertyDto": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "propertyName": {
             "type": "string"
           }
         }

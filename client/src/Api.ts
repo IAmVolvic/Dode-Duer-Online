@@ -9,16 +9,22 @@
  * ---------------------------------------------------------------
  */
 
-export interface CustomerDto {
-  /** @format int32 */
-  id?: number;
-  name?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
+export interface GameResponseDTO {
+  /** @format guid */
+  id?: string;
+  /** @format date */
+  date?: string;
+  status?: string;
 }
 
-export interface CreateCustomerDto {
+export interface UserResponseDTO {
+  /** @minLength 1 */
+  id: string;
+  /** @minLength 1 */
+  jwt: string;
+}
+
+export interface UserSignupRequestDTO {
   /** @minLength 1 */
   name: string;
   /**
@@ -26,78 +32,35 @@ export interface CreateCustomerDto {
    * @minLength 1
    */
   email: string;
+  /**
+   * @minLength 6
+   * @maxLength 32
+   */
+  password: string;
 }
 
-export interface GetCustomerDto {
+export interface UserLoginRequestDTO {
   /**
    * @format email
    * @minLength 1
    */
   email: string;
-}
-
-export interface UpdateCustomerDto {
   /**
-   * @format int32
-   * @min 1
-   * @max 2147483647
+   * @minLength 6
+   * @maxLength 32
    */
-  id: number;
+  password: string;
+}
+
+export interface AuthorizedUserResponseDTO {
+  /** @format guid */
+  id?: string;
   name?: string;
-  address?: string;
-  /** @format phone */
-  phone?: string;
-  /** @format email */
   email?: string;
-}
-
-export interface OrderDto {
-  /** @format int32 */
-  id?: number;
-  /** @format int32 */
-  customerId?: number;
-  /** @format double */
-  totalAmount?: number;
-  orderEntries?: OrderEntryDto[];
-  status?: string | null;
-}
-
-export interface OrderEntryDto {
-  /** @format int32 */
-  quantity?: number;
-  /** @format int32 */
-  productId?: number | null;
-}
-
-export interface PaperDto {
-  /** @format int32 */
-  id?: number;
-  name?: string;
-  discontinued?: boolean;
-  /** @format int32 */
-  stock?: number;
-  /** @format double */
-  price?: number;
-  properties?: PropertyDto[];
-}
-
-export interface PropertyDto {
-  /** @format int32 */
-  id?: number;
-  propertyName?: string;
-}
-
-export interface CreatePaperDto {
-  name?: string;
-  /** @format int32 */
-  stock?: number;
-  /** @format double */
-  price?: number;
-  properties?: PropertyDto[];
-}
-
-export interface CreatePropertyDto {
-  propertyName?: string;
+  /** @format decimal */
+  balance?: number;
+  role?: string;
+  status?: string;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -145,7 +108,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:5000" });
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:5001" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -237,89 +200,38 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title My Title
  * @version 1.0.0
- * @baseUrl http://localhost:5000
+ * @baseUrl http://localhost:5001
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  customer = {
+  game = {
     /**
      * No description
      *
-     * @tags Customer
-     * @name CustomerCreateCustomer
-     * @request POST:/Customer/signup
+     * @tags Game
+     * @name GameNewGame
+     * @request POST:/Game/NewGame
      */
-    customerCreateCustomer: (data: CreateCustomerDto, params: RequestParams = {}) =>
-      this.request<CustomerDto, any>({
-        path: `/Customer/signup`,
+    gameNewGame: (data: number, params: RequestParams = {}) =>
+      this.request<GameResponseDTO, any>({
+        path: `/Game/NewGame`,
         method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Customer
-     * @name CustomerLoginCustomer
-     * @request POST:/Customer/login
-     */
-    customerLoginCustomer: (data: GetCustomerDto, params: RequestParams = {}) =>
-      this.request<CustomerDto, any>({
-        path: `/Customer/login`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Customer
-     * @name CustomerUpdateCustomer
-     * @request PATCH:/Customer/update
-     */
-    customerUpdateCustomer: (data: UpdateCustomerDto, params: RequestParams = {}) =>
-      this.request<CustomerDto, any>({
-        path: `/Customer/update`,
-        method: "PATCH",
         body: data,
         type: ContentType.Json,
         format: "json",
         ...params,
       }),
   };
-  order = {
+  test = {
     /**
      * No description
      *
-     * @tags Order
-     * @name OrderCreateOrder
-     * @request POST:/Order
+     * @tags Test
+     * @name TestExampleAuthenticated
+     * @request GET:/Test/auth
      */
-    orderCreateOrder: (data: OrderDto, params: RequestParams = {}) =>
-      this.request<OrderDto, any>({
-        path: `/Order`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Order
-     * @name OrderGetOrders
-     * @request GET:/Order
-     */
-    orderGetOrders: (params: RequestParams = {}) =>
-      this.request<OrderDto[], any>({
-        path: `/Order`,
+    testExampleAuthenticated: (params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/Test/auth`,
         method: "GET",
         format: "json",
         ...params,
@@ -328,31 +240,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Order
-     * @name OrderChangeOrderStatus
-     * @request PUT:/Order
+     * @tags Test
+     * @name TestExampleAuthenticatedWithRole
+     * @request GET:/Test/admin
      */
-    orderChangeOrderStatus: (data: OrderDto, params: RequestParams = {}) =>
-      this.request<OrderDto, any>({
-        path: `/Order`,
-        method: "PUT",
-        body: data,
-        type: ContentType.Json,
+    testExampleAuthenticatedWithRole: (params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/Test/admin`,
+        method: "GET",
         format: "json",
         ...params,
       }),
   };
-  paper = {
+  user = {
     /**
      * No description
      *
-     * @tags Paper
-     * @name PaperCreatePaper
-     * @request POST:/Paper/Create
+     * @tags User
+     * @name UserPSignup
+     * @request POST:/User/signup
      */
-    paperCreatePaper: (data: CreatePaperDto, params: RequestParams = {}) =>
-      this.request<PaperDto, any>({
-        path: `/Paper/Create`,
+    userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
+      this.request<UserResponseDTO, any>({
+        path: `/User/signup`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -363,85 +273,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Paper
-     * @name PaperGetPaper
-     * @request GET:/Paper/Get/{id}
+     * @tags User
+     * @name UserPLogin
+     * @request POST:/User/login
      */
-    paperGetPaper: (id: number, params: RequestParams = {}) =>
-      this.request<PaperDto, any>({
-        path: `/Paper/Get/${id}`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Paper
-     * @name PaperUpdateDiscontinued
-     * @request PUT:/Paper/Update/{id}/Discontinued
-     */
-    paperUpdateDiscontinued: (id: number, data: boolean, params: RequestParams = {}) =>
-      this.request<PaperDto, any>({
-        path: `/Paper/Update/${id}/Discontinued`,
-        method: "PUT",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Paper
-     * @name PaperUpdateRestock
-     * @request PUT:/Paper/Update/{id}/Restock
-     */
-    paperUpdateRestock: (id: number, data: number, params: RequestParams = {}) =>
-      this.request<PaperDto, any>({
-        path: `/Paper/Update/${id}/Restock`,
-        method: "PUT",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-  };
-  products = {
-    /**
-     * No description
-     *
-     * @tags Products
-     * @name ProductsGetAllProducts
-     * @request GET:/Products
-     */
-    productsGetAllProducts: (
-      query?: {
-        search?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<PaperDto[], any>({
-        path: `/Products`,
-        method: "GET",
-        query: query,
-        format: "json",
-        ...params,
-      }),
-  };
-  property = {
-    /**
-     * No description
-     *
-     * @tags Property
-     * @name PropertyCreateProperty
-     * @request POST:/Property/Create
-     */
-    propertyCreateProperty: (data: CreatePropertyDto, params: RequestParams = {}) =>
-      this.request<PropertyDto, any>({
-        path: `/Property/Create`,
+    userPLogin: (data: UserLoginRequestDTO, params: RequestParams = {}) =>
+      this.request<UserResponseDTO, any>({
+        path: `/User/login`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -452,13 +290,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Property
-     * @name PropertyGetAllProperties
-     * @request GET:/Property/Get
+     * @tags User
+     * @name UserGGetUser
+     * @request GET:/User/@me
      */
-    propertyGetAllProperties: (params: RequestParams = {}) =>
-      this.request<PropertyDto[], any>({
-        path: `/Property/Get`,
+    userGGetUser: (params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@me`,
         method: "GET",
         format: "json",
         ...params,
