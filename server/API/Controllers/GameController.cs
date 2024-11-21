@@ -12,7 +12,7 @@ public class GameController(IGameService gameService) : ControllerBase
 {
     [HttpPost]
     [Route("NewGame")]
-    //[Rolepolicy("Admin")]
+    [Rolepolicy("Admin")]
     public ActionResult<GameResponseDTO> NewGame([FromBody] int prize)
     {
         return Ok(gameService.NewGame(prize));

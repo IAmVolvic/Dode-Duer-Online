@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
@@ -11,6 +12,7 @@ public class BoardController(IBoardService boardService) : ControllerBase
 {
     [HttpPost]
     [Route("/Play")]
+    [Authenticated]
     public ActionResult<BoardResponseDTO> PlayBoard([FromBody] PlayBoardDTO playBoardDTO)
     {
         var response = boardService.PlayBoard(playBoardDTO);
