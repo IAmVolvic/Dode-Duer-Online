@@ -24,6 +24,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                 Number = n 
             })
             .ToList();
-        
+        var newBoard = boardRepository.PlayBoard(board);
+        return new BoardResponseDTO().FromBoard(newBoard);
     }
 }
