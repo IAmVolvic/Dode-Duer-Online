@@ -15,9 +15,9 @@ public partial class User
 
     public decimal Balance { get; set; }
 
-    public string Role { get; set; }
+    public string? Role { get; set; }
 
-    public string Status { get; set; }
+    public string? Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 
