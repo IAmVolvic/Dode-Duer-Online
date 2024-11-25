@@ -11,4 +11,6 @@ public interface IUserRepository
     public User GetUserById(string userId);
     
     public Boolean EmailAlreadyExists(string email);
+
+    public User UpdateUserDB(User user);
 }

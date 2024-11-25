@@ -13,6 +13,46 @@ public class UserRepository(UserContext context) : IUserRepository
         return newUser;
     }
 
+
+    public User UpdateUserDB(User user)
+    {
+        var updatedUser = context.Users.Find(user.Id);
+        
+       
+        if (user.Name != null)
+        {
+            updatedUser.Name = user.Name;
+        }
+        
+        if (user.Email != null)
+        {
+            updatedUser.Email = user.Email;
+        }
+        
+        if (user.Passwordhash != null)
+        {
+            updatedUser.Passwordhash = user.Passwordhash;
+        }
+        
+        if (user.Balance != null)
+        {
+            updatedUser.Balance = user.Balance;
+        }
+        
+        if (user.Role != null)
+        {
+            updatedUser.Role = user.Role;
+        }
+        
+        if (user.Status != null)
+        {
+            updatedUser.Status = user.Status;
+        }
+
+        context.SaveChanges();
+        return updatedUser;
+    }
+
     
     public User GetUserByEmail(string email)
     {
@@ -24,7 +64,6 @@ public class UserRepository(UserContext context) : IUserRepository
     {
         return context.Users.FirstOrDefault(u => u.Id == Guid.Parse(userId));
     }
-    
     
     
     public Boolean EmailAlreadyExists(string email)

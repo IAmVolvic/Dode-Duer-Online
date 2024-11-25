@@ -1,38 +1,42 @@
 using API.Attributes;
+using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc;
+using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
+using Service.TransferModels.Responses;
 
 namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TransactionController: ControllerBase
+public class TransactionController(ITransactionService service): ControllerBase
 {
     
-    [HttpPatch]
+    [HttpPost]
     [Route("@user/balance/deposit")]
     [Authenticated]
-    public ActionResult<Boolean> PDepositBalance([FromBody] DepositRequestDTO data)
+    public ActionResult<TransactionResponseDTO> PDepositReq([FromBody] DepositRequestDTO data)
     {
-        return Ok(true);
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(service.NewTransactionRequest(authUser!.Id, data));
     }
     
     
     [HttpPatch]
-    [Route("@user/balance")]
+    [Route("@admin/balance")]
     [Rolepolicy("Admin")]
-    public ActionResult<Boolean> PUseBalance([FromBody] DepositRequestDTO data)
+    public ActionResult<Boolean> PUseBalance([FromBody] BalanceAdjustmentRequestDTO data)
     {
-        return Ok(true);
+        return Ok(service.TransactionAdjustment(data));
     }
     
     
     [HttpGet]
-    [Route("@user/balances")]
+    [Route("@admin/balances")]
     [Rolepolicy("Admin")]
-    public ActionResult<Boolean> PUserDeposits([FromBody] DepositRequestDTO data)
+    public ActionResult<TransactionResponseDTO[]> PDepositReqs()
     {
-        return Ok(true);
+        return Ok(service.Transactions());
     }
     
 }

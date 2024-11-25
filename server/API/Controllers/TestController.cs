@@ -7,7 +7,7 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class TestController : ControllerBase
 {
-    [HttpGet]
+    /*[HttpGet]
     [Route("auth")]
     [Authenticated]
     public ActionResult<Boolean> ExampleAuthenticated()
@@ -22,5 +22,5 @@ public class TestController : ControllerBase
     public ActionResult<Boolean> ExampleAuthenticatedWithRole()
     {
         return Ok(true);
-    }
+    }*/
 }

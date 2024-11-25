@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using API.ActionFilters;
 using DataAccess.Contexts;
 using DataAccess.Interfaces;
@@ -5,6 +6,7 @@ using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -81,6 +83,8 @@ public class Program
         builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IPriceRepository, PriceRepository>();
         builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
         builder.Services.AddScoped<IBoardService, BoardService>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AuthenticatedFilter>();
@@ -101,7 +105,11 @@ public class Program
 
         // ===================== * SWAGGER (API Documentation) * ===================== //
         app.UseOpenApi();
-        app.UseSwaggerUi();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            c.RoutePrefix = string.Empty;
+        });
         
         // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();
