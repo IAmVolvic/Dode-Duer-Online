@@ -1,0 +1,42 @@
+name: Run xUnit Tests
+
+# Trigger the workflow on every push or pull request
+on:
+  push:
+    branches:
+      - main
+      - '**'
+  pull_request:
+    branches:
+      - main
+
+# Define the jobs in the workflow
+jobs:
+  build:
+
+    # The operating system for the virtual environment
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up .NET Core
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.x' # Specify the version of .NET you're using (e.g., '6.x' or '7.x')
+
+      # Step 3: Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # Step 4: Build the solution
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      # Step 5: Run tests
+      - name: Run tests
+        run: dotnet test --no-build --verbosity normal --configuration Release
+
