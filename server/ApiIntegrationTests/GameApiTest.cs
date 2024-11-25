@@ -4,8 +4,11 @@ using System.Net;
 using DataAccess.Contexts;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Program = API.Program;
 using PgCtx;
+using Service.Services.Interfaces;
 using Service.TransferModels.Responses;
 using Xunit;
 using Xunit.Abstractions;
@@ -28,19 +31,34 @@ public class GameApiTest : WebApplicationFactory<Program>
     [Fact]
     public async Task Create_Game_API_Test_Creates_Game_With_Starting_Prize_Pool()
     {
-        
+        // Arrange
         var startingPrizePool = 1000;
+        var guid = new Guid();
+        var mockAuthService = new Mock<IAuthService>();
+        mockAuthService.Setup(s => s.IsUserAuthenticated(It.IsAny<string>())).Verifiable();
+        mockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO() { Id = guid, Name = "TestAdmin", Role = "Admin"  });
+        mockAuthService.Setup(s => s.IsUserAuthorized(It.IsAny<string[]>(), It.IsAny<string>())).Verifiable();
 
-        var client = CreateClient();
+        var appFactory = new WebApplicationFactory<Program>()
+            .WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddScoped<IAuthService>(_ => mockAuthService.Object);
+                });
+            });
 
+        var client = appFactory.CreateClient();
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+
+        // Act
         var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
-        _output.WriteLine($"Response Status Code: {response.StatusCode}");
-        _output.WriteLine($"Response Content: {await response.Content.ReadAsStringAsync()}");
-        Assert.True(response.StatusCode == HttpStatusCode.OK, _pgCtxSetup._postgres.GetConnectionString());
 
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
         Assert.NotNull(returnedGame);
-
         var gameInDb = _pgCtxSetup.DbContextInstance.Games.First();
         Assert.NotNull(gameInDb);
 
@@ -51,12 +69,45 @@ public class GameApiTest : WebApplicationFactory<Program>
     }
     
     [Fact]
+    public async Task Create_Game_API_Test_Creates_Game_Fail_Unauthorized()
+    {
+        
+        var startingPrizePool = 1000;
+
+        var client = CreateClient();
+
+        var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
+        var responseContent = await response.Content.ReadAsStringAsync();
+        
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Contains("\"Authentication\":[\"Missing authentication token.\"]", responseContent);
+    }
+
+    
+    [Fact]
     public async Task Create_Game_API_Test_Creates_Game_Without_Starting_Prize_Pool()
     {
         
         var startingPrizePool = 0;
 
-        var client = CreateClient();
+        var guid = new Guid();
+        var mockAuthService = new Mock<IAuthService>();
+        mockAuthService.Setup(s => s.IsUserAuthenticated(It.IsAny<string>())).Verifiable();
+        mockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO() { Id = guid, Name = "TestAdmin", Role = "Admin"  });
+        mockAuthService.Setup(s => s.IsUserAuthorized(It.IsAny<string[]>(), It.IsAny<string>())).Verifiable();
+
+        var appFactory = new WebApplicationFactory<Program>()
+            .WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddScoped<IAuthService>(_ => mockAuthService.Object);
+                });
+            });
+
+        var client = appFactory.CreateClient();
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
 
         var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
         _output.WriteLine($"Response Status Code: {response.StatusCode}");
@@ -80,7 +131,24 @@ public class GameApiTest : WebApplicationFactory<Program>
     {
         // Arrange
         var negativePrizePool = -10; // Invalid prize pool
-        var client = CreateClient();
+        var guid = new Guid();
+        var mockAuthService = new Mock<IAuthService>();
+        mockAuthService.Setup(s => s.IsUserAuthenticated(It.IsAny<string>())).Verifiable();
+        mockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO() { Id = guid, Name = "TestAdmin", Role = "Admin"  });
+        mockAuthService.Setup(s => s.IsUserAuthorized(It.IsAny<string[]>(), It.IsAny<string>())).Verifiable();
+
+        var appFactory = new WebApplicationFactory<Program>()
+            .WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureServices(services =>
+                {
+                    services.AddScoped<IAuthService>(_ => mockAuthService.Object);
+                });
+            });
+
+        var client = appFactory.CreateClient();
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
 
         // Act
         var response = await client.PostAsJsonAsync("/Game/NewGame", new { Prizepool = negativePrizePool });
