@@ -11,4 +11,6 @@ public interface ITransactionService
     public decimal TransactionAdjustment(BalanceAdjustmentRequestDTO balanceAdjustmentRequest);
 
     public TransactionResponseDTO[] Transactions();
+
+    public TransactionResponseDTO[] TransactionsByUser(Guid userId);
 }

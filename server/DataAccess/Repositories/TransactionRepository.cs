@@ -29,9 +29,27 @@ public class TransactionRepository(UserContext context) : ITransactionRepository
     public Transaction[] GetAllTransactions()
     {
         return context.Transactions
-            .OrderBy(t => t.TransactionStatus != "Pending")
+            .OrderByDescending(t => t.TransactionStatus == "Pending")
             .ThenBy(t => t.Id) 
             .ToArray();
+    }
+
+
+    public Transaction[] GetAllTransactionsByUserId(Guid userId)
+    {
+        var transactions = context.Transactions
+            .Where(t => t.UserId == userId)
+            .OrderByDescending(t => t.TransactionStatus == "Pending")
+            .ThenBy(t => t.Id)
+            .ToArray();
+
+        if (transactions.Length == 0)
+        {
+            return null;
+        }
+
+
+        return transactions;
     }
     
     

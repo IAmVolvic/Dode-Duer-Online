@@ -15,10 +15,20 @@ public class TransactionController(ITransactionService service): ControllerBase
     [HttpPost]
     [Route("@user/balance/deposit")]
     [Authenticated]
-    public ActionResult<TransactionResponseDTO> PDepositReq([FromBody] DepositRequestDTO data)
+    public ActionResult<TransactionResponseDTO> PUserDepositReq([FromBody] DepositRequestDTO data)
     {
         var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
         return Ok(service.NewTransactionRequest(authUser!.Id, data));
+    }
+    
+    
+    [HttpGet]
+    [Route("@user/balances")]
+    [Authenticated]
+    public ActionResult<TransactionResponseDTO[]> PUserTransactionsReqs()
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(service.TransactionsByUser(authUser!.Id));
     }
     
     

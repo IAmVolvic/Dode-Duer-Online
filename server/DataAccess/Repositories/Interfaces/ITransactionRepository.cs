@@ -11,4 +11,6 @@ public interface ITransactionRepository
     public Transaction GetTransactionById(string transactionId);
 
     public Transaction[] GetAllTransactions();
+    
+    public Transaction[] GetAllTransactionsByUserId(Guid userId);
 }

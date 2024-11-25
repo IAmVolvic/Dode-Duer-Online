@@ -84,6 +84,27 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
     }
     
     
+    public TransactionResponseDTO[] TransactionsByUser(Guid userId)
+    {
+        var transactionList = new List<TransactionResponseDTO>();
+        Console.WriteLine("Am I here?");
+        var transactions = transactionRepository.GetAllTransactionsByUserId(userId);
+
+        if (transactions == null)
+        {
+            throw new ErrorException("Transactions", "There are multiple transactions for this user");
+        }
+        
+        foreach (var transaction in transactions)
+        {
+            var transactionDTO = TransactionResponseDTO.FromEntity(transaction);
+            transactionList.Add(transactionDTO);
+        }
+        
+        return transactionList.ToArray();
+    }
+    
+    
     private bool TransactionNumberExists(string transactionNumber)
     {
         return transactionRepository.TransactionAlreadyExists(transactionNumber);
