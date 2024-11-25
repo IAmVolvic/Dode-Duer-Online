@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Net;
+using DataAccess;
 using DataAccess.Contexts;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +16,13 @@ namespace ApiIntegrationTests;
 
 public class GameApiTest : WebApplicationFactory<Program>
 {
-    private readonly PgCtxSetup<GameContext> _pgCtxSetup = new();
+    private readonly PgCtxSetup<LotteryContext> _pgCtxSetup = new();
     private readonly ITestOutputHelper _output;
 
     public GameApiTest(ITestOutputHelper output)
     {
         DotNetEnv.Env.Load();
-        _pgCtxSetup = new PgCtxSetup<GameContext>();
+        _pgCtxSetup = new PgCtxSetup<LotteryContext>();
         Environment.SetEnvironmentVariable("TestDb",_pgCtxSetup._postgres.GetConnectionString());
         _output = output;
     }
