@@ -1,8 +1,6 @@
 ﻿using System.Net.Http.Json;
-using System.Text.Json;
 using System.Net;
 using DataAccess.Contexts;
-using DataAccess.Models;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
