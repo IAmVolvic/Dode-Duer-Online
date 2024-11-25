@@ -25,7 +25,6 @@ public class GameApiTest : WebApplicationFactory<Program>
         _output = output;
     }
     
-
     [Fact]
     public async Task Create_Game_API_Test_Creates_Game_With_Starting_Prize_Pool()
     {
