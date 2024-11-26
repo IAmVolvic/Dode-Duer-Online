@@ -4,6 +4,7 @@ CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
                        Email VARCHAR(255) UNIQUE NOT NULL,
+                       PhoneNumber VARCHAR(255) NOT NULL,
                        PasswordHash VARCHAR(255) NOT NULL,
                        Balance DECIMAL(10, 2) DEFAULT 0,
                        Role VARCHAR(255) DEFAULT 'User',
@@ -36,13 +37,8 @@ CREATE TABLE Board (
 CREATE TABLE Transactions (
                               Id UUID PRIMARY KEY,
                               UserId UUID NOT NULL,
-    
-                              TransactionPhoneNumber VARCHAR(255) NOT NULL, /*MobilePay phone number*/
-                              TransactionUsername VARCHAR(255) NOT NULL, /*MobilePay Username*/
                               TransactionNumber VARCHAR(255) NOT NULL, /*MobilePay transaction number*/
-    
                               TransactionStatus VARCHAR(255) DEFAULT 'Pending',
-    
                               FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
 
