@@ -1,8 +1,9 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 using System.Net;
-using DataAccess.Contexts;
+using DataAccess;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Program = API.Program;
 using PgCtx;
@@ -14,13 +15,13 @@ namespace ApiIntegrationTests;
 
 public class GameApiTest : WebApplicationFactory<Program>
 {
-    private readonly PgCtxSetup<GameContext> _pgCtxSetup = new();
+    private readonly PgCtxSetup<LotteryContext> _pgCtxSetup = new();
     private readonly ITestOutputHelper _output;
 
     public GameApiTest(ITestOutputHelper output)
     {
         DotNetEnv.Env.Load();
-        _pgCtxSetup = new PgCtxSetup<GameContext>();
+        _pgCtxSetup = new PgCtxSetup<LotteryContext>();
         Environment.SetEnvironmentVariable("TestDb",_pgCtxSetup._postgres.GetConnectionString());
         _output = output;
     }
@@ -48,7 +49,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         Assert.True(gameInDb.Id == returnedGame.Id, "Game ID in database and API response should match.");
         Assert.True(gameInDb.Prizepool == startingPrizePool, "Prize pool in database and input should match.");
         Assert.True(gameInDb.Date == returnedGame.Date, "Game date in database and API response should match.");
-        Assert.True(returnedGame.Status == "Active", "Game status should be 'Active' in API response.");
+        Assert.True(returnedGame.Status == GameStatus.Active, "Game status should be 'Active' in API response.");
     }
     
     [Fact]
@@ -73,7 +74,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         Assert.True(gameInDb.Id == returnedGame.Id, "Game ID in database and API response should match.");
         Assert.True(gameInDb.Prizepool == startingPrizePool, "Prize pool in database and input should match.");
         Assert.True(gameInDb.Date == returnedGame.Date, "Game date in database and API response should match.");
-        Assert.True(returnedGame.Status == "Active", "Game status should be 'Active' in API response.");
+        Assert.True(returnedGame.Status == GameStatus.Active, "Game status should be 'Active' in API response.");
     }
 
     [Fact]
