@@ -6,7 +6,7 @@ namespace Service.Services.Interfaces;
 
 public interface IUserService
 {
-    public UserResponseDTO Signup(UserSignupRequestDTO newUser);
+    public AuthorizedUserResponseDTO Signup(UserSignupRequestDTO newUser);
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest);
 
     public void NewAdmin(User newUser);

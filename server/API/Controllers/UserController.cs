@@ -12,7 +12,8 @@ public class UserController(IUserService service): ControllerBase
 {
     [HttpPost]
     [Route("signup")]
-    public ActionResult<UserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
+    [Rolepolicy("Admin")]
+    public ActionResult<AuthorizedUserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
     {
         return Ok(service.Signup(request));
     }

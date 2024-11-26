@@ -24,7 +24,7 @@ public class UserService : IUserService
     }
 
     
-    public UserResponseDTO Signup(UserSignupRequestDTO newUser)
+    public AuthorizedUserResponseDTO Signup(UserSignupRequestDTO newUser)
     {
         Guid userId = Guid.NewGuid();
         var user = new User
@@ -32,21 +32,47 @@ public class UserService : IUserService
             Id = userId,
             Name = newUser.Name,
             Email = newUser.Email,
+            Phonenumber = newUser.PhoneNumber,
             Balance = 0,
             Status = UserStatus.Active,
+            Enrolled = UserEnrolled.False,
             Role = UserRole.User,
         };
-        user.Passwordhash = "abc"; /*_passwordHasher.HashPassword(user, newUser.Password);*/ // Need to pass the user into this
+        user.Passwordhash = _passwordHasher.HashPassword(user, "ABCD");
 
+        if (PhoneNumberExists(newUser.PhoneNumber))
+        {
+            throw new ErrorException("Phone", "Phone number already exists");
+        }
+        
         if (EmailExists(newUser.Email))
         {
             throw new ErrorException("Email", "Email already exists");
         }
-
-        var createdUser = _repository.CreateUserDb(user);
-        return UserResponseDTO.FromEntity(createdUser, _jwtManager);
+        
+        // SMTP email to user letting them know they had been signed up
+        
+        _repository.CreateUserDb(user);
+        return AuthorizedUserResponseDTO.FromEntity(user);
     }
     
+    public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
+    {
+       var userData = _repository.GetUserByEmail(userLoginRequest.Email);
+       
+       if (userData == null)
+       {
+           throw new ErrorException("User", "User does not exist");
+       }
+
+       if (_passwordHasher.VerifyHashedPassword(userData, userData.Passwordhash, userLoginRequest.Password) ==
+           PasswordVerificationResult.Failed)
+       {
+           throw new ErrorException("Password", "Password does not match");
+       }
+       
+       return UserResponseDTO.FromEntity(userData, _jwtManager);
+    }
     
     public void NewAdmin(User newUser)
     {
@@ -71,26 +97,6 @@ public class UserService : IUserService
 
         _repository.CreateUserDb(newUser);
     }
-
-    
-    public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
-    {
-       var userData = _repository.GetUserByEmail(userLoginRequest.Email);
-       
-       if (userData == null)
-       {
-           throw new ErrorException("User", "User does not exist");
-       }
-
-       if (_passwordHasher.VerifyHashedPassword(userData, userData.Passwordhash, userLoginRequest.Password) ==
-           PasswordVerificationResult.Failed)
-       {
-           throw new ErrorException("Password", "Password does not match");
-       }
-       
-       return UserResponseDTO.FromEntity(userData, _jwtManager);
-    }
-    
     
     private bool EmailExists(string email)
     {
