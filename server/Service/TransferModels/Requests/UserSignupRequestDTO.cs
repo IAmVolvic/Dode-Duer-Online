@@ -11,8 +11,9 @@ public class UserSignupRequestDTO
     [EmailAddress(ErrorMessage = "Invalid email format.")]
     public string Email { get; set; } = null!;
     
-    [Required(ErrorMessage = "User password is required.")]
-    [MinLength(6, ErrorMessage = "Password must be at least 6 characters.")]
-    [MaxLength(32, ErrorMessage = "Password must be between 6 and 32 characters.")]
-    public string Password { get; set; } = null!;
+    [Required(ErrorMessage = "Phone number is required.")]
+    [Phone(ErrorMessage = "Invalid phone number format.")]
+    [MinLength(8, ErrorMessage = "Phone number is too short.")]
+    [MaxLength(8, ErrorMessage = "Phone number is too long.")]
+    public string PhoneNumber { get; set; } = null!;
 }

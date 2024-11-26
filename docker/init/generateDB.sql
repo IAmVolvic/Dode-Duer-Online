@@ -1,27 +1,32 @@
-
-
 CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
                        Email VARCHAR(255) UNIQUE NOT NULL,
                        PhoneNumber VARCHAR(255) NOT NULL,
                        PasswordHash VARCHAR(255) NOT NULL,
+                       Enrolled enrollment_status DEFAULT 'true',
                        Balance DECIMAL(10, 2) DEFAULT 0,
-                       Role VARCHAR(255) DEFAULT 'User',
-                       Status VARCHAR(255)  DEFAULT 'Active'
+                       Role user_roles DEFAULT 'user',
+                       Status user_status  DEFAULT 'active'
 );
+CREATE TYPE enrollment_status AS ENUM ('true', 'false');
+CREATE TYPE user_status AS ENUM ('active', 'inactive');
+CREATE TYPE user_roles AS ENUM ('user', 'admin');
+
 CREATE TABLE Prices (
                         Id UUID PRIMARY KEY ,
                         Price DECIMAL(10, 2) NOT NULL,
                         Numbers DECIMAL(10, 2) NOT NULL
 );
+
 CREATE TABLE Game (
                       Id UUID PRIMARY KEY,
                       PrizePool DECIMAL(10, 2),
                       Date DATE NOT NULL,
                       WinningNumbers VARCHAR(50),
-                      Status VARCHAR(255)   DEFAULT 'Active'
+                      Status game_status   DEFAULT 'active'
 );
+CREATE TYPE game_status AS ENUM ('active', 'inactive');
 
 CREATE TABLE Board (
                        Id UUID PRIMARY KEY,
@@ -38,9 +43,10 @@ CREATE TABLE Transactions (
                               Id UUID PRIMARY KEY,
                               UserId UUID NOT NULL,
                               TransactionNumber VARCHAR(255) NOT NULL, /*MobilePay transaction number*/
-                              TransactionStatus VARCHAR(255) DEFAULT 'Pending',
+                              TransactionStatus transaction_status DEFAULT 'pending',
                               FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
+CREATE TYPE transaction_status AS ENUM ('pending', 'approved', 'rejected');
 
 CREATE TABLE ChosenNumbers (
                                Id UUID PRIMARY KEY,
