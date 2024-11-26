@@ -42,15 +42,8 @@ public class UserService : IUserService
         };
         user.Passwordhash = _passwordHasher.HashPassword(user, randomPassword);
 
-        if (PhoneNumberExists(newUser.PhoneNumber))
-        {
-            throw new ErrorException("Phone", "Phone number already exists");
-        }
-        
-        if (EmailExists(newUser.Email))
-        {
-            throw new ErrorException("Email", "Email already exists");
-        }
+        PhoneNumberExists(newUser.PhoneNumber);
+        EmailExists(newUser.Email);
         
         // SMTP email to user letting them know they had been signed up
         Console.WriteLine(randomPassword);
@@ -61,12 +54,7 @@ public class UserService : IUserService
     
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
     {
-       var userData = _repository.GetUserByEmail(userLoginRequest.Email);
-       
-       if (userData == null)
-       {
-           throw new ErrorException("User", "User does not exist");
-       }
+       var userData = UserByEmail(userLoginRequest.Email);
 
        if (_passwordHasher.VerifyHashedPassword(userData, userData.Passwordhash, userLoginRequest.Password) ==
            PasswordVerificationResult.Failed)
@@ -79,12 +67,7 @@ public class UserService : IUserService
 
     public AuthorizedUserResponseDTO EnrollUser(Guid userId, UserEnrollmentRequestDTO data)
     {
-        var userData = _repository.GetUserById(userId.ToString());
-        
-        if (userData == null)
-        {
-            throw new ErrorException("User", "User does not exist");
-        }
+        var userData = UserById(userId.ToString());
         
         if (userData.Enrolled == UserEnrolled.True)
         {
@@ -109,27 +92,51 @@ public class UserService : IUserService
             return;
         }
         
-        if (EmailExists(newUser.Email))
-        {
-            throw new ErrorException("Email", "Email already exists");
-        }
-
-        if (PhoneNumberExists(newUser.Phonenumber))
-        {
-            throw new ErrorException("Phone", "Phone number already exists");
-        }
-
+        EmailExists(newUser.Email);
+        PhoneNumberExists(newUser.Phonenumber);
+        
         _repository.CreateUserDb(newUser);
     }
     
-    private bool EmailExists(string email)
+    
+    private User UserById(string userId)
     {
-        return _repository.EmailAlreadyExists(email);
+        var user = _repository.GetUserById(userId);
+        
+        if (user == null)
+        {
+            throw new ErrorException("User", "User does not exist");
+        }
+        
+        return user;
     }
     
-    private bool PhoneNumberExists(string phoneNumber)
+    private User UserByEmail(string email)
     {
-        return _repository.PhoneNumberAlreadyExists(phoneNumber);
+        var user = _repository.GetUserByEmail(email);
+        
+        if (user == null)
+        {
+            throw new ErrorException("User", "User does not exist");
+        }
+        
+        return user;
+    }
+    
+    private void EmailExists(string email)
+    {
+        if (_repository.EmailAlreadyExists(email))
+        {
+            throw new ErrorException("Email", "Email already exists");
+        }
+    }
+    
+    private void PhoneNumberExists(string phoneNumber)
+    {
+        if (_repository.PhoneNumberAlreadyExists(phoneNumber))
+        {
+            throw new ErrorException("Phone", "Phone number already exists");
+        }
     }
     
     private static string GenerateRandomString()
