@@ -30,8 +30,8 @@ public class GameApiTest : WebApplicationFactory<Program>
     [Fact]
     public async Task Create_Game_API_Test_Creates_Game_With_Starting_Prize_Pool()
     {
-        // Arrange
-        var startingPrizePool = 1000;
+        var startingPrizePool = 1110;
+
         var guid = new Guid();
         var mockAuthService = new Mock<IAuthService>();
         mockAuthService.Setup(s => s.IsUserAuthenticated(It.IsAny<string>())).Verifiable();
@@ -51,13 +51,14 @@ public class GameApiTest : WebApplicationFactory<Program>
         var client = appFactory.CreateClient();
         client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
 
-        // Act
         var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
+        _output.WriteLine($"Response Status Code: {response.StatusCode}");
+        _output.WriteLine($"Response Content: {await response.Content.ReadAsStringAsync()}");
+        Assert.True(response.StatusCode == HttpStatusCode.OK, _pgCtxSetup._postgres.GetConnectionString());
 
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
         Assert.NotNull(returnedGame);
+
         var gameInDb = _pgCtxSetup.DbContextInstance.Games.First();
         Assert.NotNull(gameInDb);
 

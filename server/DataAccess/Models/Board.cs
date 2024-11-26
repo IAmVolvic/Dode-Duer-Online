@@ -6,7 +6,7 @@ namespace DataAccess.Models;
 public partial class Board
 {
     public Guid Id { get; set; }
-
+    
     public Guid Userid { get; set; }
 
     public Guid Gameid { get; set; }
