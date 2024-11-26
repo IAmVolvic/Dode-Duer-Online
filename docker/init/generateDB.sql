@@ -1,25 +1,27 @@
-
-
 CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
                        Email VARCHAR(255) UNIQUE NOT NULL,
+                       PhoneNumber VARCHAR(255) NOT NULL,
                        PasswordHash VARCHAR(255) NOT NULL,
+                       Enrolled VARCHAR(255) DEFAULT 'False',
                        Balance DECIMAL(10, 2) DEFAULT 0,
                        Role VARCHAR(255) DEFAULT 'User',
                        Status VARCHAR(255)  DEFAULT 'Active'
 );
+
 CREATE TABLE Prices (
                         Id UUID PRIMARY KEY ,
                         Price DECIMAL(10, 2) NOT NULL,
                         Numbers DECIMAL(10, 2) NOT NULL
 );
+
 CREATE TABLE Game (
                       Id UUID PRIMARY KEY,
                       PrizePool DECIMAL(10, 2),
                       Date DATE NOT NULL,
                       WinningNumbers VARCHAR(50),
-                      Status VARCHAR(255)   DEFAULT 'Active'
+                      Status VARCHAR(255) DEFAULT 'Active'
 );
 
 CREATE TABLE Board (
@@ -36,8 +38,8 @@ CREATE TABLE Board (
 CREATE TABLE Transactions (
                               Id UUID PRIMARY KEY,
                               UserId UUID NOT NULL,
-                              Amount DECIMAL(10, 2) NOT NULL,
-                              MobilePayID VARCHAR(255) NOT NULL,
+                              TransactionNumber VARCHAR(255) NOT NULL, /*MobilePay transaction number*/
+                              TransactionStatus VARCHAR(255) DEFAULT 'Pending',
                               FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
 

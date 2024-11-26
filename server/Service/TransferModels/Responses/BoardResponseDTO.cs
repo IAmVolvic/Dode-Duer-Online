@@ -17,7 +17,7 @@ public class BoardResponseDTO
 
     [MinLength(5)]
     [MaxLength(8)]
-    public List<int> Numbers { get; set; }
+    public List<int?> Numbers { get; set; }
 
     public BoardResponseDTO FromBoard(Board board)
     {

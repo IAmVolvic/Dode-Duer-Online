@@ -8,29 +8,31 @@
     "build": "npx tsc && npx vite build",
     "lint": "npx eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "npx vite preview",
-    "scaffold": "npx swagger-typescript-api -p http://localhost:5000/swagger/v1/swagger.json -o ./src/ -n Api.ts --axios",
-    "deploy": "npx firebase deploy --only hosting",
-    "diagram": "npx depcruise src --include-only \"^src\" --output-type dot | dot -T svg > dependency-graph.svg"
+    "scaffold": "npx swagger-typescript-api -p http://localhost:5001/swagger/v1/swagger.json -o ./src/ -n Api.ts --axios",
+    "deploy": "npx firebase deploy --only hosting"
   },
   "dependencies": {
+    "@preact/signals-react": "^2.2.0",
+    "@tanstack/react-query": "^5.56.2",
     "daisyui": "^4.12.10",
-    "jotai": "^2.9.3",
+    "jotai": "^2.10.0",
     "jotai-devtools": "^0.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "babel-plugin-react-compiler": "0.0.0-experimental-938cd9a-20240601",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.4",
+    "babel-plugin-react-compiler": "0.0.0-experimental-938cd9a-20240601",
     "dependency-cruiser": "^16.3.10",
-    "firebase-tools": "^13.15.1",
+    "firebase-tools": "^13.20.2",
     "jsonwebtoken": "^9.0.2",
     "postcss": "^8.4.41",
     "swagger-typescript-api": "13.0.21",

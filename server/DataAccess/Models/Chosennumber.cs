@@ -9,7 +9,7 @@ public partial class Chosennumber
 
     public Guid Boardid { get; set; }
 
-    public int Number { get; set; }
+    public int? Number { get; set; }
 
     public virtual Board Board { get; set; } = null!;
 }

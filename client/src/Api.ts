@@ -9,90 +9,58 @@
  * ---------------------------------------------------------------
  */
 
-export interface Patient {
-  /** @format int32 */
-  id?: number;
-  name?: string;
+export interface GameResponseDTO {
+  /** @format guid */
+  id?: string;
   /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
-  diagnoses?: Diagnosis[];
-  patientTreatments?: PatientTreatment[];
+  date?: string;
+  status?: string;
 }
 
-export interface Diagnosis {
-  /** @format int32 */
-  id?: number;
-  /** @format int32 */
-  patientId?: number;
-  /** @format int32 */
-  diseaseId?: number;
-  /** @format date-time */
-  diagnosisDate?: string | null;
-  /** @format int32 */
-  doctorId?: number;
-  disease?: Disease;
-  doctor?: Doctor;
-  patient?: Patient;
+export interface UserResponseDTO {
+  /** @minLength 1 */
+  id: string;
+  /** @minLength 1 */
+  jwt: string;
 }
 
-export interface Disease {
-  /** @format int32 */
-  id?: number;
+export interface UserSignupRequestDTO {
+  /** @minLength 1 */
+  name: string;
+  /**
+   * @format email
+   * @minLength 1
+   */
+  email: string;
+  /**
+   * @minLength 6
+   * @maxLength 32
+   */
+  password: string;
+}
+
+export interface UserLoginRequestDTO {
+  /**
+   * @format email
+   * @minLength 1
+   */
+  email: string;
+  /**
+   * @minLength 6
+   * @maxLength 32
+   */
+  password: string;
+}
+
+export interface AuthorizedUserResponseDTO {
+  /** @format guid */
+  id?: string;
   name?: string;
-  severity?: string;
-  diagnoses?: Diagnosis[];
-}
-
-export interface Doctor {
-  /** @format int32 */
-  id?: number;
-  name?: string;
-  specialty?: string;
-  /** @format int32 */
-  yearsExperience?: number | null;
-  diagnoses?: Diagnosis[];
-}
-
-export interface PatientTreatment {
-  /** @format int32 */
-  id?: number;
-  /** @format int32 */
-  patientId?: number;
-  /** @format int32 */
-  treatmentId?: number;
-  /** @format date-time */
-  startDate?: string | null;
-  /** @format date-time */
-  endDate?: string | null;
-  patient?: Patient;
-  treatment?: Treatment;
-}
-
-export interface Treatment {
-  /** @format int32 */
-  id?: number;
-  name?: string;
-  /** @format double */
-  cost?: number;
-  patientTreatments?: PatientTreatment[];
-}
-
-export interface CreatePatientDto {
-  name?: string;
-  /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
-}
-
-export interface UpdatePatientDto {
-  name?: string;
-  /** @format date */
-  birthdate?: string;
-  gender?: boolean;
-  address?: string | null;
+  email?: string;
+  /** @format decimal */
+  balance?: number;
+  role?: string;
+  status?: string;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -140,7 +108,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:5000" });
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:5001" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -232,20 +200,69 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title My Title
  * @version 1.0.0
- * @baseUrl http://localhost:5000
+ * @baseUrl http://localhost:5001
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
-  api = {
+  game = {
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientCreatePatient
-     * @request POST:/api/Patient
+     * @tags Game
+     * @name GameNewGame
+     * @request POST:/Game/NewGame
      */
-    patientCreatePatient: (data: CreatePatientDto, params: RequestParams = {}) =>
-      this.request<Patient, any>({
-        path: `/api/Patient`,
+    gameNewGame: (data: number, params: RequestParams = {}) =>
+      this.request<GameResponseDTO, any>({
+        path: `/Game/NewGame`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  test = {
+    /**
+     * No description
+     *
+     * @tags Test
+     * @name TestExampleAuthenticated
+     * @request GET:/Test/auth
+     */
+    testExampleAuthenticated: (params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/Test/auth`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Test
+     * @name TestExampleAuthenticatedWithRole
+     * @request GET:/Test/admin
+     */
+    testExampleAuthenticatedWithRole: (params: RequestParams = {}) =>
+      this.request<boolean, any>({
+        path: `/Test/admin`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
+  };
+  user = {
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserPSignup
+     * @request POST:/User/signup
+     */
+    userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
+      this.request<UserResponseDTO, any>({
+        path: `/User/signup`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -256,14 +273,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientUpdatePatient
-     * @request PUT:/api/Patient
+     * @tags User
+     * @name UserPLogin
+     * @request POST:/User/login
      */
-    patientUpdatePatient: (data: UpdatePatientDto, params: RequestParams = {}) =>
-      this.request<Patient, any>({
-        path: `/api/Patient`,
-        method: "PUT",
+    userPLogin: (data: UserLoginRequestDTO, params: RequestParams = {}) =>
+      this.request<UserResponseDTO, any>({
+        path: `/User/login`,
+        method: "POST",
         body: data,
         type: ContentType.Json,
         format: "json",
@@ -273,29 +290,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Patient
-     * @name PatientGetAllPatients
-     * @request GET:/api/Patient
+     * @tags User
+     * @name UserGGetUser
+     * @request GET:/User/@me
      */
-    patientGetAllPatients: (
-      query?: {
-        /**
-         * @format int32
-         * @default 10
-         */
-        limit?: number;
-        /**
-         * @format int32
-         * @default 0
-         */
-        startAt?: number;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<Patient[], any>({
-        path: `/api/Patient`,
+    userGGetUser: (params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@me`,
         method: "GET",
-        query: query,
         format: "json",
         ...params,
       }),

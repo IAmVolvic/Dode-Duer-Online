@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
 
@@ -12,8 +13,8 @@ public partial class Game
     public DateOnly Date { get; set; }
 
     public string? Winningnumbers { get; set; }
-
-    public string? Status { get; set; }
+    
+    public GameStatus Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 

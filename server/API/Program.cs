@@ -1,11 +1,13 @@
+using System.Text.Json.Serialization;
 using API.ActionFilters;
-using DataAccess;
 using DataAccess.Contexts;
+using API.Automation;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Service.Security;
 using Service.Services;
 using Service.Services.Interfaces;
@@ -30,6 +32,12 @@ public class Program
         // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
         var app = builder.Build();
         ConfigureMiddleware(app);
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            var adminUser = scope.ServiceProvider.GetRequiredService<AdminUser>();
+            adminUser.RegisterAdminUser();
+        }
     
         app.Run();
     }
@@ -60,8 +68,7 @@ public class Program
         // ===================== * DATABASE CONTEXT * ===================== //
         builder.Services.AddDbContext<LotteryContext>(options =>
             options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
-        
-        
+
         // ===================== * CONTROLLERS & MVC * ===================== //
         builder.Services.AddControllersWithViews(options =>
         {
@@ -81,8 +88,11 @@ public class Program
         builder.Services.AddScoped<IGameRepository, GameRepository>();
         builder.Services.AddScoped<IPriceRepository, PriceRepository>();
         builder.Services.AddScoped<IBoardRepository, BoardRepository>();
+        builder.Services.AddScoped<ITransactionService, TransactionService>();
+        builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
         builder.Services.AddScoped<IBoardService, BoardService>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
+        builder.Services.AddScoped<AdminUser>();
         builder.Services.AddScoped<AuthenticatedFilter>();
         
         
@@ -101,7 +111,11 @@ public class Program
 
         // ===================== * SWAGGER (API Documentation) * ===================== //
         app.UseOpenApi();
-        app.UseSwaggerUi();
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+            c.RoutePrefix = string.Empty;
+        });
         
         // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();

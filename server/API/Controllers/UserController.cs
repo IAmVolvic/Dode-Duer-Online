@@ -1,5 +1,4 @@
 using API.Attributes;
-using API.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
