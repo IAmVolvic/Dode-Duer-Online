@@ -1,3 +1,15 @@
+/*User TABLE*/
+CREATE TYPE enrollment_status AS ENUM ('true', 'false');
+CREATE TYPE user_status AS ENUM ('active', 'inactive');
+CREATE TYPE user_roles AS ENUM ('user', 'admin');
+
+/*Game TABLE*/
+CREATE TYPE game_status AS ENUM ('active', 'inactive');
+
+/*Transaction TABLE*/
+CREATE TYPE transaction_status AS ENUM ('pending', 'approved', 'rejected');
+
+
 CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
@@ -9,9 +21,6 @@ CREATE TABLE Users (
                        Role user_roles DEFAULT 'user',
                        Status user_status  DEFAULT 'active'
 );
-CREATE TYPE enrollment_status AS ENUM ('true', 'false');
-CREATE TYPE user_status AS ENUM ('active', 'inactive');
-CREATE TYPE user_roles AS ENUM ('user', 'admin');
 
 CREATE TABLE Prices (
                         Id UUID PRIMARY KEY ,
@@ -26,7 +35,6 @@ CREATE TABLE Game (
                       WinningNumbers VARCHAR(50),
                       Status game_status   DEFAULT 'active'
 );
-CREATE TYPE game_status AS ENUM ('active', 'inactive');
 
 CREATE TABLE Board (
                        Id UUID PRIMARY KEY,
@@ -46,7 +54,6 @@ CREATE TABLE Transactions (
                               TransactionStatus transaction_status DEFAULT 'pending',
                               FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
-CREATE TYPE transaction_status AS ENUM ('pending', 'approved', 'rejected');
 
 CREATE TABLE ChosenNumbers (
                                Id UUID PRIMARY KEY,
