@@ -1,10 +1,10 @@
-using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Repositories;
 
-public class TransactionRepository(UserContext context) : ITransactionRepository
+public class TransactionRepository(LotteryContext context) : ITransactionRepository
 {
 
     public Transaction NewTransaction(Transaction newTransaction)
@@ -29,8 +29,8 @@ public class TransactionRepository(UserContext context) : ITransactionRepository
     public Transaction[] GetAllTransactions()
     {
         return context.Transactions
-            .OrderByDescending(t => t.TransactionStatus == "Pending")
-            .ThenBy(t => t.Id) 
+            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatus.Pending)
+            .ThenBy(t => t.Id)
             .ToArray();
     }
 
@@ -38,8 +38,8 @@ public class TransactionRepository(UserContext context) : ITransactionRepository
     public Transaction[] GetAllTransactionsByUserId(Guid userId)
     {
         var transactions = context.Transactions
-            .Where(t => t.UserId == userId)
-            .OrderByDescending(t => t.TransactionStatus == "Pending")
+            .Where(t => t.Userid == userId)
+            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatus.Pending)
             .ThenBy(t => t.Id)
             .ToArray();
 
@@ -55,6 +55,6 @@ public class TransactionRepository(UserContext context) : ITransactionRepository
     
     public Boolean TransactionAlreadyExists(string transactionNumber)
     {
-        return context.Transactions.Any(t => t.TransactionNumber == transactionNumber);
+        return context.Transactions.Any(t => t.Transactionnumber == transactionNumber);
     }
 }

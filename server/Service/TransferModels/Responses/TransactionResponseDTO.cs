@@ -22,11 +22,11 @@ public class TransactionResponseDTO
         return new TransactionResponseDTO
         {
             Id = transaction.Id,
-            UserId = transaction.UserId,
-            TransactionPhoneNumber = transaction.TransactionPhoneNumber,
+            UserId = transaction.Userid,
+            /*TransactionPhoneNumber = transaction.TransactionPhoneNumber,
             TransactionUsername = transaction.TransactionUsername,
             TransactionNumber = transaction.TransactionNumber,
-            TransactionStatus = transaction.TransactionStatus
+            TransactionStatus = transaction.TransactionStatus*/
         };
     }
 }

@@ -1,4 +1,5 @@
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace Service.TransferModels.Responses;
 
@@ -8,8 +9,8 @@ public class AuthorizedUserResponseDTO
     public string Name { get; set; }
     public string Email { get; set; }
     public decimal Balance { get; set; }
-    public string Role { get; set; }
-    public string Status { get; set; }
+    public UserRole Role { get; set; }
+    public UserStatus Status { get; set; }
     
     
     public static AuthorizedUserResponseDTO FromEntity(User user)

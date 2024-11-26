@@ -1,6 +1,7 @@
 using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 using Microsoft.AspNetCore.Identity;
 using Service.Security;
 using Service.Services.Interfaces;
@@ -32,17 +33,17 @@ public class UserService : IUserService
             Name = newUser.Name,
             Email = newUser.Email,
             Balance = 0,
-            Status = "Active",
-            Role = "User"
+            Status = UserStatus.Active,
+            Role = UserRole.User,
         };
-        user.Passwordhash = _passwordHasher.HashPassword(user, newUser.Password); // Need to pass the user into this
+        user.Passwordhash = "abc"; /*_passwordHasher.HashPassword(user, newUser.Password);*/ // Need to pass the user into this
 
         if (EmailExists(newUser.Email))
         {
             throw new ErrorException("Email", "Email already exists");
         }
 
-        var createdUser = _repository.CreateUserDB(user);
+        var createdUser = _repository.CreateUserDb(user);
         return UserResponseDTO.FromEntity(createdUser, _jwtManager);
     }
 

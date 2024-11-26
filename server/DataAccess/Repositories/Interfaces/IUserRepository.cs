@@ -4,7 +4,7 @@ namespace DataAccess.Interfaces;
 
 public interface IUserRepository
 {
-    public User CreateUserDB(User newUser);
+    public User CreateUserDb(User newUser);
 
     public User GetUserByEmail(string email);
 
@@ -12,5 +12,8 @@ public interface IUserRepository
     
     public Boolean EmailAlreadyExists(string email);
 
-    public User UpdateUserDB(User user);
+    public Boolean PhoneNumberAlreadyExists(string phoneNumber);
+
+    public User UpdateUserDb(User user);
+    
 }

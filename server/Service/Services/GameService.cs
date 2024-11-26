@@ -1,5 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 using Service.Services.Interfaces;
 using Service.TransferModels.Responses;
 
@@ -26,12 +27,12 @@ public class GameService(IGameRepository gameRepository) : IGameService
         game.Id = Guid.NewGuid();
         game.Date = DateOnly.FromDateTime(lastMonday);
         game.Prizepool = prize;
-        game.Status = "Active";
+        game.Status = GameStatus.Active;
         
         var activeGame = gameRepository.GetActiveGame();
         if (activeGame != null)
         {
-            activeGame.Status = "Inactive";
+            activeGame.Status = GameStatus.Inactive;
         }
         
         var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));

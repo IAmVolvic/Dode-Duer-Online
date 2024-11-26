@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess;
@@ -28,6 +29,13 @@ public partial class LotteryContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .HasPostgresEnum("enrollment_status", new[] { "true", "false" })
+            .HasPostgresEnum("game_status", new[] { "active", "inactive" })
+            .HasPostgresEnum("transaction_status", new[] { "pending", "approved", "rejected" })
+            .HasPostgresEnum("user_roles", new[] { "user", "admin" })
+            .HasPostgresEnum("user_status", new[] { "active", "inactive" });
+
         modelBuilder.Entity<Board>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("board_pkey");
@@ -91,13 +99,16 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Prizepool)
                 .HasPrecision(10, 2)
                 .HasColumnName("prizepool");
-            entity.Property(e => e.Status)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("'Active'::character varying")
-                .HasColumnName("status");
             entity.Property(e => e.Winningnumbers)
                 .HasMaxLength(50)
                 .HasColumnName("winningnumbers");
+            
+            entity.Property(e => e.Status)
+                .HasConversion(
+                    v => v.ToString(),  // Convert enum to string before saving to DB
+                    v => (GameStatus)Enum.Parse(typeof(GameStatus), v)  // Convert string back to enum when reading from DB
+                )
+                .HasColumnName("status");
         });
 
         modelBuilder.Entity<Price>(entity =>
@@ -129,10 +140,6 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Transactionnumber)
                 .HasMaxLength(255)
                 .HasColumnName("transactionnumber");
-            entity.Property(e => e.Transactionstatus)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("'Pending'::character varying")
-                .HasColumnName("transactionstatus");
             entity.Property(e => e.Userid).HasColumnName("userid");
 
             entity.HasOne(d => d.User).WithMany(p => p.Transactions)
@@ -165,17 +172,31 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Passwordhash)
                 .HasMaxLength(255)
                 .HasColumnName("passwordhash");
+            
+            entity.Property(e => e.Role)
+                .HasConversion(
+                    v => v.ToString(),  // Convert enum to string before saving to DB
+                    v => (UserRole)Enum.Parse(typeof(UserRole), v)  // Convert string back to enum when reading from DB
+                )
+                .HasColumnName("role");
+
+            entity.Property(e => e.Status)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (UserStatus)Enum.Parse(typeof(UserStatus), v)
+                )
+                .HasColumnName("status");
+
+            entity.Property(e => e.Enrolled)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (UserEnrolled)Enum.Parse(typeof(UserEnrolled), v)
+                )
+                .HasColumnName("enrolled");
+            
             entity.Property(e => e.Phonenumber)
                 .HasMaxLength(255)
                 .HasColumnName("phonenumber");
-            entity.Property(e => e.Role)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("'User'::character varying")
-                .HasColumnName("role");
-            entity.Property(e => e.Status)
-                .HasMaxLength(255)
-                .HasDefaultValueSql("'Active'::character varying")
-                .HasColumnName("status");
         });
 
         modelBuilder.Entity<Winner>(entity =>

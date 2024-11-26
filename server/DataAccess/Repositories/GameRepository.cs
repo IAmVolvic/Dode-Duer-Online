@@ -1,10 +1,10 @@
-﻿using DataAccess.Contexts;
-using DataAccess.Interfaces;
+﻿using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Repositories;
 
-public class GameRepository(GameContext context) : IGameRepository
+public class GameRepository(LotteryContext context) : IGameRepository
 {
     public Game NewGame(Game game, Game activeGame)
     {
@@ -24,6 +24,6 @@ public class GameRepository(GameContext context) : IGameRepository
 
     public Game GetActiveGame()
     {
-        return context.Games.FirstOrDefault(g => g.Status == "Active");
+        return context.Games.FirstOrDefault(g => g.Status == GameStatus.Active);
     }
 }

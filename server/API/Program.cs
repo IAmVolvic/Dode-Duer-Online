@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using API.ActionFilters;
-using DataAccess.Contexts;
+using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
@@ -59,11 +59,8 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
-        builder.Services.AddDbContext<UserContext>(options =>
+        builder.Services.AddDbContext<LotteryContext>(options =>
             options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddDbContext<GameContext>(options =>
-            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
-        
         // ===================== * CONTROLLERS & MVC * ===================== //
         builder.Services.AddControllersWithViews(options =>
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
 
@@ -14,12 +13,14 @@ public partial class User
     public string Phonenumber { get; set; } = null!;
 
     public string Passwordhash { get; set; } = null!;
-
-    public decimal? Balance { get; set; }
-
-    public string? Role { get; set; }
-
-    public string? Status { get; set; }
+    
+    public UserEnrolled Enrolled { get; set; }
+    
+    public decimal Balance { get; set; }
+    
+    public UserRole Role { get; set; }
+    
+    public UserStatus Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 

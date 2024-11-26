@@ -1,12 +1,11 @@
-using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 
 namespace DataAccess.Repositories;
 
-public class UserRepository(UserContext context) : IUserRepository
+public class UserRepository(LotteryContext context) : IUserRepository
 {
-    public User CreateUserDB(User newUser)
+    public User CreateUserDb(User newUser)
     {
         context.Users.Add(newUser);
         context.SaveChanges();
@@ -14,11 +13,10 @@ public class UserRepository(UserContext context) : IUserRepository
     }
 
 
-    public User UpdateUserDB(User user)
+    public User UpdateUserDb(User user)
     {
         var updatedUser = context.Users.Find(user.Id);
         
-       
         if (user.Name != null)
         {
             updatedUser.Name = user.Name;
@@ -49,6 +47,11 @@ public class UserRepository(UserContext context) : IUserRepository
             updatedUser.Status = user.Status;
         }
 
+        if (user.Enrolled != null)
+        {
+            updatedUser.Enrolled = user.Enrolled;
+        }
+
         context.SaveChanges();
         return updatedUser;
     }
@@ -69,5 +72,10 @@ public class UserRepository(UserContext context) : IUserRepository
     public Boolean EmailAlreadyExists(string email)
     {
         return context.Users.Any(u => u.Email == email);
+    }
+    
+    public Boolean PhoneNumberAlreadyExists(string phoneNumber)
+    {
+        return context.Users.Any(u => u.Phonenumber == phoneNumber);
     }
 }

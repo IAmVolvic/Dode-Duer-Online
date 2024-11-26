@@ -17,12 +17,12 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         var transaction = new Transaction
         {
             Id = transactionId,
-            UserId = user.Id,
+            /*UserId = user.Id,*/
             User = user,
-            TransactionNumber = depositRequest.TransactionNumber,
+            /*TransactionNumber = depositRequest.TransactionNumber,
             TransactionPhoneNumber = depositRequest.TransactionPhoneNumber,
             TransactionUsername = depositRequest.TransactionUsername,
-            TransactionStatus = "Pending"
+            TransactionStatus = "Pending"*/
         };
 
         if (TransactionNumberExists(depositRequest.TransactionNumber))
@@ -40,7 +40,7 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         var transaction = transactionRepository.GetTransactionById(balanceAdjustmentRequest.TransactionId);
         var userBalance = transaction.User.Balance;
         
-        if (transaction == null)
+        /*if (transaction == null)
         {
             throw new ErrorException("Transaction", "Transaction not found");
         }
@@ -65,7 +65,8 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         };
         
         userRepository.UpdateUserDB(updatedUser);
-        return userBalance;
+        return userBalance;*/
+        return 0;
     }
 
 

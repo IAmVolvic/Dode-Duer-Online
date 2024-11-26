@@ -50,7 +50,7 @@ public class AuthService : IAuthService
     {
         var userData = GetAuthorizedUser(jwtToken);
         
-        if (!roles.Contains(userData.Role))
+        if (!roles.Contains(userData.Role.ToString()))
         {
             throw new ErrorException("Authorization", "User does not have the required role.");
         }
