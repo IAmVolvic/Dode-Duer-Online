@@ -82,6 +82,7 @@ public class Program
         builder.Services.AddScoped<IUserService, UserService>();
         builder.Services.AddScoped<IAuthService, AuthService>();
         builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+        builder.Services.AddScoped<EmailService>();
         builder.Services.AddScoped<IUserRepository, UserRepository>();
         builder.Services.AddScoped<IGameService, GameService>();
         builder.Services.AddScoped<IGameRepository, GameRepository>();

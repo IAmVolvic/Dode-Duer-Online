@@ -15,12 +15,14 @@ public class UserService : IUserService
     private readonly IPasswordHasher<User> _passwordHasher;
     private readonly IUserRepository _repository;
     private readonly IJWTManager _jwtManager;
+    private readonly EmailService _emailService;
     
-    public UserService(IPasswordHasher<User> passwordHasher, IJWTManager jwtManager, IUserRepository userRepository)
+    public UserService(IPasswordHasher<User> passwordHasher, IJWTManager jwtManager, IUserRepository userRepository, EmailService emailService)
     {
         _passwordHasher = passwordHasher;
         _repository = userRepository;
         _jwtManager = jwtManager;
+        _emailService = emailService;
     }
 
     
@@ -47,6 +49,7 @@ public class UserService : IUserService
         
         // SMTP email to user letting them know they had been signed up
         Console.WriteLine(randomPassword);
+        _emailService.SendTempPasswordToEmail(newUser.Name, newUser.Email, randomPassword);
         
         _repository.CreateUserDb(user);
         return AuthorizedUserResponseDTO.FromEntity(user);
