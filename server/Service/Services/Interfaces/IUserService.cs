@@ -9,5 +9,7 @@ public interface IUserService
     public AuthorizedUserResponseDTO Signup(UserSignupRequestDTO newUser);
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest);
 
+    public AuthorizedUserResponseDTO EnrollUser(Guid userId, UserEnrollmentRequestDTO newPassword);
+
     public void NewAdmin(User newUser);
 }
