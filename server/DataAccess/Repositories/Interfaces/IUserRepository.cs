@@ -14,6 +14,8 @@ public interface IUserRepository
 
     public Boolean PhoneNumberAlreadyExists(string phoneNumber);
 
+    public Boolean AdminAlreadyExists();
+
     public User UpdateUserDb(User user);
     
 }

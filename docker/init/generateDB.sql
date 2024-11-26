@@ -1,25 +1,13 @@
-/*User TABLE*/
-CREATE TYPE enrollment_status AS ENUM ('true', 'false');
-CREATE TYPE user_status AS ENUM ('active', 'inactive');
-CREATE TYPE user_roles AS ENUM ('user', 'admin');
-
-/*Game TABLE*/
-CREATE TYPE game_status AS ENUM ('active', 'inactive');
-
-/*Transaction TABLE*/
-CREATE TYPE transaction_status AS ENUM ('pending', 'approved', 'rejected');
-
-
 CREATE TABLE Users (
                        Id UUID PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
                        Email VARCHAR(255) UNIQUE NOT NULL,
                        PhoneNumber VARCHAR(255) NOT NULL,
                        PasswordHash VARCHAR(255) NOT NULL,
-                       Enrolled enrollment_status DEFAULT 'false',
+                       Enrolled VARCHAR(255) DEFAULT 'False',
                        Balance DECIMAL(10, 2) DEFAULT 0,
-                       Role user_roles DEFAULT 'user',
-                       Status user_status  DEFAULT 'active'
+                       Role VARCHAR(255) DEFAULT 'User',
+                       Status VARCHAR(255)  DEFAULT 'Active'
 );
 
 CREATE TABLE Prices (
@@ -33,7 +21,7 @@ CREATE TABLE Game (
                       PrizePool DECIMAL(10, 2),
                       Date DATE NOT NULL,
                       WinningNumbers VARCHAR(50),
-                      Status game_status   DEFAULT 'active'
+                      Status VARCHAR(255) DEFAULT 'Active'
 );
 
 CREATE TABLE Board (
@@ -51,7 +39,7 @@ CREATE TABLE Transactions (
                               Id UUID PRIMARY KEY,
                               UserId UUID NOT NULL,
                               TransactionNumber VARCHAR(255) NOT NULL, /*MobilePay transaction number*/
-                              TransactionStatus transaction_status DEFAULT 'pending',
+                              TransactionStatus VARCHAR(255) DEFAULT 'Pending',
                               FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
 

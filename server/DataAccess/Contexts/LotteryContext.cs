@@ -30,7 +30,7 @@ public partial class LotteryContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder
-            .HasPostgresEnum("enrollment_status", new[] { "true", "false" })
+            .HasPostgresEnum("enrollment_status", new[] { "truey", "falsey" })
             .HasPostgresEnum("game_status", new[] { "active", "inactive" })
             .HasPostgresEnum("transaction_status", new[] { "pending", "approved", "rejected" })
             .HasPostgresEnum("user_roles", new[] { "user", "admin" })
@@ -159,19 +159,35 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            
+            entity.Property(e => e.Name)
+                .HasMaxLength(255)
+                .HasColumnName("name");
+            
+            entity.Property(e => e.Email)
+                .HasMaxLength(255)
+                .HasColumnName("email");
+            
+            entity.Property(e => e.Phonenumber)
+                .HasMaxLength(255)
+                .HasColumnName("phonenumber");
+            
+            entity.Property(e => e.Passwordhash)
+                .HasMaxLength(255)
+                .HasColumnName("passwordhash");
+            
+            entity.Property(e => e.Enrolled)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (UserEnrolled)Enum.Parse(typeof(UserEnrolled), v)
+                )
+                .HasColumnName("enrolled");
+            
             entity.Property(e => e.Balance)
                 .HasPrecision(10, 2)
                 .HasDefaultValueSql("0")
                 .HasColumnName("balance");
-            entity.Property(e => e.Email)
-                .HasMaxLength(255)
-                .HasColumnName("email");
-            entity.Property(e => e.Name)
-                .HasMaxLength(255)
-                .HasColumnName("name");
-            entity.Property(e => e.Passwordhash)
-                .HasMaxLength(255)
-                .HasColumnName("passwordhash");
+            
             
             entity.Property(e => e.Role)
                 .HasConversion(
@@ -186,17 +202,6 @@ public partial class LotteryContext : DbContext
                     v => (UserStatus)Enum.Parse(typeof(UserStatus), v)
                 )
                 .HasColumnName("status");
-
-            entity.Property(e => e.Enrolled)
-                .HasConversion(
-                    v => v.ToString(),
-                    v => (UserEnrolled)Enum.Parse(typeof(UserEnrolled), v)
-                )
-                .HasColumnName("enrolled");
-            
-            entity.Property(e => e.Phonenumber)
-                .HasMaxLength(255)
-                .HasColumnName("phonenumber");
         });
 
         modelBuilder.Entity<Winner>(entity =>

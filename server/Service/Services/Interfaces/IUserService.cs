@@ -1,3 +1,4 @@
+using DataAccess.Models;
 using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 
@@ -7,4 +8,6 @@ public interface IUserService
 {
     public UserResponseDTO Signup(UserSignupRequestDTO newUser);
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest);
+
+    public void NewAdmin(User newUser);
 }

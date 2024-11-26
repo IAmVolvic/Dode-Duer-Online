@@ -1,5 +1,6 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Repositories;
 
@@ -72,6 +73,11 @@ public class UserRepository(LotteryContext context) : IUserRepository
     public Boolean EmailAlreadyExists(string email)
     {
         return context.Users.Any(u => u.Email == email);
+    }
+    
+    public Boolean AdminAlreadyExists()
+    {
+        return context.Users.Any(u => u.Role == UserRole.Admin);
     }
     
     public Boolean PhoneNumberAlreadyExists(string phoneNumber)

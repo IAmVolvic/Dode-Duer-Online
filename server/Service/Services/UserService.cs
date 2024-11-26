@@ -46,6 +46,31 @@ public class UserService : IUserService
         var createdUser = _repository.CreateUserDb(user);
         return UserResponseDTO.FromEntity(createdUser, _jwtManager);
     }
+    
+    
+    public void NewAdmin(User newUser)
+    {
+        Guid adminId = Guid.NewGuid();
+        newUser.Id = adminId;
+        newUser.Passwordhash = _passwordHasher.HashPassword(newUser, newUser.Passwordhash);
+
+        if (_repository.AdminAlreadyExists())
+        {
+            return;
+        }
+        
+        if (EmailExists(newUser.Email))
+        {
+            throw new ErrorException("Email", "Email already exists");
+        }
+
+        if (PhoneNumberExists(newUser.Phonenumber))
+        {
+            throw new ErrorException("Phone", "Phone number already exists");
+        }
+
+        _repository.CreateUserDb(newUser);
+    }
 
     
     public UserResponseDTO Login(UserLoginRequestDTO userLoginRequest)
@@ -70,5 +95,10 @@ public class UserService : IUserService
     private bool EmailExists(string email)
     {
         return _repository.EmailAlreadyExists(email);
+    }
+    
+    private bool PhoneNumberExists(string phoneNumber)
+    {
+        return _repository.PhoneNumberAlreadyExists(phoneNumber);
     }
 }
