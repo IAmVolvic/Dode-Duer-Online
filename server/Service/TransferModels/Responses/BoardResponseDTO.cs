@@ -27,7 +27,8 @@ public class BoardResponseDTO
             Userid = board.Userid,
             Gameid = board.Gameid,
             Price = board.Price.Price1,
-            Numbers = board.Chosennumbers.Select(n => n.Number).ToList()
+            Numbers = board.Chosennumbers.Select(n => n.Number).ToList(),
+            Dateofpurchase = board.Dateofpurchase
         };
     }
 }
