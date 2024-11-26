@@ -4,7 +4,7 @@ using DataAccess.Models;
 
 namespace DataAccess.Repositories;
 
-public class PriceRepository(GameContext context) : IPriceRepository
+public class PriceRepository(LotteryContext context) : IPriceRepository
 {
     public Price GetPrice(int numbers)
     {

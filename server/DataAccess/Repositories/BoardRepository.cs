@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories;
 
-public class BoardRepository(GameContext context) : IBoardRepository
+public class BoardRepository(LotteryContext context) : IBoardRepository
 {
     public Board PlayBoard(Board board)
     {

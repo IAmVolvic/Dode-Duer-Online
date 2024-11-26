@@ -4,7 +4,7 @@ using DataAccess.Models;
 
 namespace DataAccess.Repositories;
 
-public class UserRepository(UserContext context) : IUserRepository
+public class UserRepository(LotteryContext context) : IUserRepository
 {
     public User CreateUserDB(User newUser)
     {

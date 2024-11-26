@@ -54,7 +54,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
         _output.WriteLine($"Response Status Code: {response.StatusCode}");
         _output.WriteLine($"Response Content: {await response.Content.ReadAsStringAsync()}");
-        Assert.True(response.StatusCode == HttpStatusCode.OK, _pgCtxSetup._postgres.GetConnectionString());
+        Assert.True(response.StatusCode == HttpStatusCode.OK);
 
         var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
         Assert.NotNull(returnedGame);
@@ -87,7 +87,6 @@ public class GameApiTest : WebApplicationFactory<Program>
     [Fact]
     public async Task Create_Game_API_Test_Creates_Game_Without_Starting_Prize_Pool()
     {
-        
         var startingPrizePool = 0;
 
         var guid = new Guid();
@@ -112,7 +111,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         var response = await client.PostAsJsonAsync("/Game/NewGame", startingPrizePool);
         _output.WriteLine($"Response Status Code: {response.StatusCode}");
         _output.WriteLine($"Response Content: {await response.Content.ReadAsStringAsync()}");
-        Assert.True(response.StatusCode == HttpStatusCode.OK, _pgCtxSetup._postgres.GetConnectionString());
+        Assert.True(response.StatusCode == HttpStatusCode.OK);
 
         var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
         Assert.NotNull(returnedGame);

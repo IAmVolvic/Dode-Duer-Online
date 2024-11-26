@@ -150,4 +150,60 @@ VALUES
         var boardInDb = _pgCtxSetupUser.DbContextInstance.Boards.FirstOrDefault();
         Assert.Null(boardInDb);
     }
+    
+    [Theory]
+    [InlineData(new int[] { 0, 2, 3,5,6 })]
+    [InlineData(new int[] { 1, 2, 3,4,17})]
+    public async Task Play_Board_Doesnt_Work_When_Numbers_Arent_Within_Range(int[] numbers)
+    {
+        var numbersList = numbers.ToList();
+        var guidUser = Guid.NewGuid();
+        var player = new User()
+        {
+            Id = guidUser,
+            Name = "John Doe",
+            Email = "john.doe@gmail.com",
+            Passwordhash = "wipadjawpodjiawdpawidjpaw"
+        };
+        
+        _pgCtxSetupUser.DbContextInstance.Users.Add(player);
+        _pgCtxSetupUser.DbContextInstance.SaveChanges();
+        
+        var guidGame = Guid.NewGuid();
+        var game = new Game()
+        {
+            Id = guidGame,
+            Date = DateOnly.FromDateTime(DateTime.Now),
+            Prizepool = 0
+        };
+        
+        _pgCtxSetupUser.DbContextInstance.Games.Add(game);
+        _pgCtxSetupUser.DbContextInstance.SaveChanges();
+
+        var board = new PlayBoardDTO()
+        {
+            Dateofpurchase = DateOnly.FromDateTime(DateTime.Now),
+            Numbers = numbersList,
+            Userid = guidUser
+        };
+        
+        _pgCtxSetupUser.DbContextInstance.Database.ExecuteSqlRaw(@"
+INSERT INTO prices (id, price, numbers)
+VALUES
+    ('95f9a200-4538-4e43-8674-38b67579b8a7', 20.00, 5.00),
+    ('1cd3f690-2eeb-405c-b8a7-922c80f0cb3d', 40.00, 6.00),
+    ('af8c5461-d9ec-4ede-9bf0-abf2ffac9895', 80.00, 7.00),
+    ('ac6f719f-e9e0-4fde-9b31-a12562f7ce01', 160.00, 8.00);");
+
+        var client = CreateClient();
+
+        var response = await client.PostAsJsonAsync("/Board/Play", board );
+        var responseContent = await response.Content.ReadAsStringAsync();
+        _output.WriteLine(responseContent);
+        
+        // Assert
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var boardInDb = _pgCtxSetupUser.DbContextInstance.Boards.FirstOrDefault();
+        Assert.Null(boardInDb);
+    }
 }

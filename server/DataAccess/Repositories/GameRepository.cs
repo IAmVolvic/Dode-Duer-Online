@@ -4,7 +4,7 @@ using DataAccess.Models;
 
 namespace DataAccess.Repositories;
 
-public class GameRepository(GameContext context) : IGameRepository
+public class GameRepository(LotteryContext context) : IGameRepository
 {
     public Game NewGame(Game game, Game activeGame)
     {

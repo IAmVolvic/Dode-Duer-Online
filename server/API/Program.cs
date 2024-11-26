@@ -1,4 +1,5 @@
 using API.ActionFilters;
+using DataAccess;
 using DataAccess.Contexts;
 using DataAccess.Interfaces;
 using DataAccess.Models;
@@ -57,10 +58,9 @@ public class Program
     private static void ConfigureServices(WebApplicationBuilder builder)
     {
         // ===================== * DATABASE CONTEXT * ===================== //
-        builder.Services.AddDbContext<UserContext>(options =>
+        builder.Services.AddDbContext<LotteryContext>(options =>
             options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
-        builder.Services.AddDbContext<GameContext>(options =>
-            options.UseNpgsql(Environment.GetEnvironmentVariable("TestDb") ?? builder.Configuration.GetConnectionString("DefaultConnection")));
+        
         
         // ===================== * CONTROLLERS & MVC * ===================== //
         builder.Services.AddControllersWithViews(options =>
