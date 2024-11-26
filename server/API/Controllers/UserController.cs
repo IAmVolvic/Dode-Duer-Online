@@ -11,18 +11,28 @@ namespace API.Controllers;
 public class UserController(IUserService service): ControllerBase
 {
     [HttpPost]
-    [Route("signup")]
-    public ActionResult<UserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
+    [Route("@admin/signup")]
+    [Rolepolicy("Admin")]
+    public ActionResult<AuthorizedUserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
     {
         return Ok(service.Signup(request));
     }
     
     
     [HttpPost]
-    [Route("login")]
+    [Route("@user/login")]
     public ActionResult<UserResponseDTO> PLogin([FromBody] UserLoginRequestDTO data)
     {
         return Ok(service.Login(data));
+    }
+    
+    
+    [HttpPatch]
+    [Route("@user/enroll")]
+    public ActionResult<AuthorizedUserResponseDTO> PEnroll([FromBody] UserEnrollmentRequestDTO data)
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(service.EnrollUser(authUser.Id, data));
     }
     
     
