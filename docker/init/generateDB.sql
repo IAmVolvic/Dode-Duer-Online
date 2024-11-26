@@ -4,7 +4,7 @@ CREATE TABLE Users (
                        Email VARCHAR(255) UNIQUE NOT NULL,
                        PhoneNumber VARCHAR(255) NOT NULL,
                        PasswordHash VARCHAR(255) NOT NULL,
-                       Enrolled enrollment_status DEFAULT 'true',
+                       Enrolled enrollment_status DEFAULT 'false',
                        Balance DECIMAL(10, 2) DEFAULT 0,
                        Role user_roles DEFAULT 'user',
                        Status user_status  DEFAULT 'active'
