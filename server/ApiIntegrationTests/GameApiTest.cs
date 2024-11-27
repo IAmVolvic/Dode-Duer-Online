@@ -62,7 +62,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
         Assert.NotNull(returnedGame);
 
-        var gameInDb = _pgCtxSetup.DbContextInstance.Games.First();
+        var gameInDb = _pgCtxSetup.DbContextInstance.Games.First(g => g.Id == returnedGame.Id);
         Assert.NotNull(gameInDb);
 
         Assert.True(gameInDb.Id == returnedGame.Id, "Game ID in database and API response should match.");
