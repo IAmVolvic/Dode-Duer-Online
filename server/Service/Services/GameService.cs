@@ -8,7 +8,7 @@ namespace Service.Services;
 
 public class GameService(IGameRepository gameRepository) : IGameService
 {
-    public GameResponseDTO NewGame(int prize)
+    public GameResponseDTO NewGameFromMonday(int prize)
     {
         var game = new Game();
 
@@ -37,5 +37,34 @@ public class GameService(IGameRepository gameRepository) : IGameService
         
         var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
         return gameResponse;
+    }
+    
+    public GameResponseDTO NewGame(int prize)
+    {
+        var game = new Game();
+        
+        game.Id = Guid.NewGuid();
+        game.Date = DateOnly.FromDateTime(DateTime.Now);
+        game.Prizepool = prize;
+        game.Status = GameStatus.Active;
+        
+        var activeGame = gameRepository.GetActiveGame();
+        if (activeGame != null)
+        {
+            activeGame.Status = GameStatus.Inactive;
+        }
+        
+        var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
+        return gameResponse;
+    }
+
+    public bool IsAnyGame()
+    {
+        var activeGame = gameRepository.GetActiveGame();
+        if (activeGame != null)
+        {
+            return true;
+        }
+        return false;
     }
 }
