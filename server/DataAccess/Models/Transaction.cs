@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Transactions;
+﻿using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
 
@@ -12,7 +10,7 @@ public partial class Transaction
 
     public string Transactionnumber { get; set; } = null!;
     
-    public TransactionStatus Transactionstatus { get; set; }
+    public TransactionStatusA Transactionstatus { get; set; }
 
     public virtual User User { get; set; } = null!;
 }

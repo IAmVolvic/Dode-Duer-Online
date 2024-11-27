@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Types.Enums;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace DataAccess;
 
@@ -137,9 +136,18 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");
+            
             entity.Property(e => e.Transactionnumber)
                 .HasMaxLength(255)
                 .HasColumnName("transactionnumber");
+            
+            entity.Property(e => e.Transactionstatus)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => (TransactionStatusA)Enum.Parse(typeof(TransactionStatusA), v)
+                )
+                .HasColumnName("transactionstatus");
+            
             entity.Property(e => e.Userid).HasColumnName("userid");
 
             entity.HasOne(d => d.User).WithMany(p => p.Transactions)

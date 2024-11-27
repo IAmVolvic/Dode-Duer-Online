@@ -17,12 +17,9 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         var transaction = new Transaction
         {
             Id = transactionId,
-            /*UserId = user.Id,*/
+            Userid = user.Id,
             User = user,
-            /*TransactionNumber = depositRequest.TransactionNumber,
-            TransactionPhoneNumber = depositRequest.TransactionPhoneNumber,
-            TransactionUsername = depositRequest.TransactionUsername,
-            TransactionStatus = "Pending"*/
+            Transactionnumber = depositRequest.TransactionNumber
         };
 
         if (TransactionNumberExists(depositRequest.TransactionNumber))
@@ -31,42 +28,38 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         }
         
         transactionRepository.NewTransaction(transaction);
-        return TransactionResponseDTO.FromEntity(transaction);
+        return TransactionResponseDTO.FromEntity(transaction, user);
     }
 
 
     public decimal TransactionAdjustment(BalanceAdjustmentRequestDTO balanceAdjustmentRequest)
     {
         var transaction = transactionRepository.GetTransactionById(balanceAdjustmentRequest.TransactionId);
-        var userBalance = transaction.User.Balance;
+        var user = transaction.User;
+        var userBalance = user.Balance;
         
-        /*if (transaction == null)
+        if (transaction == null)
         {
             throw new ErrorException("Transaction", "Transaction not found");
         }
         
         // Adjust the new balance
-        if (balanceAdjustmentRequest.Adjustment == BalanceAdjustmentRequestDTO.AdjustmentType.Deduct)
+        if (balanceAdjustmentRequest.Adjustment == DataAccess.Types.Enums.TransactionAdjustment.Deduct)
         {
             userBalance -= balanceAdjustmentRequest.Amount;
             userBalance = Math.Max(userBalance, 0);
         }
         
-        if (balanceAdjustmentRequest.Adjustment == BalanceAdjustmentRequestDTO.AdjustmentType.Deposit)
+        if (balanceAdjustmentRequest.Adjustment == DataAccess.Types.Enums.TransactionAdjustment.Deposit)
         {
             userBalance += balanceAdjustmentRequest.Amount;
             userBalance = Math.Min(userBalance, 50000);
         }
-
-        var updatedUser = new User
-        {
-            Id = transaction.User.Id,
-            Balance = userBalance
-        };
         
-        userRepository.UpdateUserDB(updatedUser);
-        return userBalance;*/
-        return 0;
+        user.Balance = userBalance;
+        
+        userRepository.UpdateUserDb(user);
+        return userBalance;
     }
 
 
@@ -77,7 +70,7 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         
         foreach (var transaction in transactions)
         {
-            var transactionDTO = TransactionResponseDTO.FromEntity(transaction);
+            var transactionDTO = TransactionResponseDTO.FromEntity(transaction, transaction.User);
             transactionList.Add(transactionDTO);
         }
         
@@ -88,7 +81,6 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
     public TransactionResponseDTO[] TransactionsByUser(Guid userId)
     {
         var transactionList = new List<TransactionResponseDTO>();
-        Console.WriteLine("Am I here?");
         var transactions = transactionRepository.GetAllTransactionsByUserId(userId);
 
         if (transactions == null)
@@ -98,7 +90,7 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         
         foreach (var transaction in transactions)
         {
-            var transactionDTO = TransactionResponseDTO.FromEntity(transaction);
+            var transactionDTO = TransactionResponseDTO.FromEntity(transaction, transaction.User);
             transactionList.Add(transactionDTO);
         }
         

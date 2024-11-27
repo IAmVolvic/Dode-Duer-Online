@@ -1,4 +1,5 @@
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace Service.TransferModels.Responses;
 
@@ -8,25 +9,25 @@ public class TransactionResponseDTO
 
     public Guid UserId { get; set; }
     
-    public string TransactionPhoneNumber { get; set; } = null!; // MobilePay phone number
+    public string PhoneNumber { get; set; } = null!;
     
-    public string TransactionUsername { get; set; } = null!; // MobilePay Username
+    public string Username { get; set; } = null!;
     
-    public string TransactionNumber { get; set; } = null!; // MobilePay transaction number
+    public string TransactionNumber { get; set; } = null!;
     
-    public string TransactionStatus { get; set; } = "Pending"; // Default status "Pending"
+    public string TransactionStatus { get; set; }
     
     
-    public static TransactionResponseDTO FromEntity(Transaction transaction)
+    public static TransactionResponseDTO FromEntity(Transaction transaction, User user)
     {
         return new TransactionResponseDTO
         {
             Id = transaction.Id,
             UserId = transaction.Userid,
-            /*TransactionPhoneNumber = transaction.TransactionPhoneNumber,
-            TransactionUsername = transaction.TransactionUsername,
-            TransactionNumber = transaction.TransactionNumber,
-            TransactionStatus = transaction.TransactionStatus*/
+            Username = user.Name,
+            PhoneNumber = user.Phonenumber,
+            TransactionNumber = transaction.Transactionnumber,
+            TransactionStatus = transaction.Transactionstatus.ToString()
         };
     }
 }

@@ -52,7 +52,8 @@ public class UserRepository(LotteryContext context) : IUserRepository
         {
             updatedUser.Enrolled = user.Enrolled;
         }
-
+        
+        Console.WriteLine("User Role " + updatedUser.Role);
         context.SaveChanges();
         return updatedUser;
     }
