@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Json;
 using System.Net;
 using DataAccess;
+using DataAccess.Types.Enums;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -20,7 +21,10 @@ public class GameApiTest : WebApplicationFactory<Program>
 
     public GameApiTest(ITestOutputHelper output)
     {
-        DotNetEnv.Env.Load();
+        Environment.SetEnvironmentVariable("ADMIN_NAME", "TestAdmin");
+        Environment.SetEnvironmentVariable("ADMIN_EMAIL", "testadmin@example.com");
+        Environment.SetEnvironmentVariable("ADMIN_PHONENUMBER", "12345678");
+        Environment.SetEnvironmentVariable("ADMIN_PASSWORD", "ValidPassword123");
         _pgCtxSetup = new PgCtxSetup<LotteryContext>();
         Environment.SetEnvironmentVariable("TestDb",_pgCtxSetup._postgres.GetConnectionString());
         _output = output;
@@ -64,7 +68,7 @@ public class GameApiTest : WebApplicationFactory<Program>
         Assert.True(gameInDb.Id == returnedGame.Id, "Game ID in database and API response should match.");
         Assert.True(gameInDb.Prizepool == startingPrizePool, "Prize pool in database and input should match.");
         Assert.True(gameInDb.Date == returnedGame.Date, "Game date in database and API response should match.");
-        Assert.True(returnedGame.Status == "Active", "Game status should be 'Active' in API response.");
+        Assert.True(returnedGame.Status == GameStatus.Active, "Game status should be 'Active' in API response.");
     }
     
     [Fact]

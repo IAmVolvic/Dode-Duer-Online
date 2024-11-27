@@ -21,7 +21,7 @@ public class BoardApiTest: WebApplicationFactory<Program>
 
     public BoardApiTest(ITestOutputHelper output)
     {
-        DotNetEnv.Env.Load();
+        DotNetEnv.Env.Load("../API/.env");
         _pgCtxSetupUser = new PgCtxSetup<LotteryContext>();
         Environment.SetEnvironmentVariable("TestDb",_pgCtxSetupUser._postgres.GetConnectionString());
         _output = output;
@@ -36,7 +36,8 @@ public class BoardApiTest: WebApplicationFactory<Program>
             Id = guidUser,
             Name = "John Doe",
             Email = "john.doe@gmail.com",
-            Passwordhash = "wipadjawpodjiawdpawidjpaw"
+            Passwordhash = "wipadjawpodjiawdpawidjpaw",
+            Phonenumber = "01234561",
         };
         
         _pgCtxSetupUser.DbContextInstance.Users.Add(player);
@@ -106,7 +107,8 @@ VALUES
             Id = guidUser,
             Name = "John Doe",
             Email = "john.doe@gmail.com",
-            Passwordhash = "wipadjawpodjiawdpawidjpaw"
+            Passwordhash = "wipadjawpodjiawdpawidjpaw",
+            Phonenumber = "01234561",
         };
         
         _pgCtxSetupUser.DbContextInstance.Users.Add(player);
@@ -162,7 +164,8 @@ VALUES
             Id = guidUser,
             Name = "John Doe",
             Email = "john.doe@gmail.com",
-            Passwordhash = "wipadjawpodjiawdpawidjpaw"
+            Passwordhash = "wipadjawpodjiawdpawidjpaw",
+            Phonenumber = "01234561",
         };
         
         _pgCtxSetupUser.DbContextInstance.Users.Add(player);

@@ -37,7 +37,12 @@ public class Program
         {
             var adminUser = scope.ServiceProvider.GetRequiredService<AdminUser>();
             adminUser.RegisterAdminUser();
+            
+            var gameStart = scope.ServiceProvider.GetRequiredService<GameStart>();
+            gameStart.StartGame();
         }
+
+        
     
         app.Run();
     }
@@ -94,6 +99,7 @@ public class Program
         builder.Services.AddScoped<IBoardService, BoardService>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AdminUser>();
+        builder.Services.AddScoped<GameStart>();
         builder.Services.AddScoped<AuthenticatedFilter>();
         
         
