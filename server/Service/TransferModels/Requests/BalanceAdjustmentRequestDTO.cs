@@ -1,8 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using DataAccess.Types.Enums;
-using Microsoft.EntityFrameworkCore.Storage.Json;
-using TransactionStatus = System.Transactions.TransactionStatus;
 
 namespace Service.TransferModels.Requests;
 
@@ -21,5 +19,5 @@ public class BalanceAdjustmentRequestDTO
     
     [Required(ErrorMessage = "Adjustment type is required.")]
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public TransactionStatus TransactionStatus { get; set; }
+    public TransactionStatusA TransactionStatusA { get; set; }
 }

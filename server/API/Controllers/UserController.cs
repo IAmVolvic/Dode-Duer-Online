@@ -29,6 +29,7 @@ public class UserController(IUserService service): ControllerBase
     
     [HttpPatch]
     [Route("@user/enroll")]
+    [Authenticated]
     public ActionResult<AuthorizedUserResponseDTO> PEnroll([FromBody] UserEnrollmentRequestDTO data)
     {
         var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;

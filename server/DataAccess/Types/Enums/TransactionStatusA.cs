@@ -1,6 +1,6 @@
 namespace DataAccess.Types.Enums;
 
-public enum TransactionStatus
+public enum TransactionStatusA
 {
     Pending,
     Approved,

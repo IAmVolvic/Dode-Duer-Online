@@ -17,19 +17,21 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
 
     public Transaction GetTransactionById(string transactionId)
     {
-        if(context.Transactions.Any(t => t.Id != Guid.Parse(transactionId)))
+        var data = context.Transactions.FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
+        if(data == null)
         {
+            Console.WriteLine($"Transaction with id {transactionId} not found");
             return null;
         }
         
-        return context.Transactions.FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
+        return data;
     }
 
 
     public Transaction[] GetAllTransactions()
     {
         return context.Transactions
-            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatus.Pending)
+            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatusA.Pending)
             .ThenBy(t => t.Id)
             .ToArray();
     }
@@ -39,7 +41,7 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
     {
         var transactions = context.Transactions
             .Where(t => t.Userid == userId)
-            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatus.Pending)
+            .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatusA.Pending)
             .ThenBy(t => t.Id)
             .ToArray();
 

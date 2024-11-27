@@ -23,7 +23,7 @@ public class TransactionController(ITransactionService service): ControllerBase
     
     
     [HttpGet]
-    [Route("@user/balances")]
+    [Route("@user/balance/history")]
     [Authenticated]
     public ActionResult<TransactionResponseDTO[]> PUserTransactionsReqs()
     {
@@ -33,7 +33,7 @@ public class TransactionController(ITransactionService service): ControllerBase
     
     
     [HttpPatch]
-    [Route("@admin/balance")]
+    [Route("@admin/balance/adjustment")]
     [Rolepolicy("Admin")]
     public ActionResult<Boolean> PUseBalance([FromBody] BalanceAdjustmentRequestDTO data)
     {
@@ -42,7 +42,7 @@ public class TransactionController(ITransactionService service): ControllerBase
     
     
     [HttpGet]
-    [Route("@admin/balances")]
+    [Route("@admin/balance/history")]
     [Rolepolicy("Admin")]
     public ActionResult<TransactionResponseDTO[]> PDepositReqs()
     {
