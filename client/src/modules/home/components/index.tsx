@@ -2,7 +2,7 @@ export const Home = () => {
 
     return (
         <div>
-            <h1>Home</h1>
+            <div className="text-9xl text-teal-600">Home</div>
         </div>
     )
 }
