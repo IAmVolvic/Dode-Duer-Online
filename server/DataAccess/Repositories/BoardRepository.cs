@@ -12,4 +12,9 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
         context.SaveChanges();
         return board;
     }
+
+    public List<Board> GetBoards()
+    {
+        return context.Boards.Include(b => b.Price).Include(b => b.Chosennumbers).ToList();
+    }
 }

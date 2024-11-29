@@ -1,4 +1,5 @@
 ﻿using API.Attributes;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
@@ -17,5 +18,14 @@ public class BoardController(IBoardService boardService) : ControllerBase
     {
         var response = boardService.PlayBoard(playBoardDTO);
         return  Ok(response);
+    }
+
+    [HttpGet]
+    [Route("GetBoards")]
+    //[Rolepolicy("Admin")]
+    public ActionResult<List<BoardResponseDTO>> GetAllBoards()
+    {
+        var response = boardService.GetBoards();
+        return Ok(response);
     }
 }
