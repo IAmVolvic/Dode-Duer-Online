@@ -107,6 +107,19 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer
         builder.Services.AddOpenApiDocument();
+        
+        // ===================== * CORS SETUP * ===================== //
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigin", policy =>
+            {
+                // Replace with the exact origin of your front-end application
+                policy.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials(); // Allows credentials (cookies, headers, etc.)
+            });
+        });
     }
 
     
@@ -123,6 +136,9 @@ public class Program
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             c.RoutePrefix = string.Empty;
         });
+        
+        // ===================== * CORS CONFIGURATION * ===================== //
+        app.UseCors("AllowSpecificOrigin");
         
         // ===================== * AUTHENTICATION & AUTHORIZATION * ===================== //
         app.UseAuthentication();

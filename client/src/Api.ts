@@ -9,19 +9,106 @@
  * ---------------------------------------------------------------
  */
 
+export interface BoardResponseDTO {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  userid?: string;
+  /** @format guid */
+  gameid?: string;
+  /** @format decimal */
+  price?: number;
+  /** @format date */
+  dateofpurchase?: string;
+  /**
+   * @maxItems 8
+   * @minItems 5
+   */
+  numbers?: (number | null)[];
+}
+
+export interface PlayBoardDTO {
+  /**
+   * @format guid
+   * @minLength 1
+   */
+  userid: string;
+  /** @format date */
+  dateofpurchase?: string;
+  /**
+   * @maxItems 8
+   * @minItems 5
+   */
+  numbers?: number[];
+}
+
 export interface GameResponseDTO {
   /** @format guid */
   id?: string;
   /** @format date */
   date?: string;
-  status?: string;
+  status?: GameStatus;
 }
 
-export interface UserResponseDTO {
+export enum GameStatus {
+  Active = 0,
+  Inactive = 1,
+}
+
+export interface TransactionResponseDTO {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  userId?: string;
+  phoneNumber?: string;
+  username?: string;
+  transactionNumber?: string;
+  transactionStatus?: string;
+}
+
+export interface DepositRequestDTO {
+  /**
+   * @minLength 8
+   * @maxLength 15
+   */
+  transactionNumber: string;
+}
+
+export interface BalanceAdjustmentRequestDTO {
   /** @minLength 1 */
-  id: string;
-  /** @minLength 1 */
-  jwt: string;
+  transactionId: string;
+  /**
+   * @format decimal
+   * @min 0
+   * @max 10000
+   */
+  amount: number;
+  adjustment: TransactionAdjustment;
+  transactionStatusA: TransactionStatusA;
+}
+
+export enum TransactionAdjustment {
+  Deposit = "Deposit",
+  Deduct = "Deduct",
+}
+
+export enum TransactionStatusA {
+  Pending = "Pending",
+  Approved = "Approved",
+  Rejected = "Rejected",
+}
+
+export interface AuthorizedUserResponseDTO {
+  /** @format guid */
+  id?: string;
+  name?: string;
+  email?: string;
+  phoneNumber?: string;
+  /** @format decimal */
+  balance?: number;
+  role?: string;
+  enrolled?: string;
+  status?: string;
 }
 
 export interface UserSignupRequestDTO {
@@ -33,10 +120,18 @@ export interface UserSignupRequestDTO {
    */
   email: string;
   /**
-   * @minLength 6
-   * @maxLength 32
+   * @format phone
+   * @minLength 8
+   * @maxLength 8
    */
-  password: string;
+  phoneNumber: string;
+}
+
+export interface UserResponseDTO {
+  /** @minLength 1 */
+  id: string;
+  /** @minLength 1 */
+  jwt: string;
 }
 
 export interface UserLoginRequestDTO {
@@ -46,21 +141,18 @@ export interface UserLoginRequestDTO {
    */
   email: string;
   /**
-   * @minLength 6
+   * @minLength 5
    * @maxLength 32
    */
   password: string;
 }
 
-export interface AuthorizedUserResponseDTO {
-  /** @format guid */
-  id?: string;
-  name?: string;
-  email?: string;
-  /** @format decimal */
-  balance?: number;
-  role?: string;
-  status?: string;
+export interface UserEnrollmentRequestDTO {
+  /**
+   * @minLength 5
+   * @maxLength 32
+   */
+  password: string;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -203,6 +295,24 @@ export class HttpClient<SecurityDataType = unknown> {
  * @baseUrl http://localhost:5001
  */
 export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+  board = {
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardPlayBoard
+     * @request POST:/Board/Play
+     */
+    boardPlayBoard: (data: PlayBoardDTO, params: RequestParams = {}) =>
+      this.request<BoardResponseDTO, any>({
+        path: `/Board/Play`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
   game = {
     /**
      * No description
@@ -221,17 +331,34 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         ...params,
       }),
   };
-  test = {
+  transaction = {
     /**
      * No description
      *
-     * @tags Test
-     * @name TestExampleAuthenticated
-     * @request GET:/Test/auth
+     * @tags Transaction
+     * @name TransactionPUserDepositReq
+     * @request POST:/Transaction/@user/balance/deposit
      */
-    testExampleAuthenticated: (params: RequestParams = {}) =>
-      this.request<boolean, any>({
-        path: `/Test/auth`,
+    transactionPUserDepositReq: (data: DepositRequestDTO, params: RequestParams = {}) =>
+      this.request<TransactionResponseDTO, any>({
+        path: `/Transaction/@user/balance/deposit`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
+     * @name TransactionPUserTransactionsReqs
+     * @request GET:/Transaction/@user/balance/history
+     */
+    transactionPUserTransactionsReqs: (params: RequestParams = {}) =>
+      this.request<TransactionResponseDTO[], any>({
+        path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
         ...params,
@@ -240,13 +367,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
     /**
      * No description
      *
-     * @tags Test
-     * @name TestExampleAuthenticatedWithRole
-     * @request GET:/Test/admin
+     * @tags Transaction
+     * @name TransactionPUseBalance
+     * @request PATCH:/Transaction/@admin/balance/adjustment
      */
-    testExampleAuthenticatedWithRole: (params: RequestParams = {}) =>
+    transactionPUseBalance: (data: BalanceAdjustmentRequestDTO, params: RequestParams = {}) =>
       this.request<boolean, any>({
-        path: `/Test/admin`,
+        path: `/Transaction/@admin/balance/adjustment`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Transaction
+     * @name TransactionPDepositReqs
+     * @request GET:/Transaction/@admin/balance/history
+     */
+    transactionPDepositReqs: (params: RequestParams = {}) =>
+      this.request<TransactionResponseDTO[], any>({
+        path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
         ...params,
@@ -258,11 +402,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags User
      * @name UserPSignup
-     * @request POST:/User/signup
+     * @request POST:/User/@admin/signup
      */
     userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
-      this.request<UserResponseDTO, any>({
-        path: `/User/signup`,
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@admin/signup`,
         method: "POST",
         body: data,
         type: ContentType.Json,
@@ -275,12 +419,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags User
      * @name UserPLogin
-     * @request POST:/User/login
+     * @request POST:/User/@user/login
      */
     userPLogin: (data: UserLoginRequestDTO, params: RequestParams = {}) =>
       this.request<UserResponseDTO, any>({
-        path: `/User/login`,
+        path: `/User/@user/login`,
         method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserPEnroll
+     * @request PATCH:/User/@user/enroll
+     */
+    userPEnroll: (data: UserEnrollmentRequestDTO, params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@user/enroll`,
+        method: "PATCH",
         body: data,
         type: ContentType.Json,
         format: "json",
@@ -299,6 +460,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@me`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
   };

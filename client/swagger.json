@@ -11,6 +11,38 @@
     }
   ],
   "paths": {
+    "/Board/Play": {
+      "post": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_PlayBoard",
+        "requestBody": {
+          "x-name": "playBoardDTO",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayBoardDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BoardResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Game/NewGame": {
       "post": {
         "tags": [
@@ -44,12 +76,79 @@
         }
       }
     },
-    "/Test/auth": {
+    "/Transaction/@user/balance/deposit": {
+      "post": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "Transaction_PUserDepositReq",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TransactionResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Transaction/@user/balance/history": {
       "get": {
         "tags": [
-          "Test"
+          "Transaction"
         ],
-        "operationId": "Test_ExampleAuthenticated",
+        "operationId": "Transaction_PUserTransactionsReqs",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TransactionResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Transaction/@admin/balance/adjustment": {
+      "patch": {
+        "tags": [
+          "Transaction"
+        ],
+        "operationId": "Transaction_PUseBalance",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BalanceAdjustmentRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -64,19 +163,22 @@
         }
       }
     },
-    "/Test/admin": {
+    "/Transaction/@admin/balance/history": {
       "get": {
         "tags": [
-          "Test"
+          "Transaction"
         ],
-        "operationId": "Test_ExampleAuthenticatedWithRole",
+        "operationId": "Transaction_PDepositReqs",
         "responses": {
           "200": {
             "description": "",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "boolean"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TransactionResponseDTO"
+                  }
                 }
               }
             }
@@ -84,7 +186,7 @@
         }
       }
     },
-    "/User/signup": {
+    "/User/@admin/signup": {
       "post": {
         "tags": [
           "User"
@@ -108,7 +210,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/UserResponseDTO"
+                  "$ref": "#/components/schemas/AuthorizedUserResponseDTO"
                 }
               }
             }
@@ -116,7 +218,7 @@
         }
       }
     },
-    "/User/login": {
+    "/User/@user/login": {
       "post": {
         "tags": [
           "User"
@@ -148,6 +250,38 @@
         }
       }
     },
+    "/User/@user/enroll": {
+      "patch": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_PEnroll",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserEnrollmentRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizedUserResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/User/@me": {
       "get": {
         "tags": [
@@ -171,6 +305,69 @@
   },
   "components": {
     "schemas": {
+      "BoardResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "gameid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "price": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "dateofpurchase": {
+            "type": "string",
+            "format": "date"
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          }
+        }
+      },
+      "PlayBoardDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "userid"
+        ],
+        "properties": {
+          "userid": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "dateofpurchase": {
+            "type": "string",
+            "format": "date"
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        }
+      },
       "GameResponseDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -184,7 +381,171 @@
             "format": "date"
           },
           "status": {
+            "$ref": "#/components/schemas/GameStatus"
+          }
+        }
+      },
+      "GameStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "TransactionResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "phoneNumber": {
             "type": "string"
+          },
+          "username": {
+            "type": "string"
+          },
+          "transactionNumber": {
+            "type": "string"
+          },
+          "transactionStatus": {
+            "type": "string"
+          }
+        }
+      },
+      "DepositRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "transactionNumber"
+        ],
+        "properties": {
+          "transactionNumber": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 8
+          }
+        }
+      },
+      "BalanceAdjustmentRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "transactionId",
+          "amount",
+          "adjustment",
+          "transactionStatusA"
+        ],
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "amount": {
+            "type": "number",
+            "format": "decimal",
+            "maximum": 10000.0,
+            "minimum": 0.0
+          },
+          "adjustment": {
+            "$ref": "#/components/schemas/TransactionAdjustment"
+          },
+          "transactionStatusA": {
+            "$ref": "#/components/schemas/TransactionStatusA"
+          }
+        }
+      },
+      "TransactionAdjustment": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Deposit",
+          "Deduct"
+        ],
+        "enum": [
+          "Deposit",
+          "Deduct"
+        ]
+      },
+      "TransactionStatusA": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Pending",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": [
+          "Pending",
+          "Approved",
+          "Rejected"
+        ]
+      },
+      "AuthorizedUserResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phoneNumber": {
+            "type": "string"
+          },
+          "balance": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "role": {
+            "type": "string"
+          },
+          "enrolled": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "UserSignupRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "email",
+          "phoneNumber"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "maxLength": 8,
+            "minLength": 8
           }
         }
       },
@@ -206,31 +567,6 @@
           }
         }
       },
-      "UserSignupRequestDTO": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "name",
-          "email",
-          "password"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "minLength": 1
-          },
-          "password": {
-            "type": "string",
-            "maxLength": 32,
-            "minLength": 6
-          }
-        }
-      },
       "UserLoginRequestDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -247,33 +583,21 @@
           "password": {
             "type": "string",
             "maxLength": 32,
-            "minLength": 6
+            "minLength": 5
           }
         }
       },
-      "AuthorizedUserResponseDTO": {
+      "UserEnrollmentRequestDTO": {
         "type": "object",
         "additionalProperties": false,
+        "required": [
+          "password"
+        ],
         "properties": {
-          "id": {
+          "password": {
             "type": "string",
-            "format": "guid"
-          },
-          "name": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "balance": {
-            "type": "number",
-            "format": "decimal"
-          },
-          "role": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
+            "maxLength": 32,
+            "minLength": 5
           }
         }
       }

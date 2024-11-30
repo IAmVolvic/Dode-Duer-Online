@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { ProtectedComponent } from "@components/authProtected/ProtectedComponent"
 import { Toaster } from "react-hot-toast";
+import ThemeSwitcher from "@components/themeSwitcher";
 
 
 interface RouteOutletProps {

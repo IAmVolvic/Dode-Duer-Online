@@ -14,11 +14,11 @@ export const ProtectedComponent = (props: ProtectedComponentProps) => {
 	const { user, isLoggedIn } = useAuth();
 
 	if (showWhileAuthenticated) {
-		if (!isLoggedIn.value) {
+		if (!isLoggedIn) {
 			return <Navigate to={redirect} replace={true} />
 		}
 	} else {
-		if (user.value) {
+		if (user) {
 			return <Navigate to={redirect} replace={true} />
 		}
 	}
