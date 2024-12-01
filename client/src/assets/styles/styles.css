@@ -17,6 +17,8 @@ body {
 }
 
 .BackgroundVolvic {
+    background-size: cover;
+    background-position: center;
     background-image: url("/src/assets/images/BG1.jpeg");
 }
 
@@ -27,10 +29,6 @@ body {
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.navbarVolvic {
-    border-bottom: .05rem solid oklch(var(--bc));
 }
 
 .navButton {
