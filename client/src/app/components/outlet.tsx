@@ -4,6 +4,7 @@ import { Toaster } from "react-hot-toast";
 import ThemeSwitcher from "@components/themeSwitcher";
 import { TopNavigation } from "@components/navigation";
 import { Background } from "@components/background";
+import { Footer } from "@components/footer";
 
 
 interface RouteOutletProps {
@@ -20,6 +21,7 @@ const RootContent = () => {
 			<Toaster position="top-center"/>
 			<ThemeSwitcher />
 			<Outlet />
+			<Footer />
 		</>
 	)
 }

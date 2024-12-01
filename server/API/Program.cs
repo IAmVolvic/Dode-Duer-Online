@@ -114,7 +114,7 @@ public class Program
             options.AddPolicy("AllowSpecificOrigin", policy =>
             {
                 // Replace with the exact origin of your front-end application
-                policy.WithOrigins("http://localhost:4201")
+                policy.WithOrigins("http://localhost:4200")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials(); // Allows credentials (cookies, headers, etc.)

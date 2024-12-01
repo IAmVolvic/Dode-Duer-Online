@@ -9,10 +9,10 @@ interface NavigationProps {}
 export const TopNavigation = (props: NavigationProps) => {
     const {isLoggedIn} = useAuth();
 	return (
-        <div className="flex flex-row justify-between backdrop-blur-xl backdrop-brightness-100 mb-10 border-b-0.05r border-base-content/50">
+        <div className="flex flex-row justify-between backdrop-blur-xl backdrop-brightness-100 h-20  mb-10 border-b-0.05r border-base-content/50">
 
             <div className="flex flex-row items-center gap-24 px-5">
-                <img className="w-20 h-20 object-contain" src={Logo} alt="Logo" loading="lazy" />
+                <img className="w-20 h-20 object-contain hidden lg:block" src={Logo} alt="Logo" loading="lazy" />
 
                 <div className="flex flex-row items-center gap-10 h-full">
                     <NavLink className={(values) => `${values.isActive  ? 'activeNav' : ''} navButton text-lg font-medium h-full w-20` } to="/">

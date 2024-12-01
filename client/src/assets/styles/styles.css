@@ -12,10 +12,6 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-:root {
-    position: relative;
-}
-
 .BackgroundVolvic {
     background-size: cover;
     background-position: center;
@@ -40,4 +36,40 @@ code {
 
 .activeNav {
     border-bottom: .25rem solid oklch(var(--p));
+}
+
+
+
+.status-ring {
+    position: relative;
+}
+
+@layer utilities {
+  .status-ring::before {
+    content: '';
+    position: absolute;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+  }
+
+  /* Variants for different status states */
+  .status-ring-online,
+  .status-ring-online::before {
+    background-color: oklch(var(--su));
+  }
+
+  .status-ring-offline,
+  .status-ring-offline::before {
+    background-color: oklch(var(--er));
+  }
+
+  .status-ring-busy,
+  .status-ring-busy::before {
+    background-color: oklch(var(--wa));
+  }
 }
