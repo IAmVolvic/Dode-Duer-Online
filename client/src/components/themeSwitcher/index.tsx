@@ -12,7 +12,7 @@ export default function ThemeSwitcher() {
     }
 
     return (
-        <div className="fixed right-0">
+        <div className="fixed right-0 z-50">
            <div className="dropdown dropdown-end">
                 <div tabIndex={0} role="button" className="btn btn-black btn-sm m-1 rounded-2xl">
                     Theme

@@ -12,7 +12,34 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+:root {
+    position: relative;
+}
+
+.BackgroundVolvic {
+    background-image: url("/src/assets/images/BG1.jpeg");
+}
+
+.BackgroundVolvicShape {
+    background: radial-gradient(circle at 80% 50%, #0000 0%, oklch(var(--b1)) calc(80%))
+}
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.navbarVolvic {
+    border-bottom: .05rem solid oklch(var(--bc));
+}
+
+.navButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: .25rem solid transparent;
+}
+
+.activeNav {
+    border-bottom: .25rem solid oklch(var(--p));
 }

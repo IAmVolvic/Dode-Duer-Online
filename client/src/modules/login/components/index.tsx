@@ -11,7 +11,7 @@ import BGImage_1 from "@assets/images/BG2.jpeg"
 import Logo from "@assets/images/SiteLogo.png"
 
 
-export const Login = () => {
+export const LoginPage = () => {
     const [loginEmail, setLoginEmail] = useState<string>("");
     const [loginPassword, setLoginPassword] = useState<string>("");
     const login = useLogin({email: loginEmail, password: loginPassword});
@@ -59,6 +59,5 @@ export const Login = () => {
                 </div>
             </div>
         </ProtectedComponent>
-       
     )
 }

@@ -2,6 +2,8 @@ import { Outlet } from "react-router-dom"
 import { ProtectedComponent } from "@components/authProtected/ProtectedComponent"
 import { Toaster } from "react-hot-toast";
 import ThemeSwitcher from "@components/themeSwitcher";
+import { TopNavigation } from "@components/navigation";
+import { Background } from "@components/background";
 
 
 interface RouteOutletProps {
@@ -13,7 +15,10 @@ interface RouteOutletProps {
 const RootContent = () => {
 	return (
 		<>
+			<Background />
+			<TopNavigation />
 			<Toaster position="top-center"/>
+			<ThemeSwitcher />
 			<Outlet />
 		</>
 	)
