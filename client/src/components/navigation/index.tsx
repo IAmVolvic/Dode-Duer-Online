@@ -1,8 +1,8 @@
 // Importing Images
 import Logo from "@assets/images/SiteLogo.png"
-import { Link, NavLink } from "react-router-dom"
-import { FiUser, FiLogIn } from "react-icons/fi";
+import { NavLink } from "react-router-dom"
 import { useAuth } from "@hooks/authentication/useAuthentication";
+import { UserNavButton } from "./auth/userNavButton";
 
 interface NavigationProps {}
 
@@ -26,15 +26,7 @@ export const TopNavigation = (props: NavigationProps) => {
             </div>
 
             <div className="flex justify-center items-center w-32 border-l-0.05r border-base-content/50">
-                {isLoggedIn ? (
-                    <Link to="/profile" className="w-full h-full flex justify-center items-center">
-                        <FiUser className="w-7 h-7"/>
-                    </Link>
-                ) : (
-                    <Link to="/login" className="w-full h-full flex justify-center items-center">
-                        <FiLogIn className="w-7 h-7"/>
-                    </Link>
-                )}
+                <UserNavButton />
             </div>
         </div>
     )

@@ -12,6 +12,7 @@
     "deploy": "npx firebase deploy --only hosting"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@preact/signals-react": "^2.2.0",
     "@tanstack/react-query": "^5.56.2",
     "daisyui": "^4.12.10",
