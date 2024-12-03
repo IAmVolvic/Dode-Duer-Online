@@ -34,12 +34,6 @@ code {
     border-bottom: .25rem solid transparent;
 }
 
-.activeNav {
-    border-bottom: .25rem solid oklch(var(--p));
-}
-
-
-
 .status-ring {
     position: relative;
 }

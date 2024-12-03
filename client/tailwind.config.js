@@ -23,6 +23,7 @@ module.exports = {
             borderWidth: {
                 '0.05r': '0.05rem',
                 '1.5': '1.5px',
+                '0.25r': '0.25rem',
             },
         },
     },

@@ -4,6 +4,9 @@ interface TextInputProps {
     setInput: (input: string) => void;
     input: string;
     inputType: InputTypeEnum;
+
+    parentClassName?: string;
+    titleClassName?: string;
 }
 
 export enum InputTypeEnum {
@@ -22,8 +25,8 @@ export enum InputTypeEnum {
 
 export const TextInput = (props: TextInputProps) => {
     return (
-        <div className="flex flex-col gap-3 w-full">     
-            <div className="text-lg">{props.inputTitle}</div>
+        <div className={props.parentClassName}>     
+            <div className={props.titleClassName}>{props.inputTitle}</div>
             <input type={InputTypeEnum[props.inputType]} placeholder={props.input} value={props.input} onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setInput(event.target.value) } className="w-full bg-base-300 p-3 rounded-xl" />
         </div>
     )
