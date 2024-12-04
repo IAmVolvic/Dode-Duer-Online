@@ -13,12 +13,12 @@ export const BillingTabContent = () => {
     <>
         <div className="flex flex-col gap-10">
             <div className="flex flex-row items-center gap-5">
-                <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl py-3 px-3 w-full">
+                <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl px-3 h-11 w-full">
                     <TbCurrencyKroneDanish className="text-2xl text-primary" />
                     <div className="text-md"> {user?.balance} </div>
                 </div>
 
-                <button className="flex justify-center items-center bg-primary text-primary-content rounded-xl px-6 py-3" onClick={setTrue}> 
+                <button className="flex justify-center items-center bg-primary text-primary-content rounded-xl px-6 h-11" onClick={setTrue}> 
                     <FiCreditCard /> 
                 </button>
             </div>            
