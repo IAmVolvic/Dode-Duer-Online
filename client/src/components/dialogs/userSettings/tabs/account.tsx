@@ -4,7 +4,8 @@ import { useState } from "react";
 import { TbCurrencyKroneDanish } from "react-icons/tb";
 
 export const AccountTabContent = () => {
-    const {user, isLoggedIn} = useAuth();
+    const {user, isLoggedIn, refresh} = useAuth();
+
     const [userName, setUserName] = useState<string>(user?.name ?? "");
     const [userPhone, setUserPhone] = useState<string>(user?.phoneNumber ?? "");
     const [userEmail, setUserEmail] = useState<string>(user?.email ?? "");
@@ -26,7 +27,7 @@ export const AccountTabContent = () => {
         <div className="flex flex-col gap-5">
             <div className="text-lg">Account Information</div>
 
-            <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl py-3 px-3 w-full">
+            <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl px-6 h-11 w-full">
                 <TbCurrencyKroneDanish className="text-2xl text-primary" />
                 <div className="text-md"> {user?.balance} </div>
             </div>
@@ -47,7 +48,7 @@ export const AccountTabContent = () => {
         </div>
         
         <div className="flex justify-end mt-5">
-            <button className="h-10 bg-primary text-primary-content rounded-2xl lg:w-32"> Save </button>
+            <button className="h-10 bg-primary text-primary-content rounded-2xl lg:w-32" onClick={() => refresh()}> Save </button>
         </div>
     </div>
     );
