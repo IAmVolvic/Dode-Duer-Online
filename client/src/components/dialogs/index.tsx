@@ -29,7 +29,7 @@ export const BaseDialog = (props: DialogProps) => {
     return (
         <>
             <Dialog open={props.isOpen} as="div" className="relative focus:outline-none z-[60]" onClose={props.close}>
-                <DialogBackdrop className="fixed inset-0 backdrop-blur-xl backdrop-brightness-50" />
+                <DialogBackdrop className="fixed inset-0 backdrop-blur-sm backdrop-brightness-50" />
                 <div className="flex items-center justify-center w-screen fixed inset-0">
                     <DialogPanel className={`flex flex-col items-center border-0.05r border-base-content/50 backdrop-blur-xl backdrop-brightness-100 rounded-2xl ${props.dialogSize}`}>
                         {/* TopBar */}
