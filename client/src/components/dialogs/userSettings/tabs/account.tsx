@@ -1,6 +1,7 @@
 import { TextInput, InputTypeEnum } from "@components/inputs/textInput";
 import { useAuth } from "@hooks/authentication/useAuthentication";
 import { useState } from "react";
+import { TbCurrencyKroneDanish } from "react-icons/tb";
 
 export const AccountTabContent = () => {
     const {user, isLoggedIn} = useAuth();
@@ -25,14 +26,23 @@ export const AccountTabContent = () => {
         <div className="flex flex-col gap-5">
             <div className="text-lg">Account Information</div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl py-3 px-3 w-full">
+                <TbCurrencyKroneDanish className="text-2xl text-primary" />
+                <div className="text-md"> {user?.balance} </div>
+            </div>
+                
+            <div className="flex flex-col gap-5">
                 <div className="flex flex-row gap-5">
                     <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.text} inputTitle="Username" setInput={setUserName} input={userName} />
                     <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.tel} inputTitle="Phone Number" setInput={setUserPhone} input={userPhone} />
                 </div>
 
                 <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.email} inputTitle="Email" setInput={setUserEmail} input={userEmail} />
-                <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={setLoginPassword} input={loginPassword} />
+
+                <div className="flex flex-row gap-5">
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={setLoginPassword} input={loginPassword} />
+                </div>
+                
             </div>
         </div>
         

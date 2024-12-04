@@ -1,15 +1,27 @@
 import { UserTransactionDialog } from "@components/dialogs/userTransaction";
+import { useAuth } from "@hooks/authentication/useAuthentication";
 import { useBoolean } from "@hooks/utils/useBoolean";
+import { FiCreditCard } from "react-icons/fi";
+import { TbCurrencyKroneDanish } from "react-icons/tb";
+
 
 export const BillingTabContent = () => {
+    const {user, isLoggedIn} = useAuth();
     const [isOpen,, setTrue, setFalse] = useBoolean(false)
     
     return (
     <>
         <div className="flex flex-col gap-10">
-            <button onClick={setTrue} className="w-full h-full flex justify-center items-center">
-                New Transaction
-            </button>
+            <div className="flex flex-row items-center gap-5">
+                <div className="flex flex-row items-center gap-2 bg-base-300 rounded-xl py-3 px-3 w-full">
+                    <TbCurrencyKroneDanish className="text-2xl text-primary" />
+                    <div className="text-md"> {user?.balance} </div>
+                </div>
+
+                <button className="flex justify-center items-center bg-primary text-primary-content rounded-xl px-6 py-3" onClick={setTrue}> 
+                    <FiCreditCard /> 
+                </button>
+            </div>            
 
             <table className="w-full">
                 <thead>
