@@ -7,8 +7,7 @@ export const useGetTransactions = () => {
     return useQuery({
         queryKey: ['user-transactions'],
         queryFn: async (): Promise<TransactionResponseDTO[]> => {
-            const response = await API.transaction.transactionPUserTransactionsReqs();
-            return response.data;
+            return API.transaction.transactionPUserTransactionsReqs().then((res) => res.data);
         },
 
 

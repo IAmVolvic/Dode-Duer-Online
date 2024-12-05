@@ -1,14 +1,20 @@
+import { TransactionResponseDTO } from "@Api";
 import { UserTransactionDialog } from "@components/dialogs/userTransaction";
 import { useAuth } from "@hooks/authentication/useAuthentication";
+import { TransactionStatus, transactionStatusColor } from "@hooks/user/types/status";
+import { useGetTransactions } from "@hooks/user/useGetTransactions";
 import { useBoolean } from "@hooks/utils/useBoolean";
+import { useEffect } from "react";
 import { FiCreditCard } from "react-icons/fi";
 import { TbCurrencyKroneDanish } from "react-icons/tb";
 
 
 export const BillingTabContent = () => {
     const {user, isLoggedIn} = useAuth();
-    const [isOpen,, setTrue, setFalse] = useBoolean(false)
-    
+    const { isLoading, data, refetch } = useGetTransactions();
+    const [isOpen,, setTrue, setFalse] = useBoolean(false);
+
+
     return (
     <>
         <div className="flex flex-col gap-10">
@@ -33,39 +39,24 @@ export const BillingTabContent = () => {
 
                 <tbody className="before:content-['\200C'] before:leading-4 before:block ">
 
-                    <tr className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
-                        <td className="text-sm py-3">
-                            <div className="flex flex-row gap-2 items-center justify-center bg-success w-max px-3 py-1 rounded-md">
-                                <div className="w-2.5 h-2.5 rounded-full bg-success-content/30" />
-                                <span className="text-success-content">Approved</span>
-                            </div>
-                        </td>
-
-                        <td >22e6de0a-90a5-4a48-bc11-a7f713455ccf</td>
-                    </tr>
-
-                    <tr className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
-                        <td className="text-sm py-3">
-                            <div className="flex flex-row gap-2 items-center justify-center bg-error w-max px-3 py-1 rounded-md">
-                                <div className="w-2.5 h-2.5 rounded-full bg-error-content/30" />
-                                <span className="text-error-content">Rejected</span>
-                            </div>
-                        </td>
-
-                        <td >22e6de0a-90a5-4a48-bc11-a7f713455ccf</td>
-                    </tr>
-
-                    <tr className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
-                        <td className="text-sm py-3">
-                            <div className="flex flex-row gap-2 items-center justify-center bg-warning w-max px-3 py-1 rounded-md">
-                                <div className="w-2.5 h-2.5 rounded-full bg-warning-content/30" />
-                                <span className="text-warning-content">Pending</span>
-                            </div>
-                        </td>
-
-                        <td >22e6de0a-90a5-4a48-bc11-a7f713455ccf</td>
-                    </tr>
-
+                    {!isLoading && 
+                        Object.values(data as TransactionResponseDTO[]).map((value: TransactionResponseDTO) => {
+                            const { textColor, textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus!]];
+                    
+                            return (
+                                <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
+                                    <td className="text-sm py-3">
+                                        <div className={`flex flex-row gap-2 items-center justify-center w-max px-3 py-1 rounded-md ${background}`}>
+                                            <div className={`w-2.5 h-2.5 rounded-full ${backgroundContent}/30`} />
+                                            <span className={textContent}>{value.transactionStatus}</span>
+                                        </div>
+                                    </td>
+                    
+                                    <td >{value.id}</td>
+                                </tr>
+                            );
+                        })
+                    }
                 </tbody>
             </table>
         </div>

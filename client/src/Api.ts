@@ -63,7 +63,7 @@ export interface TransactionResponseDTO {
   phoneNumber?: string;
   username?: string;
   transactionNumber?: string;
-  transactionStatus?: string;
+  transactionStatus?: TransactionStatus;
 }
 
 export interface DepositRequestDTO {
@@ -155,6 +155,7 @@ export interface UserEnrollmentRequestDTO {
   password: string;
 }
 
+import { TransactionStatus } from "@hooks/user/types/status";
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
@@ -361,6 +362,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
