@@ -55,6 +55,13 @@ export enum GameStatus {
   Inactive = 1,
 }
 
+export interface PriceDto {
+  /** @format decimal */
+  price1?: number;
+  /** @format decimal */
+  numbers?: number;
+}
+
 export interface TransactionResponseDTO {
   /** @format guid */
   id?: string;
@@ -312,6 +319,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardGetAllBoards
+     * @request GET:/Board/GetBoards
+     */
+    boardGetAllBoards: (params: RequestParams = {}) =>
+      this.request<BoardResponseDTO[], any>({
+        path: `/Board/GetBoards`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
   };
   game = {
     /**
@@ -327,6 +349,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  price = {
+    /**
+     * No description
+     *
+     * @tags Price
+     * @name PriceGetPrices
+     * @request GET:/Price/GetPrices
+     */
+    priceGetPrices: (params: RequestParams = {}) =>
+      this.request<PriceDto[], any>({
+        path: `/Price/GetPrices`,
+        method: "GET",
         format: "json",
         ...params,
       }),
@@ -460,7 +498,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@me`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };

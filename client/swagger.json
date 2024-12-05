@@ -43,6 +43,29 @@
         }
       }
     },
+    "/Board/GetBoards": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_GetAllBoards",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Game/NewGame": {
       "post": {
         "tags": [
@@ -69,6 +92,29 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GameResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Price/GetPrices": {
+      "get": {
+        "tags": [
+          "Price"
+        ],
+        "operationId": "Price_GetPrices",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PriceDto"
+                  }
                 }
               }
             }
@@ -396,6 +442,20 @@
           0,
           1
         ]
+      },
+      "PriceDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "price1": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "numbers": {
+            "type": "number",
+            "format": "decimal"
+          }
+        }
       },
       "TransactionResponseDTO": {
         "type": "object",

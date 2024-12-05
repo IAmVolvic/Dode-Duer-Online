@@ -10,4 +10,9 @@ public class PriceRepository(LotteryContext context) : IPriceRepository
         var price = context.Prices.FirstOrDefault(p => p.Numbers == numbers);
         return price;
     }
+
+    public List<Price> GetPrices()
+    {
+        return context.Prices.ToList();
+    }
 }

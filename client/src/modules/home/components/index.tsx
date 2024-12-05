@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 
 export const Home = () => {
     return (
-        <LargeContainer className="flex flex-col gap-32 mb-52">
+        <LargeContainer className="flex flex-col gap-32 mb-52 my-40">
             <div className="flex flex-col">
                 <h1 className="text-4xl lg:text-8xl font-bold">Døde Duer Online</h1>
                 <p className="text-lg lg:text-xl">Welcome to Døde Duer Online, brought to you by Group B – Start playing and earn big!</p>
