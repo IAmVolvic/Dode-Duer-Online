@@ -57,8 +57,9 @@ public class TransactionService(IUserRepository userRepository, ITransactionRepo
         }
         
         user.Balance = userBalance;
-        
         userRepository.UpdateUserDb(user);
+        transactionRepository.UpdateTransactionStatus(transaction.Id, balanceAdjustmentRequest.TransactionStatusA);
+        
         return userBalance;
     }
 

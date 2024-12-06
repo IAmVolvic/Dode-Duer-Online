@@ -59,4 +59,13 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
     {
         return context.Transactions.Any(t => t.Transactionnumber == transactionNumber);
     }
+    
+    public Transaction UpdateTransactionStatus(Guid transactionId, TransactionStatusA newStatus)
+    {
+        var updatedTransaction = context.Transactions.Find(transactionId);
+        updatedTransaction.Transactionstatus = newStatus;
+        
+        context.SaveChanges();
+        return updatedTransaction;
+    }
 }

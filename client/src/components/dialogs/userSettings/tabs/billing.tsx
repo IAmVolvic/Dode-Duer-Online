@@ -33,7 +33,8 @@ export const BillingTabContent = () => {
                 <thead>
                     <tr className="bg-base-300 h-12 hidden lg:table-row">
                         <th className="rounded-l-xl"></th>
-                        <th className="rounded-r-xl text-xs text-start">TRANSACTION ID</th>
+                        <th className="rounded-r-xl text-xs text-start">Transaction Id</th>
+                        {/* <th className="rounded-r-xl text-xs text-start">Transaction Number</th> */}
                     </tr>
                 </thead>
 
@@ -53,6 +54,7 @@ export const BillingTabContent = () => {
                                     </td>
                     
                                     <td >{value.id}</td>
+                                   {/*  <td >{value.transactionNumber}</td> */}
                                 </tr>
                             );
                         })
@@ -61,7 +63,7 @@ export const BillingTabContent = () => {
             </table>
         </div>
 
-        <UserTransactionDialog isOpen={isOpen} close={setFalse} />
+        <UserTransactionDialog isOpen={isOpen} close={setFalse} transacrionRefresh={refetch} />
     </>
     );
 }

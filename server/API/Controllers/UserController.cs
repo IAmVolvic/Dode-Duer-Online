@@ -38,11 +38,20 @@ public class UserController(IUserService service): ControllerBase
     
     
     [HttpGet]
-    [Route("@me")]
+    [Route("@user")]
     [Authenticated]
     public ActionResult<AuthorizedUserResponseDTO> GGetUser()
     {
         var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
         return Ok(authUser);
+    }
+    
+    [HttpPatch]
+    [Route("@user/update")]
+    [Authenticated]
+    public ActionResult<AuthorizedUserResponseDTO> PUpdateUser([FromBody] UserUpdateRequestDTO data)
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(service.UpdateUser(authUser.Id, data));
     }
 }

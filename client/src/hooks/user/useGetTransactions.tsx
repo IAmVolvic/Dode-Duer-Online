@@ -10,7 +10,6 @@ export const useGetTransactions = () => {
             return API.transaction.transactionPUserTransactionsReqs().then((res) => res.data);
         },
 
-
         refetchOnMount: true,
         refetchInterval: 10000,
     });

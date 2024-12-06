@@ -1,16 +1,63 @@
+import { Api, UserUpdateRequestDTO } from "@Api";
 import { TextInput, InputTypeEnum } from "@components/inputs/textInput";
 import { useAuth } from "@hooks/authentication/useAuthentication";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import { TbCurrencyKroneDanish } from "react-icons/tb";
+
+
+interface AccountUpdateRQForm {
+    name: string;
+    email: string;
+    phoneNumber: string;
+    password: string;
+    passwordConfirm: string;
+}
+
 
 export const AccountTabContent = () => {
     const {user, isLoggedIn, refresh} = useAuth();
+    const API = new Api();
 
-    const [userName, setUserName] = useState<string>(user?.name ?? "");
-    const [userPhone, setUserPhone] = useState<string>(user?.phoneNumber ?? "");
-    const [userEmail, setUserEmail] = useState<string>(user?.email ?? "");
-    const [loginPassword, setLoginPassword] = useState<string>("");
+    const [data, setData] = useState<AccountUpdateRQForm>({
+        name: user?.name || '',
+        email: user?.email || '',
+        phoneNumber: user?.phoneNumber || '',
+        password: '',
+        passwordConfirm: '',
+    });
 
+    const handleInputChange = (field: keyof AccountUpdateRQForm) => (value: string) => {
+        setData((prevData) => ({
+            ...prevData,
+            [field]: value,
+        }));
+    };
+
+
+    const handleUpdatingUser = () => {
+        let dataToSend: UserUpdateRequestDTO = {};
+
+        if (data.password) {
+            if (data.password !== data.passwordConfirm) {
+                toast.error('Passwords do not match');
+                return;
+            }
+      
+            dataToSend.password = data.password;
+        }
+
+        dataToSend.name = data.name;
+        dataToSend.email = data.email;
+        dataToSend.phoneNumber = data.phoneNumber;
+
+        API.user.userPUpdateUser(dataToSend).then((res) => {
+            toast.success('User updated successfully');
+            refresh();
+        }).catch((err) => {
+            toast.error('Failed to update user');
+        });
+    };
 
 
     return (
@@ -34,21 +81,22 @@ export const AccountTabContent = () => {
                 
             <div className="flex flex-col gap-5">
                 <div className="flex flex-row gap-5">
-                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.text} inputTitle="Username" setInput={setUserName} input={userName} />
-                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.tel} inputTitle="Phone Number" setInput={setUserPhone} input={userPhone} />
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.text} inputTitle="Username" setInput={handleInputChange('name')} input={data.name} />
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.tel} inputTitle="Phone Number" setInput={handleInputChange('phoneNumber')} input={data.phoneNumber} />
                 </div>
 
-                <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.email} inputTitle="Email" setInput={setUserEmail} input={userEmail} />
+                <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.email} inputTitle="Email" setInput={handleInputChange('email')} input={data.email} />
 
                 <div className="flex flex-row gap-5">
-                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={setLoginPassword} input={loginPassword} />
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={handleInputChange('password')} input={data.password} />
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={handleInputChange('passwordConfirm')} input={data.passwordConfirm} />
                 </div>
                 
             </div>
         </div>
         
         <div className="flex justify-end mt-5">
-            <button className="h-10 bg-primary text-primary-content rounded-2xl lg:w-32" onClick={() => refresh()}> Save </button>
+            <button className="h-10 bg-primary text-primary-content rounded-2xl w-32" onClick={handleUpdatingUser}> Save </button>
         </div>
     </div>
     );

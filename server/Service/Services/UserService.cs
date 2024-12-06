@@ -100,6 +100,36 @@ public class UserService : IUserService
         
         _repository.CreateUserDb(newUser);
     }
+
+
+    public AuthorizedUserResponseDTO UpdateUser(Guid userId, UserUpdateRequestDTO userUpdateRequest)
+    {
+        var userData = UserById(userId.ToString());
+        
+        if (userUpdateRequest.Name != null)
+        {
+            userData.Name = userUpdateRequest.Name;
+        }
+        
+        if (userUpdateRequest.Email != null)
+        {
+            userData.Email = userUpdateRequest.Email;
+        }
+        
+        if (userUpdateRequest.PhoneNumber != null)
+        {
+            userData.Phonenumber = userUpdateRequest.PhoneNumber;
+        }
+        
+        if (userUpdateRequest.Password != null)
+        {
+            userData.Passwordhash = _passwordHasher.HashPassword(userData, userUpdateRequest.Password);
+        }
+
+        _repository.UpdateUserDb(userData);
+        
+        return AuthorizedUserResponseDTO.FromEntity(userData);
+    }
     
     
     private User UserById(string userId)
