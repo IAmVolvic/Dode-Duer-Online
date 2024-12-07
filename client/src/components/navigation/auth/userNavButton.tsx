@@ -1,3 +1,4 @@
+import { UserEnrollmentDialog } from "@components/dialogs/userEnrollment"
 import { UserSettingsDialog } from "@components/dialogs/userSettings"
 import { useAuth } from "@hooks/authentication/useAuthentication"
 import { useBoolean } from "@hooks/utils/useBoolean"
@@ -7,8 +8,11 @@ import { Link } from "react-router-dom"
 
 export const UserNavButton = () => { 
     const {user, isLoggedIn} = useAuth()
-    const [isOpen,, setTrue, setFalse] = useBoolean(false)
-    
+    const isEnrolled = (user?.enrolled === "False") ? false : true;
+
+    const [isOpen,, setTrue, setFalse] = useBoolean(false);
+    const [isOpenE,, setTrueE, setFalseE] = useBoolean(!isEnrolled);
+
     return(<>
         {isLoggedIn ? (
             <button onClick={setTrue} className="w-full h-full flex justify-center items-center">
@@ -21,5 +25,7 @@ export const UserNavButton = () => {
         )}
 
         <UserSettingsDialog isOpen={isOpen} close={setFalse} />
+
+        {isLoggedIn && isEnrolled === false && <UserEnrollmentDialog isOpen={isOpenE} close={setFalseE}  />}
     </>)
 }
