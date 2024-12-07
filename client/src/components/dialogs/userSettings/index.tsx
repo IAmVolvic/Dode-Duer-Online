@@ -1,9 +1,11 @@
 import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
 import { Button, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { useLogout } from "@hooks/authentication/useLogout";
-import { FiSettings, FiCreditCard, FiLayout, FiLogOut, FiUsers, FiSliders, FiShoppingCart } from "react-icons/fi";
+import { FiSettings, FiCreditCard, FiLayout, FiLogOut, FiUsers, FiSliders, FiShoppingCart, FiMenu } from "react-icons/fi";
 import classNames from 'classnames';
 import { useAuth } from "@hooks/authentication/useAuthentication";
+import { useBoolean } from "@hooks/utils/useBoolean";
+
 
 // TABS
 import { AccountTabContent } from "./tabs/account";
@@ -11,6 +13,7 @@ import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
+    const [isOpen, toggle] = useBoolean(false)
     const {user, isLoggedIn} = useAuth();
     const logout = useLogout();
 
@@ -21,9 +24,9 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
 
     return (
         <>
-            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="Settings" dialogSize={DialogSizeEnum.mediumFixed} >
-                <TabGroup className="flex flex-row w-full h-full overflow-hidden px-5">
-                    <TabList className="flex flex-col min-w-40 max-w-40 border-r-0.05r border-base-content/50">
+            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="Settings" dialogSize={DialogSizeEnum.mediumFixed} childrenTitle={ <button onClick={toggle}><FiMenu className="" /></button>} >
+                <TabGroup className="flex flex-row w-full h-full overflow-hidden lg:px-5">
+                    <TabList className={`${isOpen ? "flex" : "hidden"} flex-col border-r-0.05r border-base-content/50 absolute w-52 h-full bg-base-200 pl-5 lg:pl-0 lg:relative lg:bg-transparent lg:min-w-40 lg:max-w-40 z-[100]`}>
                         <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
                             <div className="flex justify-center items-center"> <FiSettings className="opacity-60" size={20} /> </div>
                             <div className=""> Account </div>
