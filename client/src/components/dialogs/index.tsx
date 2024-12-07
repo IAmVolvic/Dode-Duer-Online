@@ -14,9 +14,8 @@ interface DialogProps extends IBaseDialog {
 export enum DialogSizeEnum {
     small = "lg:min-w-128 lg:min-h-128",
     medium = "lg:min-w-192 lg:min-h-160",
-    large = "w-full h-full",
 
-    smallFixed = "lg:w-128 lg:h-128",
+    smallFixed = "lg:w-128 lg:h-144",
     mediumFixed = "lg:w-192 lg:h-160"
 }
 
