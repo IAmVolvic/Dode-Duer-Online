@@ -13,7 +13,7 @@ import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
-    const [isOpen, toggle] = useBoolean(false)
+    const [isOpen, toggle] = useBoolean(true)
     const {user, isLoggedIn} = useAuth();
     const logout = useLogout();
 
