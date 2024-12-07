@@ -89,7 +89,7 @@ export const AccountTabContent = () => {
 
                 <div className="flex flex-row gap-5">
                     <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={handleInputChange('password')} input={data.password} />
-                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password" setInput={handleInputChange('passwordConfirm')} input={data.passwordConfirm} />
+                    <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Password Confirm" setInput={handleInputChange('passwordConfirm')} input={data.passwordConfirm} />
                 </div>
                 
             </div>
