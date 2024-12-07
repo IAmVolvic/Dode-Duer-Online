@@ -17,5 +17,4 @@ public interface IUserRepository
     public Boolean AdminAlreadyExists();
 
     public User UpdateUserDb(User user);
-    
 }

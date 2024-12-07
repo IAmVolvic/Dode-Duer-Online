@@ -21,7 +21,10 @@ public class BoardApiTest: WebApplicationFactory<Program>
 
     public BoardApiTest(ITestOutputHelper output)
     {
-        DotNetEnv.Env.Load("../API/.env");
+        Environment.SetEnvironmentVariable("ADMIN_NAME", "TestAdmin");
+        Environment.SetEnvironmentVariable("ADMIN_EMAIL", "testadmin@example.com");
+        Environment.SetEnvironmentVariable("ADMIN_PHONENUMBER", "12345678");
+        Environment.SetEnvironmentVariable("ADMIN_PASSWORD", "ValidPassword123");
         _pgCtxSetupUser = new PgCtxSetup<LotteryContext>();
         Environment.SetEnvironmentVariable("TestDb",_pgCtxSetupUser._postgres.GetConnectionString());
         _output = output;

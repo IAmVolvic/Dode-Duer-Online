@@ -12,8 +12,10 @@
     "deploy": "npx firebase deploy --only hosting"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
     "@preact/signals-react": "^2.2.0",
     "@tanstack/react-query": "^5.56.2",
+    "classnames": "^2.5.1",
     "daisyui": "^4.12.10",
     "jotai": "^2.10.0",
     "jotai-devtools": "^0.10.1",
@@ -21,7 +23,9 @@
     "react-cookie": "^7.2.2",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.3.0",
     "react-jwt": "^1.2.2",
+    "react-qr-code": "^2.0.15",
     "react-router-dom": "^6.26.0",
     "vite-tsconfig-paths": "^5.0.1"
   },

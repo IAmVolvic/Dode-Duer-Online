@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { InputTypeEnum, TextInput } from "@components/inputs/textInput";
 import { Link } from "react-router-dom";
-import ThemeSwitcher from "@components/themeSwitcher";
 import { Toaster } from "react-hot-toast";
 import { ProtectedComponent } from "@components/authProtected/ProtectedComponent";
 import { useLogin } from "@hooks/authentication/useLogin";
@@ -11,7 +10,7 @@ import BGImage_1 from "@assets/images/BG2.jpeg"
 import Logo from "@assets/images/SiteLogo.png"
 
 
-export const Login = () => {
+export const LoginPage = () => {
     const [loginEmail, setLoginEmail] = useState<string>("");
     const [loginPassword, setLoginPassword] = useState<string>("");
     const login = useLogin({email: loginEmail, password: loginPassword});
@@ -21,8 +20,6 @@ export const Login = () => {
             <Toaster position="top-center"/>
             
             <div className="h-screen">
-                <ThemeSwitcher />
-                
                 <div className="w-full h-full flex items-center justify-center">
                     {/* Main Content Area */}
                     <div className="flex flex-col items-center w-full px-10 h-full lg:w-2/4">
@@ -39,8 +36,8 @@ export const Login = () => {
                             {/* Form Inputs */}
                             <div className="flex flex-col gap-10 w-full lg:w-96">
                                 <div className="flex flex-col gap-5">
-                                    <TextInput inputType={InputTypeEnum.email} inputTitle="Email" setInput={setLoginEmail} input={loginEmail} />
-                                    <TextInput inputType={InputTypeEnum.password} inputTitle="Password" setInput={setLoginPassword} input={loginPassword} />
+                                    <TextInput parentClassName="flex flex-col gap-3 w-full" titleClassName="text-lg" inputType={InputTypeEnum.email} inputTitle="Email" setInput={setLoginEmail} input={loginEmail} />
+                                    <TextInput parentClassName="flex flex-col gap-3 w-full" titleClassName="text-lg" inputType={InputTypeEnum.password} inputTitle="Password" setInput={setLoginPassword} input={loginPassword} />
                                 </div>
 
                                 {/* Login Button */}
@@ -59,6 +56,5 @@ export const Login = () => {
                 </div>
             </div>
         </ProtectedComponent>
-       
     )
 }

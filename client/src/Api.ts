@@ -155,6 +155,23 @@ export interface UserEnrollmentRequestDTO {
   password: string;
 }
 
+export interface UserUpdateRequestDTO {
+  name?: string | null;
+  /** @format email */
+  email?: string | null;
+  /**
+   * @format phone
+   * @minLength 8
+   * @maxLength 8
+   */
+  phoneNumber?: string | null;
+  /**
+   * @minLength 5
+   * @maxLength 32
+   */
+  password?: string | null;
+}
+
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
@@ -312,6 +329,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardGetAllBoards
+     * @request GET:/Board/GetBoards
+     */
+    boardGetAllBoards: (params: RequestParams = {}) =>
+      this.request<BoardResponseDTO[], any>({
+        path: `/Board/GetBoards`,
+        method: "GET",
+        format: "json",
+        ...params,
+      }),
   };
   game = {
     /**
@@ -346,6 +378,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -361,6 +394,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -378,6 +412,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -393,6 +428,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
   };
@@ -410,6 +446,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        withCredentials: true,
         format: "json",
         ...params,
       }),
@@ -445,6 +482,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -453,12 +491,30 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      *
      * @tags User
      * @name UserGGetUser
-     * @request GET:/User/@me
+     * @request GET:/User/@user
      */
     userGGetUser: (params: RequestParams = {}) =>
       this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@me`,
+        path: `/User/@user`,
         method: "GET",
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserPUpdateUser
+     * @request PATCH:/User/@user/update
+     */
+    userPUpdateUser: (data: UserUpdateRequestDTO, params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@user/update`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
         format: "json",
         withCredentials: true,
         ...params,
