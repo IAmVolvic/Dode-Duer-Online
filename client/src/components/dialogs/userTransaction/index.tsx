@@ -28,7 +28,7 @@ export const UserTransactionDialog = (props: TransactionDialogProps) => {
 
     return (
         <>
-            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="New Transaction" dialogSize={DialogSizeEnum.smallFixed} >
+            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="New Transaction" dialogSize={DialogSizeEnum.small} >
                 <div className="flex flex-col justify-between gap-7 w-full h-full p-5">
                     <div className="flex flex-col justify-center items-center gap-7 w-full">
                         <div className="flex flex-col items-center justify-center">
