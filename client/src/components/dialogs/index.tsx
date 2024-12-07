@@ -15,8 +15,8 @@ export enum DialogSizeEnum {
     small = "lg:min-w-128 lg:min-h-128",
     medium = "lg:min-w-192 lg:min-h-160",
 
-    smallFixed = "w-full h-full lg:w-128 lg:h-144",
-    mediumFixed = "w-full h-full lg:w-192 lg:h-128"
+    smallFixed = "w-full h-full lg:w-128 lg:h-128",
+    mediumFixed = "w-full h-full lg:w-192 lg:h-160"
 }
 
 
