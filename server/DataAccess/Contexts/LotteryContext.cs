@@ -25,6 +25,8 @@ public partial class LotteryContext : DbContext
     public virtual DbSet<User> Users { get; set; }
 
     public virtual DbSet<Winner> Winners { get; set; }
+    
+    public virtual DbSet<WinningNumbers> WinningNumbers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -98,10 +100,6 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Prizepool)
                 .HasPrecision(10, 2)
                 .HasColumnName("prizepool");
-            entity.Property(e => e.Winningnumbers)
-                .HasMaxLength(50)
-                .HasColumnName("winningnumbers");
-            
             entity.Property(e => e.Status)
                 .HasConversion(
                     v => v.ToString(),  // Convert enum to string before saving to DB
@@ -236,6 +234,26 @@ public partial class LotteryContext : DbContext
                 .HasForeignKey(d => d.Userid)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("winners_userid_fkey");
+        });
+        
+        modelBuilder.Entity<WinningNumbers>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("winningnumbers_pkey");
+
+            entity.ToTable("winningnumbers");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedNever()
+                .HasColumnName("id");
+
+            entity.Property(e => e.GameId).HasColumnName("gameid");
+
+            entity.Property(e => e.Number).HasColumnName("number");
+
+            entity.HasOne(d => d.Game).WithMany(p => p.WinningNumbers)
+                .HasForeignKey(d => d.GameId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("winningnumbers_gameid_fkey");
         });
 
         OnModelCreatingPartial(modelBuilder);
