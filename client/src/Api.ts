@@ -111,22 +111,6 @@ export interface AuthorizedUserResponseDTO {
   status?: string;
 }
 
-export interface UserSignupRequestDTO {
-  /** @minLength 1 */
-  name: string;
-  /**
-   * @format email
-   * @minLength 1
-   */
-  email: string;
-  /**
-   * @format phone
-   * @minLength 8
-   * @maxLength 8
-   */
-  phoneNumber: string;
-}
-
 export interface UserResponseDTO {
   /** @minLength 1 */
   id: string;
@@ -170,6 +154,62 @@ export interface UserUpdateRequestDTO {
    * @maxLength 32
    */
   password?: string | null;
+}
+
+export interface UserSignupRequestDTO {
+  /** @minLength 1 */
+  name: string;
+  /**
+   * @format email
+   * @minLength 1
+   */
+  email: string;
+  /**
+   * @format phone
+   * @minLength 8
+   * @maxLength 8
+   */
+  phoneNumber: string;
+}
+
+export interface UserUpdateByAdminRequestDTO {
+  /**
+   * @format guid
+   * @minLength 1
+   */
+  id: string;
+  name?: string | null;
+  /** @format email */
+  email?: string | null;
+  /**
+   * @format phone
+   * @minLength 8
+   * @maxLength 8
+   */
+  phoneNumber?: string | null;
+  /**
+   * @minLength 5
+   * @maxLength 32
+   */
+  password?: string | null;
+  enrolledStatus?: UserEnrolled | null;
+  userStatus?: UserStatus | null;
+  userRole?: UserRole | null;
+}
+
+export enum UserEnrolled {
+  True = "True",
+  False = "False",
+}
+
+export enum UserStatus {
+  Active = "Active",
+  Inactive = "Inactive",
+}
+
+export enum UserRole {
+  User = "User",
+  Admin = "Admin",
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -437,17 +477,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
-     * @name UserPSignup
-     * @request POST:/User/@admin/signup
+     * @name UserGGetUser
+     * @request GET:/User/@user
      */
-    userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
+    userGGetUser: (params: RequestParams = {}) =>
       this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@admin/signup`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        withCredentials: true,
+        path: `/User/@user`,
+        method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -490,12 +528,48 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
-     * @name UserGGetUser
-     * @request GET:/User/@user
+     * @name UserPUpdateUser
+     * @request PATCH:/User/@user/update
      */
-    userGGetUser: (params: RequestParams = {}) =>
+    userPUpdateUser: (data: UserUpdateRequestDTO, params: RequestParams = {}) =>
       this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@user`,
+        path: `/User/@user/update`,
+        method: "PATCH",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserPSignup
+     * @request POST:/User/@admin/signup
+     */
+    userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO, any>({
+        path: `/User/@admin/signup`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags User
+     * @name UserGGetUsers
+     * @request GET:/User/@admin/users
+     */
+    userGGetUsers: (params: RequestParams = {}) =>
+      this.request<AuthorizedUserResponseDTO[], any>({
+        path: `/User/@admin/users`,
         method: "GET",
         format: "json",
         withCredentials: true,
@@ -506,12 +580,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags User
-     * @name UserPUpdateUser
-     * @request PATCH:/User/@user/update
+     * @name UserPUpdateUserByAdmin
+     * @request PATCH:/User/@admin/user
      */
-    userPUpdateUser: (data: UserUpdateRequestDTO, params: RequestParams = {}) =>
+    userPUpdateUserByAdmin: (data: UserUpdateByAdminRequestDTO, params: RequestParams = {}) =>
       this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@user/update`,
+        path: `/User/@admin/user`,
         method: "PATCH",
         body: data,
         type: ContentType.Json,

@@ -63,7 +63,13 @@ public class UserRepository(LotteryContext context) : IUserRepository
     {
         return context.Users.FirstOrDefault(u => u.Email == email);
     }
-
+    
+    
+    public User[] GetUsers()
+    {
+        return context.Users.ToArray();
+    }
+    
     
     public User GetUserById(string userId)
     {

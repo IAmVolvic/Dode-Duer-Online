@@ -209,24 +209,12 @@
         }
       }
     },
-    "/User/@admin/signup": {
-      "post": {
+    "/User/@user": {
+      "get": {
         "tags": [
           "User"
         ],
-        "operationId": "User_PSignup",
-        "requestBody": {
-          "x-name": "request",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UserSignupRequestDTO"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
+        "operationId": "User_GGetUser",
         "responses": {
           "200": {
             "description": "",
@@ -305,12 +293,24 @@
         }
       }
     },
-    "/User/@user": {
-      "get": {
+    "/User/@user/update": {
+      "patch": {
         "tags": [
           "User"
         ],
-        "operationId": "User_GGetUser",
+        "operationId": "User_PUpdateUser",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdateRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
         "responses": {
           "200": {
             "description": "",
@@ -325,18 +325,73 @@
         }
       }
     },
-    "/User/@user/update": {
+    "/User/@admin/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_PSignup",
+        "requestBody": {
+          "x-name": "request",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserSignupRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizedUserResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/@admin/users": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "operationId": "User_GGetUsers",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AuthorizedUserResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/User/@admin/user": {
       "patch": {
         "tags": [
           "User"
         ],
-        "operationId": "User_PUpdateUser",
+        "operationId": "User_PUpdateUserByAdmin",
         "requestBody": {
           "x-name": "data",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UserUpdateRequestDTO"
+                "$ref": "#/components/schemas/UserUpdateByAdminRequestDTO"
               }
             }
           },
@@ -578,32 +633,6 @@
           }
         }
       },
-      "UserSignupRequestDTO": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "name",
-          "email",
-          "phoneNumber"
-        ],
-        "properties": {
-          "name": {
-            "type": "string",
-            "minLength": 1
-          },
-          "email": {
-            "type": "string",
-            "format": "email",
-            "minLength": 1
-          },
-          "phoneNumber": {
-            "type": "string",
-            "format": "phone",
-            "maxLength": 8,
-            "minLength": 8
-          }
-        }
-      },
       "UserResponseDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -683,6 +712,128 @@
             "nullable": true
           }
         }
+      },
+      "UserSignupRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "email",
+          "phoneNumber"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "minLength": 1
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "maxLength": 8,
+            "minLength": 8
+          }
+        }
+      },
+      "UserUpdateByAdminRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "nullable": true
+          },
+          "phoneNumber": {
+            "type": "string",
+            "format": "phone",
+            "maxLength": 8,
+            "minLength": 8,
+            "nullable": true
+          },
+          "password": {
+            "type": "string",
+            "maxLength": 32,
+            "minLength": 5,
+            "nullable": true
+          },
+          "enrolledStatus": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserEnrolled"
+              }
+            ]
+          },
+          "userStatus": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserStatus"
+              }
+            ]
+          },
+          "userRole": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/UserRole"
+              }
+            ]
+          }
+        }
+      },
+      "UserEnrolled": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "True",
+          "False"
+        ],
+        "enum": [
+          "True",
+          "False"
+        ]
+      },
+      "UserStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive"
+        ],
+        "enum": [
+          "Active",
+          "Inactive"
+        ]
+      },
+      "UserRole": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Admin"
+        ],
+        "enum": [
+          "User",
+          "Admin"
+        ]
       }
     }
   }
