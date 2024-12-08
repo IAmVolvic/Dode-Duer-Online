@@ -48,7 +48,7 @@ export const BillingTabContent = () => {
                                 <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
                                     <td className="text-sm py-3">
                                         <div className={`flex flex-row gap-2 items-center justify-center w-max px-3 py-1 rounded-md ${background}`}>
-                                            <div className={`w-2.5 h-2.5 rounded-full ${backgroundContent}/30`} />
+                                            <div className={`w-2.5 h-2.5 rounded-full ${backgroundContent}`} />
                                             <span className={textContent}>{value.transactionStatus}</span>
                                         </div>
                                     </td>

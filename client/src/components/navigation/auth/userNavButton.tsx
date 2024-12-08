@@ -1,5 +1,5 @@
 import { UserEnrollmentDialog } from "@components/dialogs/userEnrollment"
-import { UserSettingsDialog } from "@components/dialogs/userSettings"
+import { UserSettingsDialog } from "@components/dialogs/settings"
 import { useAuth } from "@hooks/authentication/useAuthentication"
 import { useBoolean } from "@hooks/utils/useBoolean"
 import { FiLogIn, FiUser } from "react-icons/fi"

@@ -12,6 +12,8 @@ import { AccountTabContent } from "./tabs/account";
 import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
 import { UserControl } from "./tabs/admin/userControl";
+import { TransactionControl } from "./tabs/admin/transactionControl";
+
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
     const [isOpen, toggle] = useBoolean(true)
@@ -79,7 +81,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                             <>
                                 <TabPanel> <UserControl /> </TabPanel>
                                 <TabPanel> Game Control </TabPanel>
-                                <TabPanel> Transaction Control </TabPanel>
+                                <TabPanel> <TransactionControl /> </TabPanel>
                             </>
                         )}
                     </TabPanels>

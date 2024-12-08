@@ -9,7 +9,7 @@ export const UserControl = () => {
     return (
         <div className="flex flex-col gap-5">
 
-            <button className="flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10 lg:hidden"> 
+            <button className="flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10"> 
                 <FiUserPlus  />
                 <div>New User</div>
             </button>
@@ -22,17 +22,13 @@ export const UserControl = () => {
                         <th className="text-xs text-start">Role</th>
                         <th className="text-xs text-start">Enrolled</th>
                         <th className="text-xs text-start">Status</th>
-                        <th className="rounded-r-xl">
-                            <button className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-12 h-7"> 
-                                <FiUserPlus  /> 
-                            </button>
-                        </th>
+                        <th className="rounded-r-xl"></th>
                     </tr>
                 </thead>
 
                 <tbody className="before:content-['\200C'] before:leading-4 before:block ">
 
-                    {!isLoading && 
+                    {!isLoading && data && 
                         Object.values(data as AuthorizedUserResponseDTO[]).map((value: AuthorizedUserResponseDTO) => {
                         
                             return (
