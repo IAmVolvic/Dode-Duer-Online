@@ -1,7 +1,7 @@
 
 interface TextInputProps {
     inputTitle: string;
-    setInput: (input: string) => void;
+    setInput: (input: string ) => void;
     input: string;
     inputType: InputTypeEnum;
 
