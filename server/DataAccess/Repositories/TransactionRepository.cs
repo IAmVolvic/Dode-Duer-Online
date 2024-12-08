@@ -18,7 +18,7 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
 
     public Transaction GetTransactionById(string transactionId)
     {
-        var data = context.Transactions.FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
+        var data = context.Transactions.Include(t => t.User).FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
         if(data == null)
         {
             Console.WriteLine($"Transaction with id {transactionId} not found");

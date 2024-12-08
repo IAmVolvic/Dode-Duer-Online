@@ -48,7 +48,7 @@ export const UserEnrollmentDialog = (props: UserEnrollmentDialogProps) => {
 
     return (
         <>
-            <BaseDialog isOpen={props.isOpen} close={()=>{}} dialogTitle="New Transaction" dialogSize={DialogSizeEnum.small} >
+            <BaseDialog isOpen={props.isOpen} close={()=>{}} dialogTitle="Enrollment" dialogSize={DialogSizeEnum.small} >
                 <div className="flex flex-col justify-between gap-10 w-full h-full p-5">
                     <div className="flex flex-col justify-center items-center gap-10 w-full">
                         <div className="flex flex-col items-center justify-center">
