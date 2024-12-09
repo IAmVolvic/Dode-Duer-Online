@@ -10,7 +10,7 @@ jobs:
         name: Deploy Frontend
         runs-on: ubuntu-latest
         env:
-            working-directory: ./client
+            working-directory: client
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
