@@ -1,3 +1,6 @@
+import { LargeContainer } from "@components/containers";
+import {InputTypeEnum, TextInput } from "@components/inputs/textInput";
+import { Button } from "@headlessui/react";
 import axios from "axios";
 import {FormEvent, useEffect, useState } from "react";
 interface WinningNumbersResponseDTO {
@@ -5,12 +8,11 @@ interface WinningNumbersResponseDTO {
     Winningnumbers: number[];
     Status: string;
 }
-export const WinningNumbers = () => {
+export const WinNumbersTabContent = () => {
     const [gameId, setGameId] = useState<string>('');
-    const [winningNumbers, setWinningNumbers] = useState<number[]>([]);
+    const [winningNumber, setWinningNumber] = useState<number| null>(null);
     const [response, setResponse] = useState<WinningNumbersResponseDTO | null>(null);
     const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         const fetchActiveGameId = async () => {
@@ -27,14 +29,14 @@ export const WinningNumbers = () => {
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 
-        if (winningNumbers.length !== 3) {
+        if (winningNumber === null) {
             setError('Winning numbers must be exactly 3.');
             return;
         }
         
         try {
             const result = await axios.post<WinningNumbersResponseDTO>(`http://localhost:5001/api/games/${gameId}/winning-numbers`,    
-            {winningNumbers : winningNumbers}
+            { winningNumber }
         );
             setResponse(result.data);
             setError(null);
@@ -45,36 +47,45 @@ export const WinningNumbers = () => {
     };
     const handleWinningNumbers = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
-        const numbers = value.split(",").map(Number);
-        setWinningNumbers(numbers);
-
-        console.table(winningNumbers);
+        const number = Number(value);
+        if (!isNaN(number)) {
+            setWinningNumber(number);
+        }
     };
 
 
     return (
-        <div>
-            <h2>Set Winning Numbers</h2>
-            <form onSubmit={handleSubmit}>
+        <LargeContainer className="flex flex-col gap-14 mb-52">
+            <div className="flex justify-center">
+                <h1 className="text-4xl sm:text-8xl font-bold">Set Winning Numbers</h1>
+            </div>
 
-                <div className="flex flex-col gap-5">
-                    <div className="flex flex-col gap-2 w-full">
-                        <div className="text-sm">Winning Numbers</div>
-                        <input type="text" placeholder="123,123,123,123" onChange={handleWinningNumbers}
-                               className="w-full bg-base-300 p-3 rounded-xl"/>
-                    </div>
-                </div>
-                <button type="submit">Submit</button>
-            </form>
+            <div className="flex flex-col gap-5">
+                <label className="text-lg font-medium">Enter Winning Numbers (comma-separated):</label>
+                
+                <input
+                    type="text"
+                    placeholder="e.g., 1,2,3"
+                    onChange={handleWinningNumbers}
+                    className="w-full bg-base-300 p-3 rounded-xl text-lg"
+                />
+            </div>
+
+    <div className="flex justify-center">
+                <Button
+                    onClick={handleSubmit}
+                    className="btn btn-primary w-48 text-center text-xl"
+                >
+                    Submit
+                </Button>
+            </div>
             {response && (
                 <div>
-                    <h3>Response:</h3>
                     <p>Game ID: {response.Gameid}</p>
                     <p>Status: {response.Status}</p>
                     <p>Winning Numbers: {response.Winningnumbers.join(', ')}</p>
                 </div>
             )}
-        </div>
+        </LargeContainer>
     );
-};
-export default WinningNumbers;
+}

@@ -11,6 +11,7 @@ import { useBoolean } from "@hooks/utils/useBoolean";
 import { AccountTabContent } from "./tabs/account";
 import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
+import { WinNumbersTabContent} from "./tabs/winNumbers";
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
     const [isOpen, toggle] = useBoolean(true)
@@ -53,7 +54,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
 
                                 <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
                                     <div className="flex justify-center items-center"> <FiSliders className="opacity-60" size={20} /> </div>
-                                    <div className=""> Games </div>
+                                    <div className=""> Win Numbers </div>
                                 </Tab>
 
                                 <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
@@ -73,6 +74,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         <TabPanel> <AccountTabContent /> </TabPanel>
                         <TabPanel> <BillingTabContent /> </TabPanel>
                         <TabPanel> <AppearanceTabContent /> </TabPanel>
+                        <TabPanel> <WinNumbersTabContent /> </TabPanel>
                     </TabPanels>
                 </TabGroup>
             </BaseDialog>

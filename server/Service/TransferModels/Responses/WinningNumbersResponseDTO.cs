@@ -6,15 +6,15 @@ namespace Service.TransferModels.Responses;
 public class WinningNumbersResponseDTO
 {
     public Guid Gameid { get; set; }
-    public List<int> Winningnumbers { get; set; }
+    public int WinningNumbers { get; set; }
     public GameStatus Status { get; set; }
 
-    public static WinningNumbersResponseDTO FromGame(Game game, List<int> winningNumbers)
+    public static WinningNumbersResponseDTO FromGame(Game game, int winningNumber)
     {
         return new WinningNumbersResponseDTO()
         {
             Gameid = game.Id,
-            Winningnumbers = winningNumbers,
+            WinningNumbers = winningNumber,
             Status = game.Status
         };
     }

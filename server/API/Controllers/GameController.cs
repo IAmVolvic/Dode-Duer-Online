@@ -21,9 +21,9 @@ public class GameController(IGameService gameService) : ControllerBase
     [HttpPost]
     [Route("{gameId}/winning-numbers")]
     [Rolepolicy("Admin")]
-    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int[] winningNumbers)
+    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int winningNumber)
     {
-        var result = gameService.SetWinningNumbers(gameId, winningNumbers);
+        var result = gameService.SetWinningNumbers(gameId, winningNumber);
         return Ok(result);
     }
 }

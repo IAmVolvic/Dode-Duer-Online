@@ -28,9 +28,9 @@ public class GameRepository(LotteryContext context) : IGameRepository
         return context.Games.FirstOrDefault(g => g.Status == GameStatus.Active);
     }
     
-    public void AddWinningNumbers(List<WinningNumbers> winningNumbers)
+    public void AddWinningNumbers(List<WinningNumbers> winningNumber)
     {
-        context.WinningNumbers.AddRange(winningNumbers);
+        context.WinningNumbers.AddRange(winningNumber);
         context.SaveChanges();
     }
     
