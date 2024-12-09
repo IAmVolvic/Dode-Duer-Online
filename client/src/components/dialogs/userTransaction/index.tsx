@@ -2,14 +2,28 @@ import { InputTypeEnum, TextInput } from "@components/inputs/textInput";
 import QRCode from "react-qr-code";
 import { useState } from "react";
 import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
+import { Api } from "@Api";
+import { ErrorToast } from "@components/errorToast";
+import toast from "react-hot-toast";
 
+interface TransactionDialogProps extends IBaseDialog {
+    transacrionRefresh: () => void;
+}
 
-export const UserTransactionDialog = (props: IBaseDialog) => { 
+export const UserTransactionDialog = (props: TransactionDialogProps) => { 
     const [transactionId, setTransactionId] = useState<string>("");
+    const API = new Api();
+
+    
     const handleNewTransaction = () => {
-        console.log(transactionId);
-        props.close();
-        setTransactionId("");
+        API.transaction.transactionPUserDepositReq({transactionNumber: transactionId}).then((res) => {
+            toast.success("Transaction Successful");
+            props.transacrionRefresh();
+            props.close();
+            setTransactionId("");
+        }).catch((err) => {
+            ErrorToast(err);
+        });
     };
 
     return (
@@ -24,10 +38,9 @@ export const UserTransactionDialog = (props: IBaseDialog) => {
 
                         <QRCode value="https://qr.mobilepay.dk/box/41ca2f58-d80d-45f9-82d5-aa8dea0029ae/pay-in" bgColor="#00000000" className="bg-white h-52 w-52 rounded-xl p-3" />
 
-                        <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.password} inputTitle="Transaction Number" setInput={setTransactionId} input={transactionId} />
+                        <TextInput parentClassName="flex flex-col gap-2 w-full" titleClassName="text-sm" inputType={InputTypeEnum.text} inputTitle="Transaction Number" setInput={setTransactionId} input={transactionId} />
                     </div>
 
-                    
                     <button className="h-10 bg-primary text-primary-content rounded-xl w-full" onClick={handleNewTransaction}> Send Transaction </button>
                 </div>
             </BaseDialog>

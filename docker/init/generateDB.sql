@@ -58,5 +58,11 @@ CREATE TABLE Winners (
                          FOREIGN KEY (GameId) REFERENCES Game(Id),
                          FOREIGN KEY (UserId) REFERENCES Users(Id)
 );
+create table WinningNumbers (
+                                Id uuid primary key not null,
+                                GameId uuid not null,
+                                Number integer default 0,
+                                foreign key (GameId) references Game(id)
+);
 
 

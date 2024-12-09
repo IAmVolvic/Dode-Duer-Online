@@ -10,14 +10,15 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class UserController(IUserService service): ControllerBase
 {
-    [HttpPost]
-    [Route("@admin/signup")]
-    [Rolepolicy("Admin")]
-    public ActionResult<AuthorizedUserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
+    // USER ROUTES
+    [HttpGet]
+    [Route("@user")]
+    [Authenticated]
+    public ActionResult<AuthorizedUserResponseDTO> GGetUser()
     {
-        return Ok(service.Signup(request));
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(authUser);
     }
-    
     
     [HttpPost]
     [Route("@user/login")]
@@ -25,7 +26,6 @@ public class UserController(IUserService service): ControllerBase
     {
         return Ok(service.Login(data));
     }
-    
     
     [HttpPatch]
     [Route("@user/enroll")]
@@ -36,13 +36,38 @@ public class UserController(IUserService service): ControllerBase
         return Ok(service.EnrollUser(authUser.Id, data));
     }
     
-    
-    [HttpGet]
-    [Route("@me")]
+    [HttpPatch]
+    [Route("@user/update")]
     [Authenticated]
-    public ActionResult<AuthorizedUserResponseDTO> GGetUser()
+    public ActionResult<AuthorizedUserResponseDTO> PUpdateUser([FromBody] UserUpdateRequestDTO data)
     {
         var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
-        return Ok(authUser);
+        return Ok(service.UpdateUser(authUser.Id, data));
+    }
+    
+    
+    // ADMIN ROUTES
+    [HttpPost]
+    [Route("@admin/signup")]
+    [Rolepolicy("Admin")]
+    public ActionResult<AuthorizedUserResponseDTO> PSignup([FromBody] UserSignupRequestDTO request)
+    {
+        return Ok(service.Signup(request));
+    }
+    
+    [HttpGet]
+    [Route("@admin/users")]
+    [Rolepolicy("Admin")]
+    public ActionResult<AuthorizedUserResponseDTO[]> GGetUsers()
+    {
+        return Ok(service.GetUsers());
+    }
+    
+    [HttpPatch]
+    [Route("@admin/user")]
+    [Rolepolicy("Admin")]
+    public ActionResult<AuthorizedUserResponseDTO> PUpdateUserByAdmin([FromBody] UserUpdateByAdminRequestDTO data)
+    {
+        return Ok(service.UpdateUserByAdmin(data));
     }
 }

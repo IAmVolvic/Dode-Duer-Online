@@ -5,13 +5,20 @@ import LoginRoutes from "@modules/login/routes";
 import ErrorsRoutes from "@modules/errors/routes";
 import PlayRoutes from "@modules/play/routes";
 
+import WNumbersRoutes from "modules/winNumbers/routes"
+
+
 
 const ROUTES: RouteObject[] = [
 	...HomeRoutes,
 	...LoginRoutes,
 	...PlayRoutes,
 
-	...ErrorsRoutes
+
+	...ErrorsRoutes,
+
+	...WNumbersRoutes
+
 ]
 
 export default ROUTES;

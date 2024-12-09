@@ -1,6 +1,7 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Repositories;
 
@@ -17,7 +18,7 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
 
     public Transaction GetTransactionById(string transactionId)
     {
-        var data = context.Transactions.FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
+        var data = context.Transactions.Include(t => t.User).FirstOrDefault(u => u.Id == Guid.Parse(transactionId));
         if(data == null)
         {
             Console.WriteLine($"Transaction with id {transactionId} not found");
@@ -31,6 +32,7 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
     public Transaction[] GetAllTransactions()
     {
         return context.Transactions
+            .Include(t => t.User)
             .OrderByDescending(t => (int)t.Transactionstatus == (int)TransactionStatusA.Pending)
             .ThenBy(t => t.Id)
             .ToArray();
@@ -58,5 +60,14 @@ public class TransactionRepository(LotteryContext context) : ITransactionReposit
     public Boolean TransactionAlreadyExists(string transactionNumber)
     {
         return context.Transactions.Any(t => t.Transactionnumber == transactionNumber);
+    }
+    
+    public Transaction UpdateTransactionStatus(Guid transactionId, TransactionStatusA newStatus)
+    {
+        var updatedTransaction = context.Transactions.Find(transactionId);
+        updatedTransaction.Transactionstatus = newStatus;
+        
+        context.SaveChanges();
+        return updatedTransaction;
     }
 }

@@ -17,4 +17,13 @@ public class GameController(IGameService gameService) : ControllerBase
     {
         return Ok(gameService.NewGame(prize));
     }
+    
+    [HttpPost]
+    [Route("winning-numbers")]
+    //[Rolepolicy("Admin")]
+    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int[] winningNumbers)
+    {
+        var result = gameService.SetWinningNumbers(gameId, winningNumbers);
+        return Ok(result);
+    }
 }

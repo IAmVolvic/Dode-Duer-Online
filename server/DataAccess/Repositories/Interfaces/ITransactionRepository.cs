@@ -1,4 +1,5 @@
 using DataAccess.Models;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Interfaces;
 
@@ -13,4 +14,6 @@ public interface ITransactionRepository
     public Transaction[] GetAllTransactions();
     
     public Transaction[] GetAllTransactionsByUserId(Guid userId);
+    
+    public Transaction UpdateTransactionStatus(Guid transactionId, TransactionStatusA newStatus);
 }
