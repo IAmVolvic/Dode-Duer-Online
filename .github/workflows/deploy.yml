@@ -23,11 +23,6 @@ jobs:
             - name: Clear npm cache
               run: npm cache clean --force
 
-            - name: Clean up old dependencies
-              run: |
-                rm -rf node_modules
-                rm -f package-lock.json
-
             - name: Install dependencies
               run: npm install
               working-directory: ${{ env.working-directory }}
