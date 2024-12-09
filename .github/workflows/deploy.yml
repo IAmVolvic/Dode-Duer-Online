@@ -20,6 +20,13 @@ jobs:
               with:
                   node-version: 20.8.1
 
+            - name: Archive npm failure logs
+              uses: actions/upload-artifact@v2
+              if: failure()
+              with:
+                name: npm-logs
+                path: ~/.npm/_logs
+
             - name: Clear npm cache
               run: npm cache clean --force
 
