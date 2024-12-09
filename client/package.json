@@ -38,6 +38,7 @@
     "axios": "^1.7.4",
     "babel-plugin-react-compiler": "0.0.0-experimental-938cd9a-20240601",
     "dependency-cruiser": "^16.3.10",
+    "esbuild": "^0.24.0",
     "firebase-tools": "^13.20.2",
     "jsonwebtoken": "^9.0.2",
     "postcss": "^8.4.41",
