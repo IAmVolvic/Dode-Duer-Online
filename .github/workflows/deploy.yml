@@ -3,7 +3,7 @@ name: Deploy Game
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
     deploy-fe:
