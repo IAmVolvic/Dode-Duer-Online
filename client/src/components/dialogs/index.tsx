@@ -6,16 +6,17 @@ import { FiX } from "react-icons/fi";
 interface DialogProps extends IBaseDialog {
     dialogTitle: string;
     dialogSize: DialogSizeEnum;
+
+    childrenTitle?: ReactNode;
     children?: ReactNode;
 }
 
 export enum DialogSizeEnum {
-    small = "min-w-128 min-h-128",
-    medium = "min-w-192 min-h-160",
-    large = "w-full h-full",
+    small = "lg:min-w-128 lg:min-h-128",
+    medium = "lg:min-w-192 lg:min-h-160",
 
-    smallFixed = "w-128 h-128",
-    mediumFixed = "w-192 h-160"
+    smallFixed = "w-full h-full lg:w-128 lg:h-128",
+    mediumFixed = "w-full h-full lg:w-192 lg:h-160"
 }
 
 
@@ -34,7 +35,11 @@ export const BaseDialog = (props: DialogProps) => {
                     <DialogPanel className={`flex flex-col items-center border-0.05r border-base-content/50 backdrop-blur-xl backdrop-brightness-100 rounded-2xl ${props.dialogSize}`}>
                         {/* TopBar */}
                         <div className="flex justify-between items-center min-h-16 max-h-16 w-full border-b-0.05r border-base-content/50 px-5">
-                            <div className="font-bold">{props.dialogTitle}</div>
+                            <div className="flex flex-row items-center gap-5">
+                                <div className="font-bold">{props.dialogTitle}</div>
+                                {props.childrenTitle}
+                            </div>
+                            
 
                             <Button onClick={props.close} className="h-8 w-8 flex justify-center items-center">
                                 <FiX />

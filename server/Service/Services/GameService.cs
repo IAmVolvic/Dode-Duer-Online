@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using API.Exceptions;
+using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
 using Service.Services.Interfaces;
@@ -66,5 +67,29 @@ public class GameService(IGameRepository gameRepository) : IGameService
             return true;
         }
         return false;
+    }
+    public WinningNumbersResponseDTO SetWinningNumbers (Guid gameId, int[] winningNumbers) {
+        if (winningNumbers.Length != 3)
+        {
+            throw new Exception(" Winning Numbers must be 3!");
+        }
+
+        var game = gameRepository.GetActiveGame();
+        if (game == null || game.Id != gameId)
+        {
+            throw new ErrorException("Game", "Game not found or not active.");
+        }
+        var winningNumbersEntities = winningNumbers.Select(num => new WinningNumbers
+        {
+            Id = Guid.NewGuid(),
+            GameId = gameId,
+            Number = num
+        }).ToList();
+
+        gameRepository.AddWinningNumbers(winningNumbersEntities);
+        
+        var winningNumbersList = winningNumbersEntities.Select(e => e.Number).ToList();
+
+        return WinningNumbersResponseDTO.FromGame(game, winningNumbersList);
     }
 }

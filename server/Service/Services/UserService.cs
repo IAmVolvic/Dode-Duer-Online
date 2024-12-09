@@ -100,6 +100,96 @@ public class UserService : IUserService
         
         _repository.CreateUserDb(newUser);
     }
+
+
+    public AuthorizedUserResponseDTO UpdateUser(Guid userId, UserUpdateRequestDTO userUpdateRequest)
+    {
+        var userData = UserById(userId.ToString());
+        
+        if (userUpdateRequest.Name != null)
+        {
+            userData.Name = userUpdateRequest.Name;
+        }
+        
+        if (userUpdateRequest.Email != null)
+        {
+            userData.Email = userUpdateRequest.Email;
+        }
+        
+        if (userUpdateRequest.PhoneNumber != null)
+        {
+            userData.Phonenumber = userUpdateRequest.PhoneNumber;
+        }
+        
+        if (userUpdateRequest.Password != null)
+        {
+            userData.Passwordhash = _passwordHasher.HashPassword(userData, userUpdateRequest.Password);
+        }
+
+        _repository.UpdateUserDb(userData);
+        
+        return AuthorizedUserResponseDTO.FromEntity(userData);
+    }
+    
+    
+    public AuthorizedUserResponseDTO UpdateUserByAdmin(UserUpdateByAdminRequestDTO userUpdateRequest)
+    {
+        var userData = UserById(userUpdateRequest.Id.ToString());
+        
+        if (userUpdateRequest.Name != null)
+        {
+            userData.Name = userUpdateRequest.Name;
+        }
+        
+        if (userUpdateRequest.Email != null)
+        {
+            userData.Email = userUpdateRequest.Email;
+        }
+        
+        if (userUpdateRequest.PhoneNumber != null)
+        {
+            userData.Phonenumber = userUpdateRequest.PhoneNumber;
+        }
+        
+        if (userUpdateRequest.Password != null)
+        {
+            userData.Passwordhash = _passwordHasher.HashPassword(userData, userUpdateRequest.Password);
+        }
+
+        if (userUpdateRequest.UserStatus != null)
+        {
+            userData.Status = (UserStatus)userUpdateRequest.UserStatus;
+        }
+        
+        if (userUpdateRequest.EnrolledStatus != null)
+        {
+            userData.Enrolled = (UserEnrolled)userUpdateRequest.EnrolledStatus;
+        }
+        
+        if (userUpdateRequest.UserRole != null)
+        {
+            userData.Role = (UserRole)userUpdateRequest.UserRole;
+        }
+
+        _repository.UpdateUserDb(userData);
+        
+        return AuthorizedUserResponseDTO.FromEntity(userData);
+    }
+    
+    
+    public AuthorizedUserResponseDTO[] GetUsers()
+    {
+        var userList = new List<AuthorizedUserResponseDTO>();
+        var users = _repository.GetUsers();
+        
+        foreach (var user in users)
+        {
+            var authorizedUserDTO = AuthorizedUserResponseDTO.FromEntity(user);
+            userList.Add(authorizedUserDTO);
+        }
+        
+        return userList.ToArray();
+    }
     
     
     private User UserById(string userId)
@@ -114,6 +204,7 @@ public class UserService : IUserService
         return user;
     }
     
+    
     private User UserByEmail(string email)
     {
         var user = _repository.GetUserByEmail(email);
@@ -126,6 +217,7 @@ public class UserService : IUserService
         return user;
     }
     
+    
     private void EmailExists(string email)
     {
         if (_repository.EmailAlreadyExists(email))
@@ -134,6 +226,7 @@ public class UserService : IUserService
         }
     }
     
+    
     private void PhoneNumberExists(string phoneNumber)
     {
         if (_repository.PhoneNumberAlreadyExists(phoneNumber))
@@ -141,6 +234,7 @@ public class UserService : IUserService
             throw new ErrorException("Phone", "Phone number already exists");
         }
     }
+    
     
     private static string GenerateRandomString()
     {

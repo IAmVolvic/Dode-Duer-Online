@@ -12,4 +12,10 @@ public interface IUserService
     public AuthorizedUserResponseDTO EnrollUser(Guid userId, UserEnrollmentRequestDTO newPassword);
 
     public void NewAdmin(User newUser);
+    
+    public AuthorizedUserResponseDTO UpdateUser(Guid userId, UserUpdateRequestDTO userUpdateRequest);
+
+    public AuthorizedUserResponseDTO UpdateUserByAdmin(UserUpdateByAdminRequestDTO userUpdateRequest);
+    
+    public AuthorizedUserResponseDTO[] GetUsers();
 }
