@@ -93,7 +93,7 @@ export const UserEditDialog = (props: UserEditDialogProps) => {
         dataToSend.userStatus = data.userStatus;
         dataToSend.userRole = data.userRole;
 
-        API.user.userPUpdateUserByAdmin(dataToSend).then((res) => {
+        API.user.userPUpdateUserByAdmin(dataToSend).then(() => {
             props.refresh();
             props.close();
         }).catch((err) => {

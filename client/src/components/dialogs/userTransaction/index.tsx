@@ -16,7 +16,7 @@ export const UserTransactionDialog = (props: TransactionDialogProps) => {
 
     
     const handleNewTransaction = () => {
-        API.transaction.transactionPUserDepositReq({transactionNumber: transactionId}).then((res) => {
+        API.transaction.transactionPUserDepositReq({transactionNumber: transactionId}).then(() => {
             toast.success("Transaction Successful");
             props.transacrionRefresh();
             props.close();

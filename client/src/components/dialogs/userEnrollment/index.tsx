@@ -1,8 +1,7 @@
 import { InputTypeEnum, TextInput } from "@components/inputs/textInput";
-import QRCode from "react-qr-code";
 import { useState } from "react";
 import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
-import { Api, UserEnrollmentRequestDTO } from "@Api";
+import { Api } from "@Api";
 import { ErrorToast } from "@components/errorToast";
 import toast from "react-hot-toast";
 
@@ -38,7 +37,7 @@ export const UserEnrollmentDialog = (props: UserEnrollmentDialogProps) => {
             return;
         }
 
-        API.user.userPEnroll({password: data.password}).then((res) => {
+        API.user.userPEnroll({password: data.password}).then(() => {
             toast.success("Enrollment Successful");
             props.close();
         }).catch((err) => {

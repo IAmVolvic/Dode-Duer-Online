@@ -4,13 +4,12 @@ import { useAuth } from "@hooks/authentication/useAuthentication";
 import { TransactionStatus, transactionStatusColor } from "@hooks/user/types/status";
 import { useGetTransactions } from "@hooks/user/useGetTransactions";
 import { useBoolean } from "@hooks/utils/useBoolean";
-import { useEffect } from "react";
 import { FiCreditCard } from "react-icons/fi";
 import { TbCurrencyKroneDanish } from "react-icons/tb";
 
 
 export const BillingTabContent = () => {
-    const {user, isLoggedIn} = useAuth();
+    const {user} = useAuth();
     const { isLoading, data, refetch } = useGetTransactions();
     const [isOpen,, setTrue, setFalse] = useBoolean(false);
 
@@ -34,7 +33,6 @@ export const BillingTabContent = () => {
                     <tr className="bg-base-300 h-12 hidden lg:table-row">
                         <th className="rounded-l-xl"></th>
                         <th className="rounded-r-xl text-xs text-start">Transaction Id</th>
-                        {/* <th className="rounded-r-xl text-xs text-start">Transaction Number</th> */}
                     </tr>
                 </thead>
 
@@ -42,7 +40,7 @@ export const BillingTabContent = () => {
 
                     {!isLoading && 
                         Object.values(data as TransactionResponseDTO[]).map((value: TransactionResponseDTO) => {
-                            const { textColor, textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus!]];
+                            const { textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus as keyof typeof TransactionStatus]];
                     
                             return (
                                 <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
@@ -54,7 +52,6 @@ export const BillingTabContent = () => {
                                     </td>
                     
                                     <td >{value.id}</td>
-                                   {/*  <td >{value.transactionNumber}</td> */}
                                 </tr>
                             );
                         })

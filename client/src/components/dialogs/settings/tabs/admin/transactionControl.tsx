@@ -34,7 +34,7 @@ export const TransactionControl = () => {
 
                         {!isLoading && 
                             Object.values(data as TransactionResponseDTO[]).map((value: TransactionResponseDTO) => {
-                                const { textColor, textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus!]];
+                                const { textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus as keyof typeof TransactionStatus]];
                         
                                 return (
                                     <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">

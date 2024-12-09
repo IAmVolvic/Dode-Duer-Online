@@ -11,7 +11,7 @@ export const UserNavButton = () => {
     const isEnrolled = (user?.enrolled === "False") ? false : true;
 
     const [isOpen,, setTrue, setFalse] = useBoolean(false);
-    const [isOpenE,, setTrueE, setFalseE] = useBoolean(!isEnrolled);
+    const [isOpenE,, setFalseE] = useBoolean(!isEnrolled);
 
     return(<>
         {isLoggedIn ? (

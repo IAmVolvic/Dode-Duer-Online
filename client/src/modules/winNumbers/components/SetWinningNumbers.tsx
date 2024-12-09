@@ -10,7 +10,7 @@ export const WinningNumbers = () => {
     const [gameId, setGameId] = useState<string>('');
     const [winningNumbers, setWinningNumbers] = useState<number[]>([]);
     const [response, setResponse] = useState<WinningNumbersResponseDTO | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const [, setError] = useState<string | null>(null);
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
 

@@ -36,10 +36,10 @@ export const TransactionEditDialog = (props: TransactionEditDialogProps) => {
             amount: parseFloat(adjustmentAmount),
             adjustment: adjustment,
             transactionStatusA: status
-        }).then((res) => {
+        }).then(() => {
             toast.success('Successfully updated transaction');
             props.refresh();
-        }).catch((err) => {
+        }).catch(() => {
             toast.error('Failed to update transaction');
         });
     };
