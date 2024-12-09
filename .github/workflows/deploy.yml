@@ -9,26 +9,24 @@ jobs:
     deploy-fe:
         name: Deploy Frontend
         runs-on: ubuntu-latest
+        env:
+            working-directory: ./client
         steps:
             - name: Checkout code
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
 
             - name: Setup Node.js
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                   node-version: 18.18.0
 
             - name: Install dependencies
-              run: |
-                ls
-                cd ./client
-                ls
-                npm install
+              run: npm ci
+              working-directory: ${{ env.working-directory }}
 
             - name: Build the frontend
-              run: |
-                cd ./client
-                npm run build
+              run: npm run build
+              working-directory: ${{ env.working-directory }}
 
             - name: Install SSH Key
               uses: shimataro/ssh-key-action@v2
@@ -41,5 +39,6 @@ jobs:
 
             - name: Deploy
               run: |
-                cd ./client/dist
+                cd ./dist
                 scp -r -f . ${{ secrets.SSH_USER }}@${{ secrets.IP }}:${{ secrets.PATH }}
+              working-directory: ${{ env.working-directory }}
