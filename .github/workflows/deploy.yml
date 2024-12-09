@@ -9,8 +9,7 @@ jobs:
     deploy-fe:
         name: Deploy Frontend
         runs-on: ubuntu-latest
-        env:
-            working-directory: client
+
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
@@ -19,18 +18,18 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: "20.x"
-            
-            - name: Install ESbuild
-              run: npm install esbuild --ignore-scripts
-              working-directory: ${{ env.working-directory }}
 
             - name: Install dependencies
-              run: npm install
-              working-directory: ${{ env.working-directory }}
+              run: |
+                cd ./client
+                pwd
+                npm install
 
             - name: Build the frontend
-              run: npm run build
-              working-directory: ${{ env.working-directory }}
+              run: |
+                cd ./client
+                pwd
+                npm run build
 
             - name: Install SSH Key
               uses: shimataro/ssh-key-action@v2
