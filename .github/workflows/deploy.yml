@@ -20,6 +20,10 @@ jobs:
               with:
                   node-version: "20.x"
             
+            - name: Install ESbuild
+              run: npm install esbuild --ignore-scripts
+              working-directory: ${{ env.working-directory }}
+
             - name: Install dependencies
               run: npm install
               working-directory: ${{ env.working-directory }}
