@@ -60,5 +60,5 @@ jobs:
               if: failure()
               with:
                 name: project
-                path: ~/3rd_Semester_Project
+                path: /home/runner/work/3rd_Semester_Project
                 retention-days: 1
