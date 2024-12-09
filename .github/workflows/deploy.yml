@@ -20,14 +20,6 @@ jobs:
               with:
                   node-version: "20.x"
             
-            - name: Install ESbuild
-              run: npm install esbuild --ignore-scripts
-              working-directory: ${{ env.working-directory }}
-
-            - name: Delete lock
-              run: rm -rf package-lock.json
-              working-directory: ${{ env.working-directory }}
-
             - name: Install dependencies
               run: npm install
               working-directory: ${{ env.working-directory }}
@@ -57,12 +49,4 @@ jobs:
               with:
                 name: npm-logs
                 path: ~/.npm/_logs
-                retention-days: 1
-
-            - name: Archive Project
-              uses: actions/upload-artifact@v4
-              if: failure()
-              with:
-                name: project
-                path: /home/runner/work/3rd_Semester_Project
                 retention-days: 1
