@@ -24,7 +24,9 @@ jobs:
               run: npm cache clean --force
 
             - name: Install dependencies
-              run: npm install
+              run: |
+                npm install esbuild
+                npm install --ignore-scripts
               working-directory: ${{ env.working-directory }}
 
             - name: Build the frontend
