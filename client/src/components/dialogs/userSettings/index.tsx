@@ -74,7 +74,6 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         <TabPanel> <AccountTabContent /> </TabPanel>
                         <TabPanel> <BillingTabContent /> </TabPanel>
                         <TabPanel> <AppearanceTabContent /> </TabPanel>
-                        <TabPanel> <WinNumbersTabContent /> </TabPanel>
                     </TabPanels>
                 </TabGroup>
             </BaseDialog>
