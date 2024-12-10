@@ -56,15 +56,6 @@ const colorClassMap: { [key in ButtonColor]: { background: string, text: string,
 };
 
 
-export const NormalButton = (props: ButtonProps) => {
-    return (
-        <button>
-
-        </button>
-    )
-}
-
-
 export const LinkButton = (props: ButtonProps) => {
     const { background, text, border } = colorClassMap[props.color];
     

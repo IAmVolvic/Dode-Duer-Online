@@ -1,4 +1,4 @@
-import { Api, AuthorizedUserResponseDTO } from "@Api";
+import { AuthorizedUserResponseDTO } from "@Api";
 import { UserCreateDialog } from "@components/dialogs/userCreate";
 import { UserEditDialog } from "@components/dialogs/userEdit";
 import { useGetAllUsers } from "@hooks/user/useGetAllUsers";
@@ -7,7 +7,6 @@ import { useState } from "react";
 import { FiEdit, FiUserPlus } from "react-icons/fi";
 
 export const UserControl = () => {
-    const API = new Api();
     const { isLoading, data, refetch } = useGetAllUsers();
     const [isOpenUserCreate,, setTrueUserCreate, setFalseUserCreate] = useBoolean(false);
 

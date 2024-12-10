@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
-import { Api, AuthorizedUserResponseDTO } from "@Api";
+import { Api } from "@Api";
 import { TextInput, InputTypeEnum } from "@components/inputs/textInput";
 import { ErrorToast } from "@components/errorToast";
 
@@ -20,7 +20,7 @@ export const UserCreateDialog = (props: UserCreateDialogProps) => {
             name: username,
             email: email,
             phoneNumber: phoneNumber
-        }).then((res) => {
+        }).then(() => {
             props.refresh();
             props.close();
 

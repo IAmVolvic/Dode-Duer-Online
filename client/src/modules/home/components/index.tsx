@@ -1,6 +1,5 @@
 import { LargeContainer } from "@components/containers"
 import { ButtonColor, LinkButton } from "@components/inputs/button"
-import { Link } from "react-router-dom"
 
 export const Home = () => {
     return (

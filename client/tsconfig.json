@@ -24,7 +24,7 @@
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
-
+    
     "baseUrl": "./src",
     "paths": {
       "@*": ["./*"]
@@ -32,7 +32,7 @@
   },
   "include": [
     "src"
-, "FOR LATER"  ],
+  ],
   "references": [
 
   ]

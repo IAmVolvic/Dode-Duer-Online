@@ -4,7 +4,7 @@ export enum TransactionStatus {
     Rejected    = 'Rejected'
 };
 
-export const transactionStatusColor: { [key in TransactionStatus]: {textColor, textContent, backgroundContent, background} } = {
+export const transactionStatusColor: { [key in TransactionStatus]: {textColor: string, textContent: string, backgroundContent: string, background: string} } = {
     [TransactionStatus.Pending]:   {
         textColor: "text-warning",
         textContent: "text-warning-content",
