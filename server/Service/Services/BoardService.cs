@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using API.Exceptions;
+using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Service.Services.Interfaces;
@@ -7,7 +8,7 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IGameRepository gameRepository) : IBoardService
+public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IGameRepository gameRepository, IUserService userService) : IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
@@ -24,8 +25,14 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                 Number = n 
             })
             .ToList();
+        var price = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Price1;
         var newBoard = boardRepository.PlayBoard(board);
-        return new BoardResponseDTO().FromBoard(newBoard);
+        if (newBoard != null)
+        {
+            userService.UpdateUserBalance(price,newBoard.Userid);
+            return new BoardResponseDTO().FromBoard(newBoard);
+        }
+        throw new ErrorException("BoardService","Board could not be played");
     }
 
     public List<BoardResponseDTO> GetBoards()

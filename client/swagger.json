@@ -99,6 +99,53 @@
         }
       }
     },
+    "/Game/winning-numbers": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_AddWinningNumbers",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "winningNumbers",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WinningNumbersResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Price/GetPrices": {
       "get": {
         "tags": [
@@ -530,6 +577,26 @@
           1
         ]
       },
+      "WinningNumbersResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gameid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "winningnumbers": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/GameStatus"
+          }
+        }
+      },
       "PriceDto": {
         "type": "object",
         "additionalProperties": false,
@@ -601,8 +668,8 @@
           "amount": {
             "type": "number",
             "format": "decimal",
-            "maximum": 10000.0,
-            "minimum": 0.0
+            "maximum": 10000,
+            "minimum": 0
           },
           "adjustment": {
             "$ref": "#/components/schemas/TransactionAdjustment"

@@ -55,6 +55,13 @@ export enum GameStatus {
   Inactive = 1,
 }
 
+export interface WinningNumbersResponseDTO {
+  /** @format guid */
+  gameid?: string;
+  winningnumbers?: number[];
+  status?: GameStatus;
+}
+
 export interface PriceDto {
   /** @format decimal */
   price1?: number;
@@ -409,6 +416,31 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameAddWinningNumbers
+     * @request POST:/Game/winning-numbers
+     */
+    gameAddWinningNumbers: (
+      data: number[],
+      query?: {
+        /** @format guid */
+        gameId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WinningNumbersResponseDTO, any>({
+        path: `/Game/winning-numbers`,
+        method: "POST",
+        query: query,
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
   };
   price = {
     /**
@@ -441,7 +473,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -457,7 +488,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -475,7 +505,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -491,7 +520,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };
@@ -508,7 +536,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@user`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -543,7 +570,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -561,7 +587,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -579,7 +604,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -612,7 +636,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };

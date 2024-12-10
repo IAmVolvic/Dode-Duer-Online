@@ -18,4 +18,6 @@ public interface IUserService
     public AuthorizedUserResponseDTO UpdateUserByAdmin(UserUpdateByAdminRequestDTO userUpdateRequest);
     
     public AuthorizedUserResponseDTO[] GetUsers();
+    public decimal UpdateUserBalance(decimal cost, Guid userId);
+
 }
