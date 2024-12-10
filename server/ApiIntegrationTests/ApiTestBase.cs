@@ -30,6 +30,7 @@ public class ApiTestBase : WebApplicationFactory<Program>
         MockAuthService = new Mock<IAuthService>();
         TestHttpClient = CreateClient();
         TestHttpClient.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+        
         Seed().GetAwaiter().GetResult();
     }
 

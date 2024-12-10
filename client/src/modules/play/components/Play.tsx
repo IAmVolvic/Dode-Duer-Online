@@ -1,9 +1,12 @@
 ﻿import { LargeContainer } from "@components/containers";
 import { Button } from "@headlessui/react";
 import { useState } from "react";
+import {useAtom} from "jotai/react/useAtom";
+import { PriceAtom } from "@atoms/PriceAtom";
 
 export const PlayPage = () => {
     const [pickedNumbers, setPickedNumbers] = useState<Number[]>([]);
+    const [prices, setPrices] = useAtom(PriceAtom);
     const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
 
     const toggleNumber = (n: Number) => {
