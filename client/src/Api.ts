@@ -473,6 +473,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -488,6 +489,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -505,6 +507,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -520,6 +523,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
   };
@@ -536,6 +540,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@user`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -570,6 +575,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -604,6 +610,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -636,6 +643,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
   };
