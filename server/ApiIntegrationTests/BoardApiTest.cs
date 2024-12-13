@@ -1,15 +1,10 @@
 ﻿using System.Net;
-using API;
 using DataAccess.Models;
-using Microsoft.AspNetCore.Mvc.Testing;
-using PgCtx;
 using Service.TransferModels.Requests;
 using Xunit;
 using Xunit.Abstractions;
 using System.Net.Http.Json;
-using ApiIntegrationTests;
 using ApiInterationTests;
-using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Service.TransferModels.Responses;
@@ -52,6 +47,7 @@ VALUES
         Email = "john.doe@gmail.com",
         Passwordhash = "wipadjawpodjiawdpawidjpaw",
         Phonenumber = "01234561",
+        Balance = 1000
     };
 
     // Add user and verify it's saved
@@ -110,6 +106,7 @@ VALUES
             Email = "john.doe@gmail.com",
             Passwordhash = "hashedpassword",
             Phonenumber = "01234561",
+            Balance = 1000
         };
 
         PgCtxSetup.DbContextInstance.Users.Add(player);
@@ -150,6 +147,7 @@ VALUES
             Email = "john.doe@gmail.com",
             Passwordhash = "hashedpassword",
             Phonenumber = "01234561",
+            Balance = 1000
         };
 
         PgCtxSetup.DbContextInstance.Users.Add(player);
