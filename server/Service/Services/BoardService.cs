@@ -8,7 +8,7 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IGameRepository gameRepository, IUserService userService) : IBoardService
+public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IGameRepository gameRepository, IUserService userService, IGameService gameService) : IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
@@ -30,6 +30,8 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         if (newBoard != null)
         {
             userService.UpdateUserBalance(price,newBoard.Userid);
+            var prize = GetBoards().Sum(b => b.Price);
+            gameService.UpdatePrizePool(prize);
             return new BoardResponseDTO().FromBoard(newBoard);
         }
         throw new ErrorException("BoardService","Board could not be played");

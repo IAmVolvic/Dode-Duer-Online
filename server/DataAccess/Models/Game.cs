@@ -8,7 +8,7 @@ public partial class Game
 {
     public Guid Id { get; set; }
 
-    public decimal? Prizepool { get; set; }
+    public decimal Prizepool { get; set; }
 
     public DateOnly Date { get; set; }
     

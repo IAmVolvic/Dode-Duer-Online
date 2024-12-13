@@ -48,11 +48,9 @@ export const PlayPage = () => {
                 numbers : pickedNumbers!,
                 dateofpurchase : format(new Date(), 'yyyy-MM-dd')
             };
-            console.log(board);
             const api = new Api();
             api.board.boardPlayBoard(board).then((r: AxiosResponse<BoardResponseDTO>) =>{
                 toast.success("Your board has been played");
-                console.log(r.data);
             });
         }
     }
