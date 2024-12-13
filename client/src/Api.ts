@@ -381,6 +381,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 

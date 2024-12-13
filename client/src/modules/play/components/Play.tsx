@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 
 export const PlayPage = () => {
     const [pickedNumbers, setPickedNumbers] = useState<number[]>([]);
-    //const {user, isLoggedIn} = useAuth();
+    const {user} = useAuth();
     const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
     const [prices] = useAtom(PriceAtom);
 
@@ -40,16 +40,16 @@ export const PlayPage = () => {
             return prev; // Do nothing if already 8 numbers picked
         });
     };
-    /*
+
     const playBoard =() => {
         if (user != null){
-            let board : PlayBoardDTO = {
+            const board : PlayBoardDTO = {
                 userid : user.id!,
                 numbers : pickedNumbers!,
                 dateofpurchase : format(new Date(), 'yyyy-MM-dd')
             };
             console.log(board);
-            let api = new Api();
+            const api = new Api();
             api.board.boardPlayBoard(board).then((r: AxiosResponse<BoardResponseDTO>) =>{
                 toast.success("Your board has been played");
                 console.log(r.data);
@@ -58,7 +58,7 @@ export const PlayPage = () => {
     }
 
 
-     */
+
     return (
         <LargeContainer className="flex flex-col gap-14 mb-52">
             <div className="flex justify-center">
@@ -82,7 +82,7 @@ export const PlayPage = () => {
             </div>
             <label className="flex justify-center lg:text-2xl text-xl">Price: {totalPrice()}</label>
             <div className="flex justify-center">
-                <Button disabled={pickedNumbers.length <5} className="btn btn-primary w-48 text-center text-xl">
+                <Button disabled={pickedNumbers.length <5} className="btn btn-primary w-48 text-center text-xl" onClick={()=> playBoard() }>
                     Accept
                 </Button>
             </div>
