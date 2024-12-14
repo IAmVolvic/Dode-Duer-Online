@@ -1,7 +1,17 @@
 import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
 import { Button, Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/react";
 import { useLogout } from "@hooks/authentication/useLogout";
-import { FiSettings, FiCreditCard, FiLayout, FiLogOut, FiUsers, FiSliders, FiShoppingCart, FiMenu } from "react-icons/fi";
+import {
+    FiSettings,
+    FiCreditCard,
+    FiLayout,
+    FiLogOut,
+    FiUsers,
+    FiSliders,
+    FiShoppingCart,
+    FiMenu,
+    FiArchive, FiList
+} from "react-icons/fi";
 import classNames from 'classnames';
 import { useAuth } from "@hooks/authentication/useAuthentication";
 import { useBoolean } from "@hooks/utils/useBoolean";
@@ -13,6 +23,7 @@ import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
 import { UserControl } from "./tabs/admin/userControl";
 import { TransactionControl } from "./tabs/admin/transactionControl";
+import {GameHistory} from "@components/dialogs/settings/tabs/admin/gameHistory.tsx";
 
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
@@ -63,6 +74,10 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                                     <div className="flex justify-center items-center"> <FiShoppingCart className="opacity-60" size={20} /> </div>
                                     <div className=""> Transactions </div>
                                 </Tab>
+                                <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
+                                    <div className="flex justify-center items-center"> <FiList className="opacity-60" size={20} /> </div>
+                                    <div className=""> History </div>
+                                </Tab>
                             </>
                         )}
                         
@@ -82,6 +97,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                                 <TabPanel> <UserControl /> </TabPanel>
                                 <TabPanel> Game Control </TabPanel>
                                 <TabPanel> <TransactionControl /> </TabPanel>
+                                <TabPanel> <GameHistory /></TabPanel>
                             </>
                         )}
                     </TabPanels>

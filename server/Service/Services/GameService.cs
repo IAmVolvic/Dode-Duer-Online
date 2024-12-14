@@ -97,4 +97,11 @@ public class GameService(IGameRepository gameRepository) : IGameService
     {
         gameRepository.UpdatePrizePool(newPrizePool);
     }
+
+    public List<GameResponseDTO> GetAllGames()
+    {
+        var games = gameRepository.GetAllGames();
+        var gamesDto = games.Select(g => new GameResponseDTO().FromGame(g)).ToList();
+        return gamesDto;
+    }
 }

@@ -442,6 +442,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         format: "json",
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameGetAllGames
+     * @request GET:/Game/getAllGames
+     */
+    gameGetAllGames: (params: RequestParams = {}) =>
+      this.request<GameResponseDTO[], any>({
+        path: `/Game/getAllGames`,
+        method: "GET",
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
   };
   price = {
     /**
@@ -507,8 +523,8 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PATCH",
         body: data,
         type: ContentType.Json,
-        format: "json",
         withCredentials: true,
+        format: "json",
         ...params,
       }),
 
@@ -559,6 +575,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -627,6 +644,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@admin/users`,
         method: "GET",
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 

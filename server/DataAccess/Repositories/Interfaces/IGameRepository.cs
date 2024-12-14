@@ -8,5 +8,5 @@ public interface IGameRepository
     public Game GetActiveGame();
     void AddWinningNumbers(List<WinningNumbers> winningNumbers);
     public void UpdatePrizePool(decimal newPrizePool);
-
+    public List<Game> GetAllGames();
 }

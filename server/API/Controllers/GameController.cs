@@ -26,4 +26,12 @@ public class GameController(IGameService gameService) : ControllerBase
         var result = gameService.SetWinningNumbers(gameId, winningNumbers);
         return Ok(result);
     }
+
+    [HttpGet]
+    [Route("getAllGames")]
+    public ActionResult<List<GameResponseDTO>> GetAllGames()
+    {
+        var result = gameService.GetAllGames();
+        return Ok(result);
+    }
 }

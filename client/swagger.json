@@ -146,6 +146,29 @@
         }
       }
     },
+    "/Game/getAllGames": {
+      "get": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_GetAllGames",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/GameResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Price/GetPrices": {
       "get": {
         "tags": [
