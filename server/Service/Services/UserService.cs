@@ -130,6 +130,18 @@ public class UserService : IUserService
         
         return AuthorizedUserResponseDTO.FromEntity(userData);
     }
+
+    public decimal UpdateUserBalance(decimal cost, Guid userId)
+    {
+        var userData = UserById(userId.ToString());
+        if (userData.Balance - cost>=0)
+        {
+            userData.Balance = userData.Balance - cost;
+            _repository.UpdateUserDb(userData);
+            return userData.Balance;
+        }
+        throw new ErrorException("UserService", "User balance cannot be updated");
+    }
     
     
     public AuthorizedUserResponseDTO UpdateUserByAdmin(UserUpdateByAdminRequestDTO userUpdateRequest)

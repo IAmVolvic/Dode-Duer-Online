@@ -33,6 +33,19 @@ public class GameRepository(LotteryContext context) : IGameRepository
         context.WinningNumbers.AddRange(winningNumbers);
         context.SaveChanges();
     }
-    
+
+    public void UpdatePrizePool(decimal newPrizePool)
+    {
+        var game = context.Games.FirstOrDefault(g => g.Status == GameStatus.Active);
+        if (game != null)
+        {
+            game.Prizepool = newPrizePool;
+            context.SaveChanges();
+        }
+        else
+        {
+            throw new InvalidOperationException("Active game is not available.");
+        }
+    }
 }
 

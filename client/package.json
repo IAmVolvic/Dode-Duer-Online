@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "scaffold": "npx swagger-typescript-api -p http://localhost:5001/swagger/v1/swagger.json -o ./src/ -n Api.ts --axios"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -18,6 +19,7 @@
     "axios": "^1.7.9",
     "classnames": "^2.5.1",
     "daisyui": "^4.12.20",
+    "date-fns": "^4.1.0",
     "jotai": "^2.10.3",
     "jotai-devtools": "^0.10.1",
     "postcss": "^8.4.49",

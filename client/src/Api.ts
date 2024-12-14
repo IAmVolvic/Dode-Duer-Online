@@ -55,6 +55,20 @@ export enum GameStatus {
   Inactive = 1,
 }
 
+export interface WinningNumbersResponseDTO {
+  /** @format guid */
+  gameid?: string;
+  winningnumbers?: number[];
+  status?: GameStatus;
+}
+
+export interface PriceDto {
+  /** @format decimal */
+  price1?: number;
+  /** @format decimal */
+  numbers?: number;
+}
+
 export interface TransactionResponseDTO {
   /** @format guid */
   id?: string;
@@ -367,6 +381,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
+        withCredentials: true,
         ...params,
       }),
 
@@ -399,6 +414,47 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "POST",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameAddWinningNumbers
+     * @request POST:/Game/winning-numbers
+     */
+    gameAddWinningNumbers: (
+      data: number[],
+      query?: {
+        /** @format guid */
+        gameId?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WinningNumbersResponseDTO, any>({
+        path: `/Game/winning-numbers`,
+        method: "POST",
+        query: query,
+        body: data,
+        type: ContentType.Json,
+        format: "json",
+        ...params,
+      }),
+  };
+  price = {
+    /**
+     * No description
+     *
+     * @tags Price
+     * @name PriceGetPrices
+     * @request GET:/Price/GetPrices
+     */
+    priceGetPrices: (params: RequestParams = {}) =>
+      this.request<PriceDto[], any>({
+        path: `/Price/GetPrices`,
+        method: "GET",
         format: "json",
         ...params,
       }),
@@ -538,7 +594,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -572,7 +627,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@admin/users`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
