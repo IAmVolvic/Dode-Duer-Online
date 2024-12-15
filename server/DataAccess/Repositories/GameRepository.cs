@@ -1,7 +1,6 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
-using Microsoft.EntityFrameworkCore;
 
 
 namespace DataAccess.Repositories;
@@ -35,12 +34,18 @@ public class GameRepository(LotteryContext context) : IGameRepository
         context.SaveChanges();
     }
 
-    public List<Winner> GetWinnersWithGame()
+    public void UpdatePrizePool(decimal newPrizePool)
     {
-        return context.Winners
-            .Include(w => w.Game)
-            .Include( w => w.User)
-            .ToList();
+        var game = context.Games.FirstOrDefault(g => g.Status == GameStatus.Active);
+        if (game != null)
+        {
+            game.Prizepool = newPrizePool;
+            context.SaveChanges();
+        }
+        else
+        {
+            throw new InvalidOperationException("Active game is not available.");
+        }
     }
 }
 

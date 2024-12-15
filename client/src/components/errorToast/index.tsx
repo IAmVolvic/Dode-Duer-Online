@@ -1,14 +1,19 @@
+import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 
-export const ErrorToast = (error) => {
-    if (error.response && error.response.data && error.response.data.errors) {
+export const ErrorToast = (error: AxiosError) => {
+    if (error.response && error.response.data && (error.response.data as any).errors) {
         let errorMessage = '';
-            Object.keys(error.response.data.errors).forEach((field) => {
-                error.response.data.errors[field].forEach((message) => {
+        
+        // Iterate over the error fields
+        Object.keys((error.response.data as any).errors).forEach((field) => {
+            // Type message as string
+            (error.response?.data as any).errors[field].forEach((message: string) => {
                 errorMessage += `${field}: ${message}\n`; 
             });
         });
 
+        // Show the error message using the toast
         toast.error(errorMessage);
-      }
-}
+    }
+};

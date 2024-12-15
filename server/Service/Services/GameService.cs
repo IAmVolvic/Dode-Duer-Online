@@ -85,8 +85,11 @@ public class GameService(IGameRepository gameRepository) : IGameService
 
         gameRepository.AddWinningNumbers(new List<WinningNumbers>{winningNumbersEntities});
 
-        return WinningNumbersResponseDTO.FromGame(game,winningNumber);
+        return WinningNumbersResponseDTO.FromGame(game, new List<int> { winningNumber });
     }
-    
 
+    public void UpdatePrizePool(decimal newPrizePool)
+    {
+        gameRepository.UpdatePrizePool(newPrizePool);
+    }
 }

@@ -14,4 +14,10 @@ public interface IUserService
     public void NewAdmin(User newUser);
     
     public AuthorizedUserResponseDTO UpdateUser(Guid userId, UserUpdateRequestDTO userUpdateRequest);
+
+    public AuthorizedUserResponseDTO UpdateUserByAdmin(UserUpdateByAdminRequestDTO userUpdateRequest);
+    
+    public AuthorizedUserResponseDTO[] GetUsers();
+    public decimal UpdateUserBalance(decimal cost, Guid userId);
+
 }

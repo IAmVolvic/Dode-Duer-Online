@@ -1,9 +1,8 @@
 import { StrictMode } from "react";
-import ReactDOM from 'react-dom/client'
-import '@assets/styles/styles.css';
-import 'jotai-devtools/styles.css';
+import ReactDOM from 'react-dom/client';
 import App from "@app/App";
 
+import "@assets/css/index.css";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <StrictMode>

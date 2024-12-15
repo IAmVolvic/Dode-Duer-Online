@@ -1,7 +1,7 @@
 import { SimpleContainer } from "@components/containers"
 
 export const Footer = () => {
-    const s = true
+    const s = false
     const isLoading = s;
     const response = { failed: s };
 

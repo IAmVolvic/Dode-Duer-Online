@@ -1,13 +1,9 @@
 // Importing Images
 import Logo from "@assets/images/SiteLogo.png"
 import { NavLink } from "react-router-dom"
-import { useAuth } from "@hooks/authentication/useAuthentication";
 import { UserNavButton } from "./auth/userNavButton";
 
-interface NavigationProps {}
-
-export const TopNavigation = (props: NavigationProps) => {
-    const {isLoggedIn} = useAuth();
+export const TopNavigation = () => {
 	return (
         <div className="flex flex-row justify-between backdrop-blur-xl backdrop-brightness-100 h-20  mb-10 border-b-0.05r border-base-content/50">
 
