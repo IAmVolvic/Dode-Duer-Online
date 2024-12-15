@@ -2,13 +2,13 @@ name: Run xUnit Tests
 
 # Trigger the workflow on every push or pull request
 on:
-  # push:
-    # branches:
-    #   - main
-    #   - '**'
+  push:
+    branches:
+      - master
+      - '**'
   pull_request:
     branches:
-      - main
+      - master
 
 # Define the jobs in the workflow
 jobs:
