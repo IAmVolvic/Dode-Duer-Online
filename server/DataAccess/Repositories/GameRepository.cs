@@ -1,6 +1,7 @@
 ﻿using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace DataAccess.Repositories;
@@ -33,6 +34,13 @@ public class GameRepository(LotteryContext context) : IGameRepository
         context.WinningNumbers.AddRange(winningNumber);
         context.SaveChanges();
     }
-    
+
+    public List<Winner> GetWinnersWithGame()
+    {
+        return context.Winners
+            .Include(w => w.Game)
+            .Include( w => w.User)
+            .ToList();
+    }
 }
 

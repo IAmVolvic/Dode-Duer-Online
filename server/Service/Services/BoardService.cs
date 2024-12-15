@@ -34,4 +34,14 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var boardsDto = boards.Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
         return boardsDto;
     }
+    
+    public List<BoardResponseDTO> IdentifyWinners(Guid gameId, int winningNumber)
+    {
+        var boards = boardRepository.GetBoards().Where(b => b.Gameid == gameId).ToList();
+        var winningBoards = boards.Where(b => b.Chosennumbers.Any(n => n.Number == winningNumber)).ToList();
+        var winners = winningBoards.Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
+            
+        return winners;
+    }
+
 }

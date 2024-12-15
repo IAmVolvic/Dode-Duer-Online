@@ -16,4 +16,5 @@ public partial class Winner
     public virtual Game Game { get; set; } = null!;
 
     public virtual User User { get; set; } = null!;
+    
 }

@@ -1,4 +1,5 @@
-﻿using API.Exceptions;
+﻿using System.Globalization;
+using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
@@ -84,6 +85,8 @@ public class GameService(IGameRepository gameRepository) : IGameService
 
         gameRepository.AddWinningNumbers(new List<WinningNumbers>{winningNumbersEntities});
 
-        return WinningNumbersResponseDTO.FromGame(game, new List<int> { winningNumber });
+        return WinningNumbersResponseDTO.FromGame(game,winningNumber);
     }
+    
+
 }

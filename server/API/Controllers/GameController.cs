@@ -26,4 +26,14 @@ public class GameController(IGameService gameService) : ControllerBase
         var result = gameService.SetWinningNumbers(gameId, winningNumber);
         return Ok(result);
     }
+    
+    [HttpGet]
+    [Route("winners")]
+    [Rolepolicy("Admin")]
+    public IActionResult GetWinners()
+    {
+        var winners = gameService.GetWinners();
+        return Ok(winners);
+    }
+
 }
