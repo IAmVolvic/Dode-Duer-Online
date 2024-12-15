@@ -69,25 +69,26 @@ public class GameService(IGameRepository gameRepository) : IGameService
         }
         return false;
     }
-    public WinningNumbersResponseDTO SetWinningNumbers (Guid gameId, int winningNumber) {
-
+    public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int winningNumber)
+    {
         var game = gameRepository.GetActiveGame();
         if (game == null || game.Id != gameId)
         {
             throw new ErrorException("Game", "Game not found or not active.");
         }
-        var winningNumbersEntities =new WinningNumbers
+
+        var winningNumbersEntities = new WinningNumbers
         {
             Id = Guid.NewGuid(),
             GameId = gameId,
             Number = winningNumber
         };
 
-        gameRepository.AddWinningNumbers(new List<WinningNumbers>{winningNumbersEntities});
+        gameRepository.AddWinningNumbers(new List<WinningNumbers> { winningNumbersEntities });
 
-        return WinningNumbersResponseDTO.FromGame(game, new List<int> { winningNumber });
+        return WinningNumbersResponseDTO.FromGame(game, winningNumber);
     }
-
+    
     public void UpdatePrizePool(decimal newPrizePool)
     {
         gameRepository.UpdatePrizePool(newPrizePool);

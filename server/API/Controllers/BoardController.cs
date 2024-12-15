@@ -28,4 +28,15 @@ public class BoardController(IBoardService boardService) : ControllerBase
         var response = boardService.GetBoards();
         return Ok(response);
     }
+    
+    [HttpGet]
+    [Route("winners")]
+    [Rolepolicy("Admin")]
+    public ActionResult<List<BoardResponseDTO>> IdentifyWinners(Guid gameId, [FromBody] int winningNumber)
+    {
+        {
+            var winners = boardService.IdentifyWinners(gameId, winningNumber);
+            return Ok(winners);
+        }
+    }
 }
