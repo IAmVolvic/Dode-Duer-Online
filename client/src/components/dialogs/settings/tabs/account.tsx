@@ -16,7 +16,7 @@ interface AccountUpdateRQForm {
 
 
 export const AccountTabContent = () => {
-    const {user, isLoggedIn, refresh} = useAuth();
+    const {user, refresh} = useAuth();
     const API = new Api();
 
     const [data, setData] = useState<AccountUpdateRQForm>({
@@ -51,10 +51,10 @@ export const AccountTabContent = () => {
         dataToSend.email = data.email;
         dataToSend.phoneNumber = data.phoneNumber;
 
-        API.user.userPUpdateUser(dataToSend).then((res) => {
+        API.user.userPUpdateUser(dataToSend).then(() => {
             toast.success('User updated successfully');
             refresh();
-        }).catch((err) => {
+        }).catch(() => {
             toast.error('Failed to update user');
         });
     };

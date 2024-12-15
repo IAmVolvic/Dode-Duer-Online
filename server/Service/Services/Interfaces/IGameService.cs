@@ -7,5 +7,6 @@ public interface IGameService
     public GameResponseDTO NewGame(int prize);
     public GameResponseDTO NewGameFromMonday(int prize);
     public bool IsAnyGame();
-   public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int winningNumbers);
+   public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int[] winningNumbers);
+   public void UpdatePrizePool(decimal newPrizePool);
 }

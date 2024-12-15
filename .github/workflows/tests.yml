@@ -4,11 +4,11 @@ name: Run xUnit Tests
 on:
   push:
     branches:
-      - main
+      - master
       - '**'
   pull_request:
     branches:
-      - main
+      - master
 
 # Define the jobs in the workflow
 jobs:
@@ -26,7 +26,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '7.x' # Specify the version of .NET you're using (e.g., '6.x' or '7.x')
+          dotnet-version: '8.x' # Specify the version of .NET you're using (e.g., '6.x' or '7.x')
 
       # Step 3: Restore dependencies
       - name: Restore dependencies

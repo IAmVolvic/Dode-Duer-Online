@@ -1,7 +1,7 @@
 
 interface TextInputProps {
     inputTitle: string;
-    setInput: (input: string) => void;
+    setInput: (input: string ) => void;
     input: string;
     inputType: InputTypeEnum;
 
@@ -27,7 +27,7 @@ export const TextInput = (props: TextInputProps) => {
     return (
         <div className={props.parentClassName}>     
             <div className={props.titleClassName}>{props.inputTitle}</div>
-            <input type={InputTypeEnum[props.inputType]} placeholder={props.input} value={props.input} onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setInput(event.target.value) } className="w-full bg-base-300 p-3 rounded-xl" />
+            <input type={props.inputType} placeholder={props.input} value={props.input} onChange={(event: React.ChangeEvent<HTMLInputElement>) => props.setInput(event.target.value) } className="w-full bg-base-300 p-3 rounded-xl" />
         </div>
     )
 }
