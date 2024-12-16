@@ -21,10 +21,25 @@ public class GameController(IGameService gameService) : ControllerBase
     [HttpPost]
     [Route("{gameId}/winning-numbers")]
     [Rolepolicy("Admin")]
-    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int winningNumber)
+    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int[] winningNumbers)
     {
-        var result = gameService.SetWinningNumbers(gameId, winningNumber);
+        var result = gameService.SetWinningNumbers(gameId, winningNumbers);
         return Ok(result);
     }
-
+    
+    [HttpGet]
+    [Route("Active")]
+    //[Rolepolicy("Admin")]
+    public ActionResult<Guid?> GetActiveGameId()
+    {
+        var activeGameId = gameService.GetActiveGameId();
+        
+        if (activeGameId.HasValue)
+        {
+            return Ok(new { id = activeGameId.Value });
+        }
+        
+        return NotFound("No active game found.");
+    }
+    
 }

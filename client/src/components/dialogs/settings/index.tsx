@@ -13,6 +13,7 @@ import { BillingTabContent } from "./tabs/billing";
 import { AppearanceTabContent } from "./tabs/appearance";
 import { UserControl } from "./tabs/admin/userControl";
 import { TransactionControl } from "./tabs/admin/transactionControl";
+import { WinningNumberControl } from "./tabs/admin/winningNumberControl";
 
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
@@ -56,7 +57,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
 
                                 <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
                                     <div className="flex justify-center items-center"> <FiSliders className="opacity-60" size={20} /> </div>
-                                    <div className=""> Game </div>
+                                    <div className=""> WinningNumbers </div>
                                 </Tab>
 
                                 <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
@@ -80,7 +81,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         {isLoggedIn && user?.role === 'Admin' && (
                             <>
                                 <TabPanel> <UserControl /> </TabPanel>
-                                <TabPanel> Game Control </TabPanel>
+                                <TabPanel> <WinningNumberControl /> </TabPanel>
                                 <TabPanel> <TransactionControl /> </TabPanel>
                             </>
                         )}

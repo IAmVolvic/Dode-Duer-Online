@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿
 using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
@@ -69,24 +69,37 @@ public class GameService(IGameRepository gameRepository) : IGameService
         }
         return false;
     }
-    public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int winningNumber)
+    public Guid? GetActiveGameId()
     {
+        var activeGame = gameRepository.GetActiveGame();
+        return activeGame?.Id; 
+    }
+    
+    public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int[] winningNumbers)
+    {
+        if (winningNumbers.Length != 3)
+        {
+            throw new Exception("Winning Numbers must be 3!");
+        }
+        
         var game = gameRepository.GetActiveGame();
         if (game == null || game.Id != gameId)
         {
             throw new ErrorException("Game", "Game not found or not active.");
         }
 
-        var winningNumbersEntities = new WinningNumbers
+        var winningNumbersEntities = winningNumbers.Select(num => new WinningNumbers
         {
             Id = Guid.NewGuid(),
             GameId = gameId,
-            Number = winningNumber
-        };
+            Number = num
+        }).ToList();
 
-        gameRepository.AddWinningNumbers(new List<WinningNumbers> { winningNumbersEntities });
+        gameRepository.AddWinningNumbers(winningNumbersEntities);
 
-        return WinningNumbersResponseDTO.FromGame(game, winningNumber);
+        var winningNumbersList = winningNumbersEntities.Select(e => e.Number).ToList();
+
+        return WinningNumbersResponseDTO.FromGame(game, winningNumbersList);
     }
     
     public void UpdatePrizePool(decimal newPrizePool)

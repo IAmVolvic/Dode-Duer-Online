@@ -1,4 +1,5 @@
-﻿using API.Exceptions;
+﻿using System.Globalization;
+using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
@@ -44,13 +45,34 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         return boardsDto;
     }
     
-    public List<BoardResponseDTO> IdentifyWinners(Guid gameId, int winningNumber)
+    public List<WinnerResponseDTO> IdentifyWinners(Guid gameId, List<int> winningNumbers)
     {
         var boards = boardRepository.GetBoards().Where(b => b.Gameid == gameId).ToList();
-        var winningBoards = boards.Where(b => b.Chosennumbers.Any(n => n.Number == winningNumber)).ToList();
-        var winners = winningBoards.Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
-            
+        var winningBoards = boards.Where(b =>
+        {
+            var chosenNumbers = b.Chosennumbers.Select(n => n.Number ?? 0).ToList();
+            var matchedNumbersCount = winningNumbers.Intersect(chosenNumbers).Count();
+            return matchedNumbersCount == 3;
+        }).ToList();
+        
+        var winners = winningBoards.Select(b =>
+        {
+            decimal wonAmount = b.Price.Price1;  
+            return WinnerResponseDTO.FromBoard(b, wonAmount);
+        }).ToList();
+
         return winners;
     }
-
+    
+    public List<WinnerResponseDTO> GetWinners(Guid gameId)
+    {
+        var winners = gameRepository.GetWinnersWithGame(gameId);
+        return winners.Select(w => new WinnerResponseDTO
+        {
+            UserName = w.User.Name,
+            //WonAmount = w.WonAmount,
+            WeekNumber = ISOWeek.GetWeekOfYear(w.Game.Date.ToDateTime(new TimeOnly(0, 0)))
+        }).ToList();
+    }
 }
+

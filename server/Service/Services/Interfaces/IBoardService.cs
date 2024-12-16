@@ -7,6 +7,7 @@ public interface IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO);
     public List<BoardResponseDTO> GetBoards();
-    public List<BoardResponseDTO> IdentifyWinners(Guid gameId, int winningNumber);
+    List<WinnerResponseDTO> IdentifyWinners(Guid gameId, List<int> winningNumbers);
+    List<WinnerResponseDTO> GetWinners(Guid gameId);
 
 }
