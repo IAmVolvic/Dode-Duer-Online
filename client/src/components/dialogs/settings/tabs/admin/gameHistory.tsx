@@ -62,8 +62,7 @@ export const GameHistory = () => {
                         </td>
                         <td className="lg:w-44">
                             <button
-                                className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-40 h-7"
-                            >
+                                className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-40 h-7">
                                 See boards
                             </button>
                         </td>
