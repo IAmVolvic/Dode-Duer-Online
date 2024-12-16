@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { Api, GameResponseDTO } from "@Api.ts";
+import {Api, AuthorizedUserResponseDTO, GameResponseDTO} from "@Api.ts";
 import { FiEdit } from "react-icons/fi";
+import {BoardsShow} from "@components/dialogs/boardsShow/boardsShow.tsx";
+import {useBoolean} from "@hooks/utils/useBoolean.tsx";
 
 export const GameHistory = () => {
     const [data, setData] = useState<GameResponseDTO[]>([]); // State to store fetched data
     const [loading, setLoading] = useState<boolean>(true);  // State to manage loading
+    const [selectedGame, setSelectedGame] = useState({} as string);
+    const [isOpenBoardHistory,, setTrueBoardHistory, setFalseBoardHistory] = useBoolean(false);
 
-    // Fetch data function
+
     const fetchData = async () => {
         try {
             const api = new Api();
@@ -35,6 +39,11 @@ export const GameHistory = () => {
         return date.toISOString().split("T")[0];
     };
 
+    const handleOpenBoardHistoryDialog = (gameId: string) => {
+        setSelectedGame(gameId);
+        setTrueBoardHistory();
+    }
+
     return (
         <div className="flex flex-col gap-5">
             <table className="w-full">
@@ -62,6 +71,7 @@ export const GameHistory = () => {
                         </td>
                         <td className="lg:w-44">
                             <button
+                                onClick={()=> handleOpenBoardHistoryDialog(value.id!)}
                                 className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-40 h-7">
                                 See boards
                             </button>
@@ -70,6 +80,7 @@ export const GameHistory = () => {
                 ))}
                 </tbody>
             </table>
+            <BoardsShow gameId={selectedGame} isOpen={isOpenBoardHistory} close={setFalseBoardHistory}/>
         </div>
     );
 };

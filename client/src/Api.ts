@@ -42,6 +42,20 @@ export interface PlayBoardDTO {
   numbers?: number[];
 }
 
+export interface BoardGameResponseDTO {
+  /** @format guid */
+  id?: string;
+  user?: string;
+  /** @format date */
+  dateofpurchase?: string;
+  /**
+   * @maxItems 8
+   * @minItems 5
+   */
+  numbers?: (number | null)[];
+}
+
+
 export interface GameResponseDTO {
   /** @format guid */
   id?: string;
@@ -250,7 +264,7 @@ export type RequestParams = Omit<FullRequestParams, "body" | "method" | "query" 
 
 export interface ApiConfig<SecurityDataType = unknown> extends Omit<AxiosRequestConfig, "data" | "cancelToken"> {
   securityWorker?: (
-    securityData: SecurityDataType | null,
+      securityData: SecurityDataType | null,
   ) => Promise<AxiosRequestConfig | void> | AxiosRequestConfig | void;
   secure?: boolean;
   format?: ResponseType;
@@ -322,19 +336,19 @@ export class HttpClient<SecurityDataType = unknown> {
   }
 
   public request = async <T = any, _E = any>({
-    secure,
-    path,
-    type,
-    query,
-    format,
-    body,
-    ...params
-  }: FullRequestParams): Promise<AxiosResponse<T>> => {
+                                               secure,
+                                               path,
+                                               type,
+                                               query,
+                                               format,
+                                               body,
+                                               ...params
+                                             }: FullRequestParams): Promise<AxiosResponse<T>> => {
     const secureParams =
-      ((typeof secure === "boolean" ? secure : this.secure) &&
-        this.securityWorker &&
-        (await this.securityWorker(this.securityData))) ||
-      {};
+        ((typeof secure === "boolean" ? secure : this.secure) &&
+            this.securityWorker &&
+            (await this.securityWorker(this.securityData))) ||
+        {};
     const requestParams = this.mergeRequestParams(params, secureParams);
     const responseFormat = format || this.format || undefined;
 
@@ -375,15 +389,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/Board/Play
      */
     boardPlayBoard: (data: PlayBoardDTO, params: RequestParams = {}) =>
-      this.request<BoardResponseDTO, any>({
-        path: `/Board/Play`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<BoardResponseDTO, any>({
+          path: `/Board/Play`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -393,12 +407,29 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/Board/GetBoards
      */
     boardGetAllBoards: (params: RequestParams = {}) =>
-      this.request<BoardResponseDTO[], any>({
-        path: `/Board/GetBoards`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
+        this.request<BoardResponseDTO[], any>({
+          path: `/Board/GetBoards`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
+
+    /**
+     * No description
+     *
+     * @tags Board
+     * @name BoardGetBoardsFromGame
+     * @request GET:/Board/GetBoardsFromGame/{gameId}
+     */
+    boardGetBoardsFromGame: (gameId: string, params: RequestParams = {}) =>
+        this.request<BoardGameResponseDTO[], any>({
+          path: `/Board/GetBoardsFromGame/${gameId}`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
   };
   game = {
     /**
@@ -409,14 +440,33 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/Game/NewGame
      */
     gameNewGame: (data: number, params: RequestParams = {}) =>
-      this.request<GameResponseDTO, any>({
-        path: `/Game/NewGame`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+        this.request<GameResponseDTO, any>({
+          path: `/Game/NewGame`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          withCredentials: true,
+          format: "json",
+          ...params,
+        }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameNewGameFromMonday
+     * @request POST:/Game/NewGameFromMonday
+     */
+    gameNewGameFromMonday: (data: number, params: RequestParams = {}) =>
+        this.request<GameResponseDTO, any>({
+          path: `/Game/NewGameFromMonday`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          withCredentials: true,
+          format: "json",
+          ...params,
+        }),
 
     /**
      * No description
@@ -426,22 +476,22 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/Game/winning-numbers
      */
     gameAddWinningNumbers: (
-      data: number[],
-      query?: {
-        /** @format guid */
-        gameId?: string;
-      },
-      params: RequestParams = {},
+        data: number[],
+        query?: {
+          /** @format guid */
+          gameId?: string;
+        },
+        params: RequestParams = {},
     ) =>
-      this.request<WinningNumbersResponseDTO, any>({
-        path: `/Game/winning-numbers`,
-        method: "POST",
-        query: query,
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+        this.request<WinningNumbersResponseDTO, any>({
+          path: `/Game/winning-numbers`,
+          method: "POST",
+          query: query,
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          ...params,
+        }),
 
     /**
      * No description
@@ -451,13 +501,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/Game/getAllGames
      */
     gameGetAllGames: (params: RequestParams = {}) =>
-      this.request<GameResponseDTO[], any>({
-        path: `/Game/getAllGames`,
-        method: "GET",
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<GameResponseDTO[], any>({
+          path: `/Game/getAllGames`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
   };
   price = {
     /**
@@ -468,12 +518,12 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/Price/GetPrices
      */
     priceGetPrices: (params: RequestParams = {}) =>
-      this.request<PriceDto[], any>({
-        path: `/Price/GetPrices`,
-        method: "GET",
-        format: "json",
-        ...params,
-      }),
+        this.request<PriceDto[], any>({
+          path: `/Price/GetPrices`,
+          method: "GET",
+          format: "json",
+          ...params,
+        }),
   };
   transaction = {
     /**
@@ -484,15 +534,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/Transaction/@user/balance/deposit
      */
     transactionPUserDepositReq: (data: DepositRequestDTO, params: RequestParams = {}) =>
-      this.request<TransactionResponseDTO, any>({
-        path: `/Transaction/@user/balance/deposit`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<TransactionResponseDTO, any>({
+          path: `/Transaction/@user/balance/deposit`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -502,13 +552,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/Transaction/@user/balance/history
      */
     transactionPUserTransactionsReqs: (params: RequestParams = {}) =>
-      this.request<TransactionResponseDTO[], any>({
-        path: `/Transaction/@user/balance/history`,
-        method: "GET",
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<TransactionResponseDTO[], any>({
+          path: `/Transaction/@user/balance/history`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -518,15 +568,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/Transaction/@admin/balance/adjustment
      */
     transactionPUseBalance: (data: BalanceAdjustmentRequestDTO, params: RequestParams = {}) =>
-      this.request<boolean, any>({
-        path: `/Transaction/@admin/balance/adjustment`,
-        method: "PATCH",
-        body: data,
-        type: ContentType.Json,
-        withCredentials: true,
-        format: "json",
-        ...params,
-      }),
+        this.request<boolean, any>({
+          path: `/Transaction/@admin/balance/adjustment`,
+          method: "PATCH",
+          body: data,
+          type: ContentType.Json,
+          withCredentials: true,
+          format: "json",
+          ...params,
+        }),
 
     /**
      * No description
@@ -536,13 +586,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/Transaction/@admin/balance/history
      */
     transactionPDepositReqs: (params: RequestParams = {}) =>
-      this.request<TransactionResponseDTO[], any>({
-        path: `/Transaction/@admin/balance/history`,
-        method: "GET",
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<TransactionResponseDTO[], any>({
+          path: `/Transaction/@admin/balance/history`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
   };
   user = {
     /**
@@ -553,13 +603,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/User/@user
      */
     userGGetUser: (params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@user`,
-        method: "GET",
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO, any>({
+          path: `/User/@user`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -569,15 +619,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/User/@user/login
      */
     userPLogin: (data: UserLoginRequestDTO, params: RequestParams = {}) =>
-      this.request<UserResponseDTO, any>({
-        path: `/User/@user/login`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<UserResponseDTO, any>({
+          path: `/User/@user/login`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -587,15 +637,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/User/@user/enroll
      */
     userPEnroll: (data: UserEnrollmentRequestDTO, params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@user/enroll`,
-        method: "PATCH",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO, any>({
+          path: `/User/@user/enroll`,
+          method: "PATCH",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -605,14 +655,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/User/@user/update
      */
     userPUpdateUser: (data: UserUpdateRequestDTO, params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@user/update`,
-        method: "PATCH",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO, any>({
+          path: `/User/@user/update`,
+          method: "PATCH",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          ...params,
+        }),
 
     /**
      * No description
@@ -622,15 +672,15 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/User/@admin/signup
      */
     userPSignup: (data: UserSignupRequestDTO, params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@admin/signup`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO, any>({
+          path: `/User/@admin/signup`,
+          method: "POST",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -640,13 +690,13 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/User/@admin/users
      */
     userGGetUsers: (params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO[], any>({
-        path: `/User/@admin/users`,
-        method: "GET",
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO[], any>({
+          path: `/User/@admin/users`,
+          method: "GET",
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
 
     /**
      * No description
@@ -656,14 +706,14 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/User/@admin/user
      */
     userPUpdateUserByAdmin: (data: UserUpdateByAdminRequestDTO, params: RequestParams = {}) =>
-      this.request<AuthorizedUserResponseDTO, any>({
-        path: `/User/@admin/user`,
-        method: "PATCH",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
+        this.request<AuthorizedUserResponseDTO, any>({
+          path: `/User/@admin/user`,
+          method: "PATCH",
+          body: data,
+          type: ContentType.Json,
+          format: "json",
+          withCredentials: true,
+          ...params,
+        }),
   };
 }

@@ -32,7 +32,7 @@ public class BoardController(IBoardService boardService) : ControllerBase
     [HttpGet]
     [Route("GetBoardsFromGame/{gameId}")]
     [Rolepolicy("Admin")]
-    public ActionResult<List<BoardResponseDTO>> GetBoardsFromGame([FromRoute] Guid gameId)
+    public ActionResult<List<BoardGameResponseDTO>> GetBoardsFromGame([FromRoute] Guid gameId)
     {
         var response = boardService.GetBoardsFromGame(gameId);
         return Ok(response);

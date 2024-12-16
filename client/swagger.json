@@ -66,12 +66,80 @@
         }
       }
     },
+    "/Board/GetBoardsFromGame/{gameId}": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_GetBoardsFromGame",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BoardGameResponseDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Game/NewGame": {
       "post": {
         "tags": [
           "Game"
         ],
         "operationId": "Game_NewGame",
+        "requestBody": {
+          "x-name": "prize",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "integer",
+                "format": "int32"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameResponseDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Game/NewGameFromMonday": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_NewGameFromMonday",
         "requestBody": {
           "x-name": "prize",
           "content": {
@@ -567,6 +635,33 @@
             "items": {
               "type": "integer",
               "format": "int32"
+            }
+          }
+        }
+      },
+      "BoardGameResponseDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "user": {
+            "type": "string"
+          },
+          "dateofpurchase": {
+            "type": "string",
+            "format": "date"
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
             }
           }
         }
