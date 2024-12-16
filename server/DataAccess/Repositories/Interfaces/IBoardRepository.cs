@@ -9,4 +9,6 @@ public interface IBoardRepository
     public List<Board> GetBoardsFromGame(Guid gameId);
     public BoardAutoplay AutoplayBoard(BoardAutoplay board);
     public List<BoardAutoplay> GetAutoplayBoards();
+    public BoardAutoplay AdjustLeftToPlay(BoardAutoplay board);
+    public void DeleteBoardLeftToPlay(BoardAutoplay board);
 }

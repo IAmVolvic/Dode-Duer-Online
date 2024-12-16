@@ -10,4 +10,5 @@ public interface IGameService
    public WinningNumbersResponseDTO SetWinningNumbers(Guid gameId, int[] winningNumbers);
    public void UpdatePrizePool(decimal newPrizePool);
    public List<GameResponseDTO> GetAllGames();
+   public GameResponseDTO GetActiveGame();
 }

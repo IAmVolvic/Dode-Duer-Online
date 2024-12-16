@@ -57,6 +57,8 @@ public class GameService(IGameRepository gameRepository, IBoardService boardServ
         
         var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
         
+        boardService.PlayAllAutoplayBoards();
+        
         return gameResponse;
     }
 
@@ -104,5 +106,11 @@ public class GameService(IGameRepository gameRepository, IBoardService boardServ
         var games = gameRepository.GetAllGames();
         var gamesDto = games.Select(g => new GameResponseDTO().FromGame(g)).ToList();
         return gamesDto;
+    }
+
+    public GameResponseDTO GetActiveGame()
+    {
+        var game = gameRepository.GetActiveGame();
+        return new GameResponseDTO().FromGame(game);
     }
 }

@@ -8,14 +8,14 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IGameRepository gameRepository, IUserService userService, IGameService gameService) : IBoardService
+public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IUserService userService, IGameService gameService) : IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
         var board = new Board();
         board.Userid = playBoardDTO.Userid;
         board.Dateofpurchase = playBoardDTO.Dateofpurchase;
-        board.Gameid = gameRepository.GetActiveGame().Id;
+        board.Gameid = gameService.GetActiveGame().Id;
         board.Id = Guid.NewGuid();
         board.Priceid = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Id;
         board.Chosennumbers = playBoardDTO.Numbers.Select(n => new Chosennumber
@@ -71,7 +71,31 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
 
     public void PlayAllAutoplayBoards()
     {
-        var boards = boardRepository.GetAutoplayBoards();
-        
+        var boardsToPlay = boardRepository.GetAutoplayBoards();
+        AdjustLeftToPlay(boardsToPlay);
+        var activeGame = gameService.GetActiveGame();
+        var boards = boardsToPlay.Select(b => new PlayBoardDTO().fromAutoplay(b)).ToList();
+        foreach (var board in boards)
+        {
+            
+            PlayBoard(board);
+        }
+    }
+
+    public void AdjustLeftToPlay(List<BoardAutoplay> boards)
+    {
+        var boardsLeft = new List<BoardAutoplay>();
+        foreach (var board in boards)
+        {
+            board.LeftToPlay -= 1;
+            if (board.LeftToPlay <1)
+            {
+                
+            }
+            else
+            {
+                boardRepository.AdjustLeftToPlay(board);
+            }
+        }
     }
 }
