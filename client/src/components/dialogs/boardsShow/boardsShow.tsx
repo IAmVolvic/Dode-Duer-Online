@@ -14,7 +14,6 @@ export const BoardsShow = (props: BoardsGetDialogProps) => {
     const fetchData = async () => {
         try {
             const api = new Api();
-            console.log(props.gameId);
             const response = await api.board.boardGetBoardsFromGame(props.gameId);
             setData(response.data);
         } catch (error) {
