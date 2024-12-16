@@ -8,14 +8,16 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class GameController(IGameService gameService) : ControllerBase
+public class GameController(IGameService gameService, IBoardService boardService) : ControllerBase
 {
     [HttpPost]
     [Route("NewGame")]
     [Rolepolicy("Admin")]
     public ActionResult<GameResponseDTO> NewGame([FromBody] int prize)
     {
-        return Ok(gameService.NewGame(prize));
+        var game = gameService.NewGame(prize);
+        boardService.PlayAllAutoplayBoards();
+        return Ok(game);
     }
     
     [HttpPost]

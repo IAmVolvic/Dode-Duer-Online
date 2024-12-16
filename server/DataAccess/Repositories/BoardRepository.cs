@@ -33,7 +33,7 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
 
     public List<BoardAutoplay> GetAutoplayBoards()
     {
-        return context.BoardAutoplays.ToList();
+        return context.BoardAutoplays.Include(b => b.ChosenNumbersAutoplays).ToList();
     }
 
     public BoardAutoplay AdjustLeftToPlay(BoardAutoplay board)

@@ -7,7 +7,7 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class GameService(IGameRepository gameRepository, IBoardService boardService) : IGameService
+public class GameService(IGameRepository gameRepository) : IGameService
 {
     public GameResponseDTO NewGameFromMonday(int prize)
     {
@@ -56,8 +56,6 @@ public class GameService(IGameRepository gameRepository, IBoardService boardServ
         }
         
         var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
-        
-        boardService.PlayAllAutoplayBoards();
         
         return gameResponse;
     }
