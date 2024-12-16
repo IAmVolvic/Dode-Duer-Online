@@ -50,4 +50,28 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var boardsDto = boards.Select(b => new BoardGameResponseDTO().FromBoard(b)).ToList();
         return boardsDto;
     }
+
+    public AutoplayBoardDTO AutoplayBoard(PlayAutoplayBoardDTO playAutoplayBoardDTO)
+    {
+        var board = new BoardAutoplay();
+        board.Id = Guid.NewGuid();
+        board.UserId = playAutoplayBoardDTO.Userid;
+        board.LeftToPlay = playAutoplayBoardDTO.LeftToPlay;
+        board.ChosenNumbersAutoplays = playAutoplayBoardDTO.Numbers.Select(n => new ChosenNumbersAutoplay()
+            {
+                Id = Guid.NewGuid(), 
+                BoardId = board.Id, 
+                Number = n 
+            })
+            .ToList();
+
+        var newBoard = boardRepository.AutoplayBoard(board);
+        return new AutoplayBoardDTO().FromBoard(newBoard);
+    }
+
+    public void PlayAllAutoplayBoards()
+    {
+        var boards = boardRepository.GetAutoplayBoards();
+        
+    }
 }

@@ -17,10 +17,19 @@ public class BoardController(IBoardService boardService) : ControllerBase
     public ActionResult<BoardResponseDTO> PlayBoard([FromBody] PlayBoardDTO playBoardDTO)
     {
         var response = boardService.PlayBoard(playBoardDTO);
-        return  Ok(response);
+        return Ok(response);
     }
 
-    [HttpGet]
+    [HttpPost]
+    [Route("Autoplay")]
+    [Authenticated]
+    public ActionResult<AutoplayBoardDTO> AutoplayBoard([FromBody] PlayAutoplayBoardDTO playAutoplayBoardDTO)
+    {
+        var response = boardService.AutoplayBoard(playAutoplayBoardDTO);
+        return Ok(response);
+    }
+
+[HttpGet]
     [Route("GetBoards")]
     [Rolepolicy("Admin")]
     public ActionResult<List<BoardResponseDTO>> GetAllBoards()

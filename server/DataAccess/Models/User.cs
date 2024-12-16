@@ -23,6 +23,7 @@ public partial class User
     public UserStatus Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
+    public virtual ICollection<BoardAutoplay> BoardAutoplays { get; set; } = new List<BoardAutoplay>();
 
     public virtual ICollection<Transaction> Transactions { get; set; } = new List<Transaction>();
 

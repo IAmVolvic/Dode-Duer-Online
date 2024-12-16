@@ -23,4 +23,16 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
         return context.Boards.Include(b => b.User).Include(b => b.Chosennumbers).Where(b => b.Gameid == gameId)
             .ToList();
     }
+
+    public BoardAutoplay AutoplayBoard(BoardAutoplay board)
+    {
+        context.BoardAutoplays.Add(board);
+        context.SaveChanges();
+        return board;
+    }
+
+    public List<BoardAutoplay> GetAutoplayBoards()
+    {
+        return context.BoardAutoplays.ToList();
+    }
 }

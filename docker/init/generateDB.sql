@@ -65,6 +65,13 @@ create table WinningNumbers (
                                 foreign key (GameId) references Game(id)
 );
 
+CREATE TABLE BoardAutoplay (
+                               Id UUID PRIMARY KEY,
+                               UserId UUID NOT NULL,
+                               LeftToPlay INT NOT NULL,
+                               FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
 CREATE TABLE ChosenNumbersAutoplay (
                                Id UUID PRIMARY KEY,
                                BoardId UUID NOT NULL,
@@ -72,9 +79,4 @@ CREATE TABLE ChosenNumbersAutoplay (
                                FOREIGN KEY (BoardId) REFERENCES BoardAutoplay(Id)
 );
 
-CREATE TABLE BoardAutoplay (
-                       Id UUID PRIMARY KEY,
-                       UserId UUID NOT NULL,
-                       LeftToPlay INT NOT NULL,
-                       FOREIGN KEY (UserId) REFERENCES Users(Id),
-);
+
