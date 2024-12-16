@@ -91,4 +91,9 @@ public class UserRepository(LotteryContext context) : IUserRepository
     {
         return context.Users.Any(u => u.Phonenumber == phoneNumber);
     }
+
+    public decimal GetUserBalance(User user)
+    {
+        return context.Users.Find(user.Id).Balance;
+    }
 }

@@ -72,17 +72,18 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
     public void PlayAllAutoplayBoards()
     {
         var boardsToPlay = boardRepository.GetAutoplayBoards();
-        AdjustLeftToPlay(boardsToPlay);
-        var activeGame = gameService.GetActiveGame();
-        var boards = boardsToPlay.Select(b => new PlayBoardDTO().fromAutoplay(b)).ToList();
+        var adjustedBoards = AdjustLeftToPlay(boardsToPlay);
+        var boards = adjustedBoards.Select(b => new PlayBoardDTO().fromAutoplay(b)).ToList();
         foreach (var board in boards)
         {
-            
-            PlayBoard(board);
+            if (userService.CheckUsersBalance(board.Userid) < priceRepository.GetPrice(board.Numbers.Count()).Price1)
+            {
+                PlayBoard(board);
+            }
         }
     }
 
-    public void AdjustLeftToPlay(List<BoardAutoplay> boards)
+    public List<BoardAutoplay> AdjustLeftToPlay(List<BoardAutoplay> boards)
     {
         var boardsLeft = new List<BoardAutoplay>();
         foreach (var board in boards)
@@ -90,12 +91,14 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
             board.LeftToPlay -= 1;
             if (board.LeftToPlay <1)
             {
-                
+                boardRepository.DeleteBoardLeftToPlay(board);
             }
             else
             {
-                boardRepository.AdjustLeftToPlay(board);
+                boardsLeft.Add(boardRepository.AdjustLeftToPlay(board));
             }
         }
+
+        return boardsLeft;
     }
 }

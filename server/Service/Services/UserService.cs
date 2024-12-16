@@ -262,4 +262,10 @@ public class UserService : IUserService
         
         return new string(stringChars);
     }
+
+    public decimal CheckUsersBalance(Guid userId)
+    {
+        var user = _repository.GetUserById(userId.ToString());
+        return _repository.GetUserBalance(user);
+    }
 }

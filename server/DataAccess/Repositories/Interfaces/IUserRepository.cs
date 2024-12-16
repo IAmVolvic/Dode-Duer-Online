@@ -19,4 +19,6 @@ public interface IUserRepository
     public User UpdateUserDb(User user);
 
     public User[] GetUsers();
+
+    public decimal GetUserBalance(User user);
 }
