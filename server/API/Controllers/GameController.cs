@@ -19,11 +19,27 @@ public class GameController(IGameService gameService) : ControllerBase
     }
     
     [HttpPost]
+    [Route("NewGameFromMonday")]
+    [Rolepolicy("Admin")]
+    public ActionResult<GameResponseDTO> NewGameFromMonday([FromBody] int prize)
+    {
+        return Ok(gameService.NewGameFromMonday(prize));
+    }
+    
+    [HttpPost]
     [Route("winning-numbers")]
-    //[Rolepolicy("Admin")]
+    [Rolepolicy("Admin")]
     public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int[] winningNumbers)
     {
         var result = gameService.SetWinningNumbers(gameId, winningNumbers);
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [Route("getAllGames")]
+    public ActionResult<List<GameResponseDTO>> GetAllGames()
+    {
+        var result = gameService.GetAllGames();
         return Ok(result);
     }
 }

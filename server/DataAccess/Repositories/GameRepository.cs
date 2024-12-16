@@ -47,5 +47,10 @@ public class GameRepository(LotteryContext context) : IGameRepository
             throw new InvalidOperationException("Active game is not available.");
         }
     }
+
+    public List<Game> GetAllGames()
+    {
+        return context.Games.ToList();
+    }
 }
 

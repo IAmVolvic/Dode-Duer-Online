@@ -43,4 +43,11 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var boardsDto = boards.Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
         return boardsDto;
     }
+
+    public List<BoardGameResponseDTO> GetBoardsFromGame(Guid gameId)
+    {
+        var boards = boardRepository.GetBoardsFromGame(gameId);
+        var boardsDto = boards.Select(b => new BoardGameResponseDTO().FromBoard(b)).ToList();
+        return boardsDto;
+    }
 }

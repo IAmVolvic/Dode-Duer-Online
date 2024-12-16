@@ -28,4 +28,13 @@ public class BoardController(IBoardService boardService) : ControllerBase
         var response = boardService.GetBoards();
         return Ok(response);
     }
+
+    [HttpGet]
+    [Route("GetBoardsFromGame/{gameId}")]
+    [Rolepolicy("Admin")]
+    public ActionResult<List<BoardGameResponseDTO>> GetBoardsFromGame([FromRoute] Guid gameId)
+    {
+        var response = boardService.GetBoardsFromGame(gameId);
+        return Ok(response);
+    }
 }
