@@ -936,7 +936,7 @@
             "format": "date"
           },
           "status": {
-            "$ref": "#/components/schemas/GameStatus2"
+            "$ref": "#/components/schemas/GameStatus"
           },
           "enddate": {
             "type": "string",
@@ -962,18 +962,6 @@
             }
           }
         }
-      },
-      "GameStatus2": {
-        "type": "integer",
-        "description": "",
-        "x-enumNames": [
-          "Active",
-          "Inactive"
-        ],
-        "enum": [
-          0,
-          1
-        ]
       },
       "Board": {
         "type": "object",
@@ -1122,39 +1110,39 @@
         }
       },
       "UserEnrolled": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "True",
           "False"
         ],
         "enum": [
-          0,
-          1
+          "True",
+          "False"
         ]
       },
       "UserRole": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "User",
           "Admin"
         ],
         "enum": [
-          0,
-          1
+          "User",
+          "Admin"
         ]
       },
       "UserStatus": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "Active",
           "Inactive"
         ],
         "enum": [
-          0,
-          1
+          "Active",
+          "Inactive"
         ]
       },
       "BoardAutoplay": {
@@ -1229,7 +1217,7 @@
         }
       },
       "TransactionStatusA": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "Pending",
@@ -1237,9 +1225,9 @@
           "Rejected"
         ],
         "enum": [
-          0,
-          1,
-          2
+          "Pending",
+          "Approved",
+          "Rejected"
         ]
       },
       "WinningNumbers": {
@@ -1345,23 +1333,9 @@
             "type": "string"
           },
           "transactionStatus": {
-            "$ref": "#/components/schemas/TransactionStatusA2"
+            "$ref": "#/components/schemas/TransactionStatusA"
           }
         }
-      },
-      "TransactionStatusA2": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Pending",
-          "Approved",
-          "Rejected"
-        ],
-        "enum": [
-          "Pending",
-          "Approved",
-          "Rejected"
-        ]
       },
       "DepositRequestDTO": {
         "type": "object",
@@ -1401,7 +1375,7 @@
             "$ref": "#/components/schemas/TransactionAdjustment"
           },
           "transactionStatusA": {
-            "$ref": "#/components/schemas/TransactionStatusA2"
+            "$ref": "#/components/schemas/TransactionStatusA"
           }
         }
       },
@@ -1439,51 +1413,15 @@
             "format": "decimal"
           },
           "role": {
-            "$ref": "#/components/schemas/UserRole2"
+            "$ref": "#/components/schemas/UserRole"
           },
           "enrolled": {
-            "$ref": "#/components/schemas/UserEnrolled2"
+            "$ref": "#/components/schemas/UserEnrolled"
           },
           "status": {
-            "$ref": "#/components/schemas/UserStatus2"
+            "$ref": "#/components/schemas/UserStatus"
           }
         }
-      },
-      "UserRole2": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "User",
-          "Admin"
-        ],
-        "enum": [
-          "User",
-          "Admin"
-        ]
-      },
-      "UserEnrolled2": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "True",
-          "False"
-        ],
-        "enum": [
-          "True",
-          "False"
-        ]
-      },
-      "UserStatus2": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Active",
-          "Inactive"
-        ],
-        "enum": [
-          "Active",
-          "Inactive"
-        ]
       },
       "UserResponseDTO": {
         "type": "object",
@@ -1629,7 +1567,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserEnrolled2"
+                "$ref": "#/components/schemas/UserEnrolled"
               }
             ]
           },
@@ -1637,7 +1575,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserStatus2"
+                "$ref": "#/components/schemas/UserStatus"
               }
             ]
           },
@@ -1645,7 +1583,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserRole2"
+                "$ref": "#/components/schemas/UserRole"
               }
             ]
           }
