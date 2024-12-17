@@ -1,6 +1,5 @@
 import { GameResponseDTO, GameStatus } from "@Api";
 import { GameEditDialog } from "@components/dialogs/gameEdit";
-import { CustomSelect } from "@components/inputs/multiSelect";
 import { useGetCurrentGame } from "@hooks/game/useGetCurrentGame";
 import { useBoolean } from "@hooks/utils/useBoolean";
 import { useEffect, useState } from "react";

@@ -119,21 +119,16 @@ export interface GameResponseDTO {
   id?: string;
   /** @format date */
   date?: string;
-  status?: GameStatus2;
+  status?: GameStatus;
   /** @format date-time */
   enddate?: string | null;
-}
-
-export enum GameStatus2 {
-  Active = 0,
-  Inactive = 1,
 }
 
 export interface WinningNumbersResponseDTO {
   /** @format guid */
   gameid?: string;
   winningnumbers?: number[];
-  status?: GameStatus2;
+  status?: GameStatus;
 }
 
 export interface PriceDto {
