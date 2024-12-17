@@ -16,12 +16,15 @@ CREATE TABLE Prices (
                         Numbers DECIMAL(10, 2) NOT NULL
 );
 
-CREATE TABLE Game (
-                      Id UUID PRIMARY KEY,
-                      PrizePool DECIMAL(10, 2),
-                      Date DATE NOT NULL,
-                      WinningNumbers VARCHAR(50),
-                      Status VARCHAR(255) DEFAULT 'Active'
+create table game
+(
+    id             uuid not null
+        primary key,
+    prizepool      numeric(10, 2),
+    date           date not null,
+    winningnumbers varchar(50),
+    status         varchar(255) default 'Active'::character varying,
+    enddate        timestamp
 );
 
 CREATE TABLE Board (
