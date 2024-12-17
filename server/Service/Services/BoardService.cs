@@ -47,21 +47,42 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
     
     public List<WinnerResponseDTO> IdentifyWinners(Guid gameId, List<int> winningNumbers)
     {
-        var boards = boardRepository.GetBoards().Where(b => b.Gameid == gameId).ToList();
+        var boards = boardRepository.GetBoards()
+            .Where(b => b.Gameid == gameId)
+            .ToList();
+        
         var winningBoards = boards.Where(b =>
         {
             var chosenNumbers = b.Chosennumbers.Select(n => n.Number ?? 0).ToList();
             var matchedNumbersCount = winningNumbers.Intersect(chosenNumbers).Count();
             return matchedNumbersCount == 3;
         }).ToList();
+
+        var totalRevenue = boards.Sum(b => b.Price.Price1); // Calculate total revenue (sum of all board prices)
         
-        var winners = winningBoards.Select(b =>
+        var prizePool = totalRevenue * 0.7m; // Calculate prize pool: 70% of revenue
+        
+        var totalWinners = winningBoards.Count;
+        
+        var wonAmount = totalWinners > 0 ? prizePool / totalWinners : 0m;  // Divide prize pool between winners
+        var winnerEntities = winningBoards.Select(b => new Winner
         {
-            decimal wonAmount = b.Price.Price1;  
-            return WinnerResponseDTO.FromBoard(b, wonAmount);
+            Id = Guid.NewGuid(),
+            Gameid = gameId,
+            Userid = b.Userid,
+            Wonamount = wonAmount
         }).ToList();
 
-        return winners;
+        gameRepository.SaveWinners(winnerEntities);
+
+        var winnersResponse = winnerEntities.Select(w => new WinnerResponseDTO
+        {
+            UserName = w.User.Name,  
+            WonAmount = w.Wonamount,
+            WeekNumber = ISOWeek.GetWeekOfYear(DateTime.Now)
+        }).ToList();
+
+        return winnersResponse;
     }
     
     public List<WinnerResponseDTO> GetWinners(Guid gameId)

@@ -29,17 +29,18 @@ public class BoardController(IBoardService boardService) : ControllerBase
         return Ok(response);
     }
     
-    /*[HttpPost("{gameId}/identify-winners")]
+    [HttpPost("{gameId}/identify-winners")]
     public ActionResult<List<WinnerResponseDTO>> IdentifyWinners(Guid gameId, List<int> winningNumbers)
     {
         var winners = boardService.IdentifyWinners(gameId, winningNumbers);
         return Ok(winners);
-         }*/ 
+    }
+         
 
-    /*[HttpGet("{gameId}/winners")]
-    public ActionResult<List<WinnerResponseDTO>> GetWinners(Guid gameId)
+    [HttpGet("{gameId}/winners")]
+   public ActionResult<List<WinnerResponseDTO>> GetWinners(Guid gameId)
     {
         var winners = boardService.GetWinners(gameId);
         return Ok(winners);
-    }*/
+    }
 }

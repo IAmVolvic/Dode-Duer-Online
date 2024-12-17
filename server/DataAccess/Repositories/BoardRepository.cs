@@ -17,4 +17,5 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
     {
         return context.Boards.Include(b => b.Price).Include(b => b.Chosennumbers).ToList();
     }
+    
 }
