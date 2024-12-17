@@ -66,7 +66,7 @@ export const GameHistory = () => {
                             {addDaysToDateOnly(value.date!, 6)}
                         </td>
                         <td className="lg:text-center lg:align-middle">
-                            {value.status === 0 ? "Active" : "Inactive"}
+                            {value.status}
                         </td>
                         <td className="lg:w-44">
                             <button

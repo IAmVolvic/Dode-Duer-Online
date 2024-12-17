@@ -30,7 +30,20 @@ public class GameRepository(LotteryContext context) : IGameRepository
     
     public void AddWinningNumbers(List<WinningNumbers> winningNumbers)
     {
-        context.WinningNumbers.AddRange(winningNumbers);
+        var gameId = winningNumbers.First().GameId;
+
+        var existingWinningNumbers = context.WinningNumbers
+            .Where(wn => wn.GameId == gameId)
+            .ToList();
+
+        context.WinningNumbers.RemoveRange(existingWinningNumbers);
+
+        foreach (var winningNumber in winningNumbers)
+        {
+            winningNumber.GameId = gameId;
+            context.WinningNumbers.Add(winningNumber);
+        }
+        
         context.SaveChanges();
     }
 

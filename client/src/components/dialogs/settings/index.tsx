@@ -10,7 +10,7 @@ import {
     FiSliders,
     FiShoppingCart,
     FiMenu,
-    FiArchive, FiList
+    FiList
 } from "react-icons/fi";
 import classNames from 'classnames';
 import { useAuth } from "@hooks/authentication/useAuthentication";
@@ -26,6 +26,7 @@ import { TransactionControl } from "./tabs/admin/transactionControl";
 import {GameHistory} from "@components/dialogs/settings/tabs/admin/gameHistory.tsx";
 import {AutoplayHistory} from "@components/dialogs/settings/tabs/autoplayActive.tsx";
 import { BoardHistory } from "./tabs/boardHistory";
+import { GameControl } from "./tabs/admin/gameControl";
 
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
@@ -108,7 +109,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         {isLoggedIn && user?.role === 'Admin' && (
                             <>
                                 <TabPanel> <UserControl /> </TabPanel>
-                                <TabPanel> Game Control </TabPanel>
+                                <TabPanel> <GameControl /> </TabPanel>
                                 <TabPanel> <TransactionControl /> </TabPanel>
                                 <TabPanel> <GameHistory /></TabPanel>
                             </>

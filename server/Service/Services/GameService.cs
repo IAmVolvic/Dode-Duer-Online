@@ -3,6 +3,7 @@ using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
 using Service.Services.Interfaces;
+using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 
 namespace Service.Services;
@@ -73,21 +74,18 @@ public class GameService(IGameRepository gameRepository) : IGameService
         }
         return false;
     }
-    public WinningNumbersResponseDTO SetWinningNumbers (Guid gameId, int[] winningNumbers) {
-        if (winningNumbers.Length != 3)
-        {
-            throw new Exception(" Winning Numbers must be 3!");
-        }
-
+    
+    public WinningNumbersResponseDTO SetWinningNumbers (WinningNumbersRequestDTO data) {
         var game = gameRepository.GetActiveGame();
-        if (game == null || game.Id != gameId)
+        if (game == null || game.Id != data.GameId)
         {
             throw new ErrorException("Game", "Game not found or not active.");
         }
-        var winningNumbersEntities = winningNumbers.Select(num => new WinningNumbers
+        
+        var winningNumbersEntities = data.WinningNumbers.Select(num => new WinningNumbers
         {
             Id = Guid.NewGuid(),
-            GameId = gameId,
+            GameId = data.GameId,
             Number = num
         }).ToList();
 
