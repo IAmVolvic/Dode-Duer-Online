@@ -82,7 +82,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                                 </Tab>
                                 <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
                                     <div className="flex justify-center items-center"> <FiList className="opacity-60" size={20} /> </div>
-                                    <div className=""> History </div>
+                                    <div className=""> Game History </div>
                                 </Tab>
                             </>
                         )}
