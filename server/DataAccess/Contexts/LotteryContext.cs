@@ -255,6 +255,26 @@ public partial class LotteryContext : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("winningnumbers_gameid_fkey");
         });
+        
+        modelBuilder.Entity<Winner>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("winners_pkey");
+
+                entity.ToTable("winners");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Gameid).HasColumnName("gameid");
+
+                entity.Property(e => e.Userid).HasColumnName("userid");
+
+                entity.Property(e => e.Wonamount)
+                    .HasPrecision(10, 2)
+                    .HasColumnName("wonamount");
+            });
+        
 
         OnModelCreatingPartial(modelBuilder);
     }

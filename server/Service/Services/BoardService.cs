@@ -84,16 +84,5 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
 
         return winnersResponse;
     }
-    
-    public List<WinnerResponseDTO> GetWinners(Guid gameId)
-    {
-        var winners = gameRepository.GetWinnersWithGame(gameId);
-        return winners.Select(w => new WinnerResponseDTO
-        {
-            UserName = w.User.Name,
-            //WonAmount = w.WonAmount,
-            WeekNumber = ISOWeek.GetWeekOfYear(w.Game.Date.ToDateTime(new TimeOnly(0, 0)))
-        }).ToList();
-    }
 }
 

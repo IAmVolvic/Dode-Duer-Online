@@ -37,19 +37,23 @@ public class GameRepository(LotteryContext context) : IGameRepository
     
     public List<Winner> GetWinnersWithGame(Guid gameId)
     {
-        return context.Winners
+        var winners = context.Winners
             .Where(w => w.Gameid == gameId)
-            .Include(w => w.Game)
-            .Include(w => w.User)
-            .Select(w => new Winner
-            {
-                Id = w.Id,
-                Gameid = w.Gameid,
-                User = w.User,
-                Game = w.Game,
-                //Wonamount = CalculateWonamount(w)
-            })
             .ToList();
+
+        foreach (var winner in winners)
+        {
+            context.Entry(winner).Reference(w => w.Game).Load();
+            context.Entry(winner).Reference(w => w.User).Load();
+        }
+
+        return winners;
+    }
+    
+    public void SaveWinners(List<Winner> winners)
+    {
+        context.Winners.AddRange(winners);
+        context.SaveChanges();
     }
 
     public void UpdatePrizePool(decimal newPrizePool)
@@ -64,12 +68,6 @@ public class GameRepository(LotteryContext context) : IGameRepository
         {
             throw new InvalidOperationException("Active game is not available.");
         }
-    }
-    
-    public void SaveWinners(List<Winner> winners)
-    {
-        context.Winners.AddRange(winners);
-        context.SaveChanges();
     }
 }
 

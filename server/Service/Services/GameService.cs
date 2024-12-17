@@ -1,4 +1,5 @@
 ﻿
+using System.Globalization;
 using API.Exceptions;
 using DataAccess.Interfaces;
 using DataAccess.Models;
@@ -69,6 +70,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
         }
         return false;
     }
+    
     public Guid? GetActiveGameId()
     {
         var activeGame = gameRepository.GetActiveGame();
@@ -100,6 +102,17 @@ public class GameService(IGameRepository gameRepository) : IGameService
         var winningNumbersList = winningNumbersEntities.Select(e => e.Number).ToList();
 
         return WinningNumbersResponseDTO.FromGame(game, winningNumbersList);
+    }
+    
+    public List<WinnerResponseDTO> GetWinners(Guid gameId)
+    {
+        var winners = gameRepository.GetWinnersWithGame(gameId);
+        return winners.Select(w => new WinnerResponseDTO
+        {
+            UserName = w.User.Name, 
+            WonAmount = w.Wonamount,
+            WeekNumber = ISOWeek.GetWeekOfYear(w.Game.Date.ToDateTime(new TimeOnly(0, 0)))
+        }).ToList();
     }
     
     public void UpdatePrizePool(decimal newPrizePool)
