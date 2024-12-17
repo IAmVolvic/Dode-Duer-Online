@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
@@ -12,6 +13,7 @@ public partial class Game
 
     public DateOnly Date { get; set; }
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameStatus Status { get; set; }
     
     public DateTime? Enddate { get; set; }

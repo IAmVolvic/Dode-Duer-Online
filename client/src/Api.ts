@@ -119,16 +119,184 @@ export interface GameResponseDTO {
   id?: string;
   /** @format date */
   date?: string;
+  winners?: Winner[];
   status?: GameStatus;
   /** @format date-time */
   enddate?: string | null;
 }
 
+export interface Winner {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  gameid?: string;
+  /** @format guid */
+  userid?: string;
+  /** @format decimal */
+  wonamount?: number;
+  game?: Game;
+  user?: User;
+}
+
+export interface Game {
+  /** @format guid */
+  id?: string;
+  /** @format decimal */
+  prizepool?: number;
+  /** @format date */
+  date?: string;
+  status?: GameStatus2;
+  /** @format date-time */
+  enddate?: string | null;
+  boards?: Board[];
+  winners?: Winner[];
+  winningNumbers?: WinningNumbers[];
+}
+
+export enum GameStatus2 {
+  Active = 0,
+  Inactive = 1,
+}
+
+export interface Board {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  userid?: string;
+  /** @format guid */
+  gameid?: string;
+  /** @format guid */
+  priceid?: string;
+  /** @format date */
+  dateofpurchase?: string;
+  chosennumbers?: Chosennumber[];
+  game?: Game;
+  price?: Price;
+  user?: User;
+}
+
+export interface Chosennumber {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  boardid?: string;
+  /** @format int32 */
+  number?: number | null;
+  board?: Board;
+}
+
+export interface Price {
+  /** @format guid */
+  id?: string;
+  /** @format decimal */
+  price1?: number;
+  /** @format decimal */
+  numbers?: number;
+  boards?: Board[];
+}
+
+export interface User {
+  /** @format guid */
+  id?: string;
+  name?: string;
+  email?: string;
+  phonenumber?: string;
+  passwordhash?: string;
+  enrolled?: UserEnrolled;
+  /** @format decimal */
+  balance?: number;
+  role?: UserRole;
+  status?: UserStatus;
+  boards?: Board[];
+  boardAutoplays?: BoardAutoplay[];
+  transactions?: Transaction[];
+  winners?: Winner[];
+}
+
+export enum UserEnrolled {
+  True = 0,
+  False = 1,
+}
+
+export enum UserRole {
+  User = 0,
+  Admin = 1,
+}
+
+export enum UserStatus {
+  Active = 0,
+  Inactive = 1,
+}
+
+export interface BoardAutoplay {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  userId?: string;
+  /** @format int32 */
+  leftToPlay?: number;
+  user?: User;
+  chosenNumbersAutoplays?: ChosenNumbersAutoplay[];
+}
+
+export interface ChosenNumbersAutoplay {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  boardId?: string;
+  /** @format int32 */
+  number?: number;
+  boardAutoplay?: BoardAutoplay;
+}
+
+export interface Transaction {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  userid?: string;
+  transactionnumber?: string;
+  transactionstatus?: TransactionStatusA;
+  user?: User;
+}
+
+export enum TransactionStatusA {
+  Pending = 0,
+  Approved = 1,
+  Rejected = 2,
+}
+
+export interface WinningNumbers {
+  /** @format guid */
+  id?: string;
+  /** @format guid */
+  gameId?: string;
+  /** @format int32 */
+  number?: number;
+  game?: Game;
+}
+
 export interface WinningNumbersResponseDTO {
   /** @format guid */
   gameid?: string;
+  /**
+   * @maxItems 3
+   * @minItems 3
+   */
   winningnumbers?: number[];
   status?: GameStatus;
+}
+
+export interface WinningNumbersRequestDTO {
+  /**
+   * @format guid
+   * @minLength 1
+   */
+  gameId: string;
+  /**
+   * @maxItems 3
+   * @minItems 3
+   */
+  winningNumbers: number[];
 }
 
 export interface PriceDto {
@@ -146,7 +314,13 @@ export interface TransactionResponseDTO {
   phoneNumber?: string;
   username?: string;
   transactionNumber?: string;
-  transactionStatus?: string;
+  transactionStatus?: TransactionStatusA2;
+}
+
+export enum TransactionStatusA2 {
+  Pending = "Pending",
+  Approved = "Approved",
+  Rejected = "Rejected",
 }
 
 export interface DepositRequestDTO {
@@ -167,18 +341,12 @@ export interface BalanceAdjustmentRequestDTO {
    */
   amount: number;
   adjustment: TransactionAdjustment;
-  transactionStatusA: TransactionStatusA;
+  transactionStatusA: TransactionStatusA2;
 }
 
 export enum TransactionAdjustment {
   Deposit = "Deposit",
   Deduct = "Deduct",
-}
-
-export enum TransactionStatusA {
-  Pending = "Pending",
-  Approved = "Approved",
-  Rejected = "Rejected",
 }
 
 export interface AuthorizedUserResponseDTO {
@@ -189,9 +357,24 @@ export interface AuthorizedUserResponseDTO {
   phoneNumber?: string;
   /** @format decimal */
   balance?: number;
-  role?: string;
-  enrolled?: string;
-  status?: string;
+  role?: UserRole2;
+  enrolled?: UserEnrolled2;
+  status?: UserStatus2;
+}
+
+export enum UserRole2 {
+  User = "User",
+  Admin = "Admin",
+}
+
+export enum UserEnrolled2 {
+  True = "True",
+  False = "False",
+}
+
+export enum UserStatus2 {
+  Active = "Active",
+  Inactive = "Inactive",
 }
 
 export interface UserResponseDTO {
@@ -275,24 +458,9 @@ export interface UserUpdateByAdminRequestDTO {
    * @maxLength 32
    */
   password?: string | null;
-  enrolledStatus?: UserEnrolled | null;
-  userStatus?: UserStatus | null;
-  userRole?: UserRole | null;
-}
-
-export enum UserEnrolled {
-  True = "True",
-  False = "False",
-}
-
-export enum UserStatus {
-  Active = "Active",
-  Inactive = "Inactive",
-}
-
-export enum UserRole {
-  User = "User",
-  Admin = "Admin",
+  enrolledStatus?: UserEnrolled2 | null;
+  userStatus?: UserStatus2 | null;
+  userRole?: UserRole2 | null;
 }
 
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
@@ -450,7 +618,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -468,7 +635,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -484,7 +650,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetBoards`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -500,7 +665,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetBoardsFromGame/${gameId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -516,7 +680,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetAutoplayBoards/${userId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -532,7 +695,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/@me/History`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };
@@ -551,7 +713,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -569,33 +730,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Game
-     * @name GameAddWinningNumbers
-     * @request POST:/Game/winning-numbers
-     */
-    gameAddWinningNumbers: (
-      data: number[],
-      query?: {
-        /** @format guid */
-        gameId?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<WinningNumbersResponseDTO, any>({
-        path: `/Game/winning-numbers`,
-        method: "POST",
-        query: query,
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -611,7 +745,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Game/getAllGames`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Game
+     * @name GameSetWinningNumbers
+     * @request POST:/Game/winningNumbers
+     */
+    gameSetWinningNumbers: (data: WinningNumbersRequestDTO, params: RequestParams = {}) =>
+      this.request<WinningNumbersResponseDTO, any>({
+        path: `/Game/winningNumbers`,
+        method: "POST",
+        body: data,
+        type: ContentType.Json,
+        format: "json",
         ...params,
       }),
   };
@@ -628,7 +778,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Price/GetPrices`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };
@@ -647,7 +796,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -663,7 +811,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -681,7 +828,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -697,7 +843,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };
@@ -714,7 +859,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@user`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -749,7 +893,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -767,7 +910,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -785,7 +927,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -801,7 +942,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@admin/users`,
         method: "GET",
         format: "json",
-        withCredentials: true,
         ...params,
       }),
 
@@ -819,7 +959,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
         ...params,
       }),
   };

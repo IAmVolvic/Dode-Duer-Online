@@ -257,53 +257,6 @@
         }
       }
     },
-    "/Game/winning-numbers": {
-      "post": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_AddWinningNumbers",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "winningNumbers",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WinningNumbersResponseDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Game/getAllGames": {
       "get": {
         "tags": [
@@ -320,6 +273,38 @@
                   "items": {
                     "$ref": "#/components/schemas/GameResponseDTO"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Game/winningNumbers": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_SetWinningNumbers",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WinningNumbersRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WinningNumbersResponseDTO"
                 }
               }
             }
@@ -890,6 +875,66 @@
             "type": "string",
             "format": "date"
           },
+          "winners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Winner"
+            }
+          },
+          "status": {
+            "$ref": "#/components/schemas/GameStatus"
+          },
+          "enddate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "Winner": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "gameid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "wonamount": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "game": {
+            "$ref": "#/components/schemas/Game"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Game": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "prizepool": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
           "status": {
             "$ref": "#/components/schemas/GameStatus2"
           },
@@ -897,6 +942,24 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "boards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Board"
+            }
+          },
+          "winners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Winner"
+            }
+          },
+          "winningNumbers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WinningNumbers"
+            }
           }
         }
       },
@@ -912,6 +975,294 @@
           1
         ]
       },
+      "Board": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "gameid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "priceid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "dateofpurchase": {
+            "type": "string",
+            "format": "date"
+          },
+          "chosennumbers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Chosennumber"
+            }
+          },
+          "game": {
+            "$ref": "#/components/schemas/Game"
+          },
+          "price": {
+            "$ref": "#/components/schemas/Price"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "Chosennumber": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "boardid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "board": {
+            "$ref": "#/components/schemas/Board"
+          }
+        }
+      },
+      "Price": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "price1": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "numbers": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "boards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Board"
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "phonenumber": {
+            "type": "string"
+          },
+          "passwordhash": {
+            "type": "string"
+          },
+          "enrolled": {
+            "$ref": "#/components/schemas/UserEnrolled"
+          },
+          "balance": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "role": {
+            "$ref": "#/components/schemas/UserRole"
+          },
+          "status": {
+            "$ref": "#/components/schemas/UserStatus"
+          },
+          "boards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Board"
+            }
+          },
+          "boardAutoplays": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardAutoplay"
+            }
+          },
+          "transactions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transaction"
+            }
+          },
+          "winners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Winner"
+            }
+          }
+        }
+      },
+      "UserEnrolled": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "True",
+          "False"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "UserRole": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Admin"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "UserStatus": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive"
+        ],
+        "enum": [
+          0,
+          1
+        ]
+      },
+      "BoardAutoplay": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "leftToPlay": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "chosenNumbersAutoplays": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChosenNumbersAutoplay"
+            }
+          }
+        }
+      },
+      "ChosenNumbersAutoplay": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "boardId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "boardAutoplay": {
+            "$ref": "#/components/schemas/BoardAutoplay"
+          }
+        }
+      },
+      "Transaction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "transactionnumber": {
+            "type": "string"
+          },
+          "transactionstatus": {
+            "$ref": "#/components/schemas/TransactionStatusA"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          }
+        }
+      },
+      "TransactionStatusA": {
+        "type": "integer",
+        "description": "",
+        "x-enumNames": [
+          "Pending",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": [
+          0,
+          1,
+          2
+        ]
+      },
+      "WinningNumbers": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "gameId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "game": {
+            "$ref": "#/components/schemas/Game"
+          }
+        }
+      },
       "WinningNumbersResponseDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -922,13 +1273,39 @@
           },
           "winningnumbers": {
             "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
             "items": {
               "type": "integer",
               "format": "int32"
             }
           },
           "status": {
-            "$ref": "#/components/schemas/GameStatus2"
+            "$ref": "#/components/schemas/GameStatus"
+          }
+        }
+      },
+      "WinningNumbersRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gameId",
+          "winningNumbers"
+        ],
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "winningNumbers": {
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         }
       },
@@ -968,9 +1345,23 @@
             "type": "string"
           },
           "transactionStatus": {
-            "type": "string"
+            "$ref": "#/components/schemas/TransactionStatusA2"
           }
         }
+      },
+      "TransactionStatusA2": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Pending",
+          "Approved",
+          "Rejected"
+        ],
+        "enum": [
+          "Pending",
+          "Approved",
+          "Rejected"
+        ]
       },
       "DepositRequestDTO": {
         "type": "object",
@@ -1010,7 +1401,7 @@
             "$ref": "#/components/schemas/TransactionAdjustment"
           },
           "transactionStatusA": {
-            "$ref": "#/components/schemas/TransactionStatusA"
+            "$ref": "#/components/schemas/TransactionStatusA2"
           }
         }
       },
@@ -1024,20 +1415,6 @@
         "enum": [
           "Deposit",
           "Deduct"
-        ]
-      },
-      "TransactionStatusA": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Pending",
-          "Approved",
-          "Rejected"
-        ],
-        "enum": [
-          "Pending",
-          "Approved",
-          "Rejected"
         ]
       },
       "AuthorizedUserResponseDTO": {
@@ -1062,15 +1439,51 @@
             "format": "decimal"
           },
           "role": {
-            "type": "string"
+            "$ref": "#/components/schemas/UserRole2"
           },
           "enrolled": {
-            "type": "string"
+            "$ref": "#/components/schemas/UserEnrolled2"
           },
           "status": {
-            "type": "string"
+            "$ref": "#/components/schemas/UserStatus2"
           }
         }
+      },
+      "UserRole2": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "User",
+          "Admin"
+        ],
+        "enum": [
+          "User",
+          "Admin"
+        ]
+      },
+      "UserEnrolled2": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "True",
+          "False"
+        ],
+        "enum": [
+          "True",
+          "False"
+        ]
+      },
+      "UserStatus2": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive"
+        ],
+        "enum": [
+          "Active",
+          "Inactive"
+        ]
       },
       "UserResponseDTO": {
         "type": "object",
@@ -1216,7 +1629,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserEnrolled"
+                "$ref": "#/components/schemas/UserEnrolled2"
               }
             ]
           },
@@ -1224,7 +1637,7 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserStatus"
+                "$ref": "#/components/schemas/UserStatus2"
               }
             ]
           },
@@ -1232,47 +1645,11 @@
             "nullable": true,
             "oneOf": [
               {
-                "$ref": "#/components/schemas/UserRole"
+                "$ref": "#/components/schemas/UserRole2"
               }
             ]
           }
         }
-      },
-      "UserEnrolled": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "True",
-          "False"
-        ],
-        "enum": [
-          "True",
-          "False"
-        ]
-      },
-      "UserStatus": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "Active",
-          "Inactive"
-        ],
-        "enum": [
-          "Active",
-          "Inactive"
-        ]
-      },
-      "UserRole": {
-        "type": "string",
-        "description": "",
-        "x-enumNames": [
-          "User",
-          "Admin"
-        ],
-        "enum": [
-          "User",
-          "Admin"
-        ]
       }
     }
   }

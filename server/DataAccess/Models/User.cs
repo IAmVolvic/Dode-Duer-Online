@@ -1,4 +1,5 @@
-﻿using DataAccess.Types.Enums;
+﻿using System.Text.Json.Serialization;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
 
@@ -14,12 +15,15 @@ public partial class User
 
     public string Passwordhash { get; set; } = null!;
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public UserEnrolled Enrolled { get; set; }
     
     public decimal Balance { get; set; }
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public UserRole Role { get; set; }
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public UserStatus Status { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();

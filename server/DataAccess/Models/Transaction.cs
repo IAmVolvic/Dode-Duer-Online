@@ -1,4 +1,5 @@
-﻿using DataAccess.Types.Enums;
+﻿using System.Text.Json.Serialization;
+using DataAccess.Types.Enums;
 
 namespace DataAccess.Models;
 
@@ -10,6 +11,7 @@ public partial class Transaction
 
     public string Transactionnumber { get; set; } = null!;
     
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public TransactionStatusA Transactionstatus { get; set; }
 
     public virtual User User { get; set; } = null!;
