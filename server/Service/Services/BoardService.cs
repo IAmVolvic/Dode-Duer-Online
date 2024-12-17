@@ -30,7 +30,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         if (newBoard != null)
         {
             userService.UpdateUserBalance(price,newBoard.Userid);
-            var prize = GetBoards().Sum(b => b.Price);
+            var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price);
             gameService.UpdatePrizePool(prize);
             return new BoardResponseDTO().FromBoard(newBoard);
         }
