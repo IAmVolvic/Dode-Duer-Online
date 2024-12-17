@@ -135,7 +135,9 @@ public partial class LotteryContext : DbContext
             entity.HasKey(e => e.Id).HasName("game_pkey");
 
             entity.ToTable("game");
-
+            entity.Property(e => e.Enddate)
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("enddate");
             entity.Property(e => e.Id)
                 .ValueGeneratedNever()
                 .HasColumnName("id");

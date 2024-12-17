@@ -13,6 +13,8 @@ public partial class Game
     public DateOnly Date { get; set; }
     
     public GameStatus Status { get; set; }
+    
+    public DateTime? Enddate { get; set; }
 
     public virtual ICollection<Board> Boards { get; set; } = new List<Board>();
 

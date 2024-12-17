@@ -8,6 +8,7 @@ public class GameResponseDTO
     public Guid Id { get; set; }
     public DateOnly Date { get; set; }
     public GameStatus Status { get; set; }
+    public DateTime? Enddate { get; set; }
 
     public GameResponseDTO FromGame(Game game)
     {
@@ -15,7 +16,8 @@ public class GameResponseDTO
         {
             Id = game.Id,
             Date = game.Date,
-            Status = game.Status
+            Status = game.Status,
+            Enddate = game.Enddate,
         };
     }
 }

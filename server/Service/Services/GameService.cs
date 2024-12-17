@@ -46,6 +46,10 @@ public class GameService(IGameRepository gameRepository) : IGameService
         
         game.Id = Guid.NewGuid();
         game.Date = DateOnly.FromDateTime(DateTime.Now);
+        DateTime now = DateTime.Now;
+        int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)now.DayOfWeek + 7) % 7;
+        DateTime nextSaturday = now.AddDays(daysUntilSaturday).Date.AddHours(17); // Add 17:00 (5 PM)
+        game.Enddate = nextSaturday;
         game.Prizepool = prize;
         game.Status = GameStatus.Active;
         

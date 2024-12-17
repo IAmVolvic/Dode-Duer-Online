@@ -12,29 +12,37 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
-        var board = new Board();
-        board.Userid = playBoardDTO.Userid;
-        board.Dateofpurchase = playBoardDTO.Dateofpurchase;
-        board.Gameid = gameService.GetActiveGame().Id;
-        board.Id = Guid.NewGuid();
-        board.Priceid = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Id;
-        board.Chosennumbers = playBoardDTO.Numbers.Select(n => new Chosennumber
-            {
-                Id = Guid.NewGuid(), 
-                Boardid = board.Id, 
-                Number = n 
-            })
-            .ToList();
-        var price = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Price1;
-        var newBoard = boardRepository.PlayBoard(board);
-        if (newBoard != null)
+        if (gameService.GetActiveGame().Enddate > DateTime.Now)
         {
-            userService.UpdateUserBalance(price,newBoard.Userid);
-            var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price);
-            gameService.UpdatePrizePool(prize);
-            return new BoardResponseDTO().FromBoard(newBoard);
+            var board = new Board();
+            board.Userid = playBoardDTO.Userid;
+            board.Dateofpurchase = playBoardDTO.Dateofpurchase;
+            board.Gameid = gameService.GetActiveGame().Id;
+            board.Id = Guid.NewGuid();
+            board.Priceid = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Id;
+            board.Chosennumbers = playBoardDTO.Numbers.Select(n => new Chosennumber
+                {
+                    Id = Guid.NewGuid(), 
+                    Boardid = board.Id, 
+                    Number = n 
+                })
+                .ToList();
+            var price = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Price1;
+            var newBoard = boardRepository.PlayBoard(board);
+            if (newBoard != null)
+            {
+                userService.UpdateUserBalance(price,newBoard.Userid);
+                var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price);
+                gameService.UpdatePrizePool(prize);
+                return new BoardResponseDTO().FromBoard(newBoard);
+            }
+            throw new ErrorException("BoardService","Board could not be played");
         }
-        throw new ErrorException("BoardService","Board could not be played");
+        else
+        {
+            throw new ErrorException("BoardService","Board could not be played because game is not active");
+        }
+        
     }
 
     public List<BoardResponseDTO> GetBoards()
