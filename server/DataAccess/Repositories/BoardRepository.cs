@@ -38,9 +38,14 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
 
     public BoardAutoplay AdjustLeftToPlay(BoardAutoplay board)
     {
-        context.BoardAutoplays.Update(board);
-        context.SaveChanges();
-        return board;
+        var trackedEntity = context.BoardAutoplays.Find(board.Id);
+        if (trackedEntity != null)
+        {
+            trackedEntity.LeftToPlay = board.LeftToPlay;
+            context.SaveChanges();
+        }
+
+        return trackedEntity;
     }
 
     public void DeleteBoardLeftToPlay(BoardAutoplay board)

@@ -83,7 +83,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
           
             var price = priceRepository.GetPrice(board.Numbers.Count());
 
-            if (userBalance < price.Price1)
+            if (userBalance >= price.Price1)
             {
                 PlayBoard(board);
             }
@@ -91,6 +91,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
 
         foreach (var board in adjustedBoards)
         {
+            board.LeftToPlay -= 1;
             boardRepository.AdjustLeftToPlay(board);
         }
     }
@@ -107,7 +108,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
             }
             else
             {
-                boardsLeft.Add(boardRepository.AdjustLeftToPlay(board));
+                boardsLeft.Add(board);
             }
         }
 
