@@ -43,6 +43,38 @@
         }
       }
     },
+    "/Board/Autoplay": {
+      "post": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_AutoplayBoard",
+        "requestBody": {
+          "x-name": "playAutoplayBoardDTO",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlayAutoplayBoardDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoplayBoardDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Board/GetBoards": {
       "get": {
         "tags": [
@@ -636,6 +668,60 @@
               "type": "integer",
               "format": "int32"
             }
+          }
+        }
+      },
+      "AutoplayBoardDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "guid"
+          },
+          "userid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "leftToPlay": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "PlayAutoplayBoardDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "userid"
+        ],
+        "properties": {
+          "userid": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          "leftToPlay": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
