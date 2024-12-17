@@ -83,13 +83,14 @@ export interface BoardGameResponseDTO {
     numbers?: (number | null)[];
 }
 
-
 export interface GameResponseDTO {
     /** @format guid */
     id?: string;
     /** @format date */
     date?: string;
     status?: GameStatus;
+    /** @format date-time */
+    enddate?: string | null;
 }
 
 export enum GameStatus {
@@ -471,6 +472,21 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         boardGetBoardsFromGame: (gameId: string, params: RequestParams = {}) =>
             this.request<BoardGameResponseDTO[], any>({
                 path: `/Board/GetBoardsFromGame/${gameId}`,
+                method: "GET",
+                format: "json",
+                withCredentials: true,
+                ...params,
+            }),
+        /**
+         * No description
+         *
+         * @tags Board
+         * @name BoardGetAutoplayBoards
+         * @request GET:/Board/GetAutoplayBoards/{userId}
+         */
+        boardGetAutoplayBoards: (userId: string, params: RequestParams = {}) =>
+            this.request<AutoplayBoardDTO[], any>({
+                path: `/Board/GetAutoplayBoards/${userId}`,
                 method: "GET",
                 format: "json",
                 withCredentials: true,

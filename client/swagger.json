@@ -133,6 +133,41 @@
         }
       }
     },
+    "/Board/GetAutoplayBoards/{userId}": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_GetAutoplayBoards",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AutoplayBoardDTO"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Game/NewGame": {
       "post": {
         "tags": [
@@ -766,6 +801,11 @@
           },
           "status": {
             "$ref": "#/components/schemas/GameStatus"
+          },
+          "enddate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },

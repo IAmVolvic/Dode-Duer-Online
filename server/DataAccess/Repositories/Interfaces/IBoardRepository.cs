@@ -11,4 +11,5 @@ public interface IBoardRepository
     public List<BoardAutoplay> GetAutoplayBoards();
     public BoardAutoplay AdjustLeftToPlay(BoardAutoplay board);
     public void DeleteBoardLeftToPlay(BoardAutoplay board);
+    public List<BoardAutoplay> GetAutoplayBoards(Guid userId);
 }

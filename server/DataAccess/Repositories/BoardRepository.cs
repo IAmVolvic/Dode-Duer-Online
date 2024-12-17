@@ -53,4 +53,9 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
         context.BoardAutoplays.Remove(board);
         context.SaveChanges();
     }
+
+    public List<BoardAutoplay> GetAutoplayBoards(Guid userId)
+    {
+        return context.BoardAutoplays.Include(b=> b.ChosenNumbersAutoplays).Where(b => b.UserId == userId).ToList();
+    }
 }

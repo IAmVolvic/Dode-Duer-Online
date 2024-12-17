@@ -122,4 +122,10 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
 
         return boardsLeft;
     }
+
+    public List<AutoplayBoardDTO> GetAutoplayBoards(Guid userId)
+    {
+        var autoplay = boardRepository.GetAutoplayBoards(userId);
+        return autoplay.Select(b => new AutoplayBoardDTO().FromBoard(b)).ToList();
+    }
 }

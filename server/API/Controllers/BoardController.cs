@@ -29,7 +29,7 @@ public class BoardController(IBoardService boardService) : ControllerBase
         return Ok(response);
     }
 
-[HttpGet]
+    [HttpGet]
     [Route("GetBoards")]
     [Rolepolicy("Admin")]
     public ActionResult<List<BoardResponseDTO>> GetAllBoards()
@@ -44,6 +44,15 @@ public class BoardController(IBoardService boardService) : ControllerBase
     public ActionResult<List<BoardGameResponseDTO>> GetBoardsFromGame([FromRoute] Guid gameId)
     {
         var response = boardService.GetBoardsFromGame(gameId);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    [Route("GetAutoplayBoards/{userId}")]
+    [Authenticated]
+    public ActionResult<List<AutoplayBoardDTO>> GetAutoplayBoards([FromRoute] Guid userId)
+    {
+        var response = boardService.GetAutoplayBoards(userId);
         return Ok(response);
     }
 }
