@@ -32,7 +32,7 @@ export const TransactionControl = () => {
 
                     <tbody className="before:content-['\200C'] before:leading-4 before:block ">
 
-                        {!isLoading && 
+                        {!isLoading && data &&
                             Object.values(data as TransactionResponseDTO[]).map((value: TransactionResponseDTO) => {
                                 const { textContent, backgroundContent, background } = transactionStatusColor[TransactionStatus[value.transactionStatus as keyof typeof TransactionStatus]];
                         

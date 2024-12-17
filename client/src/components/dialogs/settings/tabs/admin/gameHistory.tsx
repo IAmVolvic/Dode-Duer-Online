@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import {Api, AuthorizedUserResponseDTO, GameResponseDTO} from "@Api.ts";
+import {Api, AuthorizedUserResponseDTO, GameResponseDTO, GameStatus} from "@Api.ts";
 import { FiEdit } from "react-icons/fi";
 import {BoardsShow} from "@components/dialogs/boardsShow/boardsShow.tsx";
 import {useBoolean} from "@hooks/utils/useBoolean.tsx";
@@ -67,7 +67,7 @@ export const GameHistory = () => {
                             {addDaysToDateOnly(value.date!, 6)}
                         </td>
                         <td className="lg:text-center lg:align-middle">
-                            {value.status === 0 ? "Active" : "Inactive"}
+                            {value.status}
                         </td>
                         <td className="lg:w-44">
                             <button

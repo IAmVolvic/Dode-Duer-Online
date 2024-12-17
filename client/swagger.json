@@ -167,53 +167,6 @@
         }
       }
     },
-    "/Game/winning-numbers": {
-      "post": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_AddWinningNumbers",
-        "parameters": [
-          {
-            "name": "gameId",
-            "in": "query",
-            "schema": {
-              "type": "string",
-              "format": "guid"
-            },
-            "x-position": 1
-          }
-        ],
-        "requestBody": {
-          "x-name": "winningNumbers",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              }
-            }
-          },
-          "required": true,
-          "x-position": 2
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/WinningNumbersResponseDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Game/getAllGames": {
       "get": {
         "tags": [
@@ -230,6 +183,38 @@
                   "items": {
                     "$ref": "#/components/schemas/GameResponseDTO"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Game/winningNumbers": {
+      "post": {
+        "tags": [
+          "Game"
+        ],
+        "operationId": "Game_SetWinningNumbers",
+        "requestBody": {
+          "x-name": "data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WinningNumbersRequestDTO"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 1
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WinningNumbersResponseDTO"
                 }
               }
             }
@@ -684,15 +669,15 @@
         }
       },
       "GameStatus": {
-        "type": "integer",
+        "type": "string",
         "description": "",
         "x-enumNames": [
           "Active",
           "Inactive"
         ],
         "enum": [
-          0,
-          1
+          "Active",
+          "Inactive"
         ]
       },
       "WinningNumbersResponseDTO": {
@@ -705,6 +690,8 @@
           },
           "winningnumbers": {
             "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
             "items": {
               "type": "integer",
               "format": "int32"
@@ -712,6 +699,30 @@
           },
           "status": {
             "$ref": "#/components/schemas/GameStatus"
+          }
+        }
+      },
+      "WinningNumbersRequestDTO": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "gameId",
+          "winningNumbers"
+        ],
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "format": "guid",
+            "minLength": 1
+          },
+          "winningNumbers": {
+            "type": "array",
+            "maxItems": 3,
+            "minItems": 3,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         }
       },
@@ -786,8 +797,8 @@
           "amount": {
             "type": "number",
             "format": "decimal",
-            "maximum": 10000,
-            "minimum": 0
+            "maximum": 10000.0,
+            "minimum": 0.0
           },
           "adjustment": {
             "$ref": "#/components/schemas/TransactionAdjustment"

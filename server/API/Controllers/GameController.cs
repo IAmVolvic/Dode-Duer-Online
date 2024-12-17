@@ -1,6 +1,7 @@
 ﻿using API.Attributes;
 using Microsoft.AspNetCore.Mvc;
 using Service.Services.Interfaces;
+using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 
 namespace API.Controllers;
@@ -25,15 +26,6 @@ public class GameController(IGameService gameService) : ControllerBase
     {
         return Ok(gameService.NewGameFromMonday(prize));
     }
-    
-    [HttpPost]
-    [Route("winning-numbers")]
-    [Rolepolicy("Admin")]
-    public ActionResult<WinningNumbersResponseDTO> AddWinningNumbers(Guid gameId, [FromBody] int[] winningNumbers)
-    {
-        var result = gameService.SetWinningNumbers(gameId, winningNumbers);
-        return Ok(result);
-    }
 
     [HttpGet]
     [Route("getAllGames")]
@@ -41,5 +33,13 @@ public class GameController(IGameService gameService) : ControllerBase
     {
         var result = gameService.GetAllGames();
         return Ok(result);
+    }
+    
+    [HttpPost]
+    [Route("winningNumbers")]
+    [Rolepolicy("Admin")]
+    public ActionResult<WinningNumbersResponseDTO> SetWinningNumbers([FromBody] WinningNumbersRequestDTO data)
+    {
+        return Ok(gameService.SetWinningNumbers(data));
     }
 }
