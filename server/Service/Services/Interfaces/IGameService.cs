@@ -18,8 +18,4 @@ public interface IGameService
     public GameResponseDTO GetActiveGame();
 
     public WinningNumbersResponseDTO SetWinningNumbers(WinningNumbersRequestDTO data);
-
-    public void UpdatePrizePool(decimal newPrizePool);
-
-    public List<GameResponseDTO> GetAllGames();
 }
