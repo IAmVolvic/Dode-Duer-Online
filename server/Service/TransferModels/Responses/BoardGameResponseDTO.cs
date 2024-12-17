@@ -8,6 +8,8 @@ public class BoardGameResponseDTO
     public Guid Id { get; set; }
 
     public virtual string User { get; set; }
+    
+    public Guid userId { get; set; }
 
     public DateOnly Dateofpurchase { get; set; }
 
@@ -22,7 +24,8 @@ public class BoardGameResponseDTO
             Id = board.Id,
             User = board.User.Name,
             Numbers = board.Chosennumbers.Select(n => n.Number).ToList(),
-            Dateofpurchase = board.Dateofpurchase
+            Dateofpurchase = board.Dateofpurchase,
+            userId = board.Userid
         };
     }
 }

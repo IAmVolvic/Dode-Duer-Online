@@ -37,4 +37,12 @@ public class BoardController(IBoardService boardService) : ControllerBase
         var response = boardService.GetBoardsFromGame(gameId);
         return Ok(response);
     }
+    [HttpGet]
+    [Route("getWinners/{gameId}")]
+    [Rolepolicy("Admin")]
+    public ActionResult<List<WinnersDto>> GetWinners([FromRoute] Guid gameId)
+    {
+        var result = boardService.EstablishWinners(gameId);
+        return Ok(result);
+    }
 }

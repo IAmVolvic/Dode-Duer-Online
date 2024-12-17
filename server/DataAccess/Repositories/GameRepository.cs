@@ -65,5 +65,15 @@ public class GameRepository(LotteryContext context) : IGameRepository
     {
         return context.Games.ToList();
     }
+
+    public Game GetGameById(Guid gameId)
+    {
+        return context.Games.Find(gameId);
+    }
+
+    public List<WinningNumbers> GetWinningNumbers(Guid gameId)
+    {
+        return context.WinningNumbers.Where(wn => wn.GameId == gameId).ToList();
+    }
 }
 

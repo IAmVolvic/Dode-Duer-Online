@@ -8,4 +8,5 @@ public interface IBoardService
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO);
     public List<BoardResponseDTO> GetBoards();
     public List<BoardGameResponseDTO> GetBoardsFromGame(Guid gameId);
+    public List<WinnersDto> EstablishWinners(Guid gameId);
 }

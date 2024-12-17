@@ -9,4 +9,6 @@ public interface IGameRepository
     void AddWinningNumbers(List<WinningNumbers> winningNumbers);
     public void UpdatePrizePool(decimal newPrizePool);
     public List<Game> GetAllGames();
+    public Game GetGameById(Guid gameId);
+    public List<WinningNumbers> GetWinningNumbers(Guid gameId);
 }

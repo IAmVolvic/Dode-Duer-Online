@@ -50,4 +50,30 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var boardsDto = boards.Select(b => new BoardGameResponseDTO().FromBoard(b)).ToList();
         return boardsDto;
     }
+
+    public List<WinnersDto> EstablishWinners(Guid gameId)
+    {
+        var game = gameService.getGameById(gameId);
+        var prize = game.Prize * 0.7m;
+        var boards = GetBoardsFromGame(gameId);
+        var winningNumbers = gameService.GetWinningNumbers(gameId);
+        var winningBoards = new List<BoardGameResponseDTO>();
+        var winners = new List<WinnersDto>();
+        var numberOfWinners = 0;
+        foreach (var b in boards)
+        {
+            if (winningNumbers.All(win => b.Numbers.Contains(win.Number)))
+            {
+                winningBoards.Add(b);
+                numberOfWinners++;
+            }
+        }
+        foreach (var b in winningBoards)
+        {
+            if (winners.First() == null || winners.Where(w => w.UserId == b.userId) == null)
+            {
+                
+            }
+        }
+    }
 }

@@ -9,7 +9,7 @@ namespace API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class GameController(IGameService gameService) : ControllerBase
+public class GameController(IGameService gameService, IBoardService boardService) : ControllerBase
 {
     [HttpPost]
     [Route("NewGame")]
@@ -18,7 +18,7 @@ public class GameController(IGameService gameService) : ControllerBase
     {
         return Ok(gameService.NewGame(prize));
     }
-    
+
     [HttpPost]
     [Route("NewGameFromMonday")]
     [Rolepolicy("Admin")]
@@ -34,7 +34,7 @@ public class GameController(IGameService gameService) : ControllerBase
         var result = gameService.GetAllGames();
         return Ok(result);
     }
-    
+
     [HttpPost]
     [Route("winningNumbers")]
     [Rolepolicy("Admin")]
@@ -42,4 +42,6 @@ public class GameController(IGameService gameService) : ControllerBase
     {
         return Ok(gameService.SetWinningNumbers(data));
     }
+    
+
 }

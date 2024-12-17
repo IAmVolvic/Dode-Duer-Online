@@ -102,4 +102,16 @@ public class GameService(IGameRepository gameRepository) : IGameService
         var gamesDto = games.Select(g => new GameResponseDTO().FromGame(g)).ToList();
         return gamesDto;
     }
+
+    public GameResponseDTO getGameById(Guid gameId)
+    {
+        var game = gameRepository.GetGameById(gameId);
+        return new GameResponseDTO().FromGame(game);
+    }
+
+    public List<WinningNumbers> GetWinningNumbers(Guid gameId)
+    {
+        var winningNumbers = gameRepository.GetWinningNumbers(gameId);
+        return winningNumbers;
+    }
 }
