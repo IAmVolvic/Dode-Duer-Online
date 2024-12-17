@@ -168,6 +168,29 @@
         }
       }
     },
+    "/Board/@me/History": {
+      "get": {
+        "tags": [
+          "Board"
+        ],
+        "operationId": "Board_UserBoardHistory",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyBoards"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/Game/NewGame": {
       "post": {
         "tags": [
@@ -787,6 +810,74 @@
           }
         }
       },
+      "MyBoards": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gameId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date"
+          },
+          "status": {
+            "$ref": "#/components/schemas/GameStatus"
+          },
+          "endDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "boards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserBoard"
+            }
+          }
+        }
+      },
+      "GameStatus": {
+        "type": "string",
+        "description": "",
+        "x-enumNames": [
+          "Active",
+          "Inactive"
+        ],
+        "enum": [
+          "Active",
+          "Inactive"
+        ]
+      },
+      "UserBoard": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "boardId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "dateOfPurchase": {
+            "type": "string",
+            "format": "date"
+          },
+          "numbers": {
+            "type": "array",
+            "maxItems": 8,
+            "minItems": 5,
+            "items": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true
+            }
+          },
+          "winningAmount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameResponseDTO": {
         "type": "object",
         "additionalProperties": false,
@@ -800,7 +891,7 @@
             "format": "date"
           },
           "status": {
-            "$ref": "#/components/schemas/GameStatus"
+            "$ref": "#/components/schemas/GameStatus2"
           },
           "enddate": {
             "type": "string",
@@ -809,7 +900,7 @@
           }
         }
       },
-      "GameStatus": {
+      "GameStatus2": {
         "type": "integer",
         "description": "",
         "x-enumNames": [
@@ -837,7 +928,7 @@
             }
           },
           "status": {
-            "$ref": "#/components/schemas/GameStatus"
+            "$ref": "#/components/schemas/GameStatus2"
           }
         }
       },
@@ -912,8 +1003,8 @@
           "amount": {
             "type": "number",
             "format": "decimal",
-            "maximum": 10000,
-            "minimum": 0
+            "maximum": 10000.0,
+            "minimum": 0.0
           },
           "adjustment": {
             "$ref": "#/components/schemas/TransactionAdjustment"

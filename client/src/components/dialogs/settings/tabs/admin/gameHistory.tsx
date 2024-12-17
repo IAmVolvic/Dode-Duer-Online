@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import {Api, AuthorizedUserResponseDTO, GameResponseDTO} from "@Api.ts";
-import { FiEdit } from "react-icons/fi";
+import {Api, GameResponseDTO} from "@Api.ts";
 import {BoardsShow} from "@components/dialogs/boardsShow/boardsShow.tsx";
 import {useBoolean} from "@hooks/utils/useBoolean.tsx";
 
