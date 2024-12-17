@@ -55,4 +55,13 @@ public class BoardController(IBoardService boardService) : ControllerBase
         var response = boardService.GetAutoplayBoards(userId);
         return Ok(response);
     }
+    
+    [HttpGet]
+    [Route("@me/History")]
+    [Authenticated]
+    public ActionResult<MyBoards[]> UserBoardHistory()
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(boardService.GetAllMyBoards(authUser.Id));
+    }
 }

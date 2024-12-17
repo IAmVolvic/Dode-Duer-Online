@@ -25,6 +25,7 @@ import { UserControl } from "./tabs/admin/userControl";
 import { TransactionControl } from "./tabs/admin/transactionControl";
 import {GameHistory} from "@components/dialogs/settings/tabs/admin/gameHistory.tsx";
 import {AutoplayHistory} from "@components/dialogs/settings/tabs/autoplayActive.tsx";
+import { BoardHistory } from "./tabs/boardHistory";
 
 
 export const UserSettingsDialog = (props: IBaseDialog) => { 
@@ -60,6 +61,11 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
                             <div className="flex justify-center items-center"> <FiList className="opacity-60" size={20} /> </div>
                             <div className=""> Autoplay </div>
+                        </Tab>
+
+                        <Tab className={({selected}) => classNames("flex flex-row items-center gap-5 py-2.5 outline-none", selected ? 'border-r-0.25r !border-primary':'')}>
+                            <div className="flex justify-center items-center"> <FiList className="opacity-60" size={20} /> </div>
+                            <div className=""> Board History </div>
                         </Tab>
 
                         {isLoggedIn && user?.role === 'Admin' && (
@@ -98,6 +104,7 @@ export const UserSettingsDialog = (props: IBaseDialog) => {
                         <TabPanel> <BillingTabContent /> </TabPanel>
                         <TabPanel> <AppearanceTabContent /> </TabPanel>
                         <TabPanel>  <AutoplayHistory/>    </TabPanel>
+                        <TabPanel>  <BoardHistory />    </TabPanel>
                         {isLoggedIn && user?.role === 'Admin' && (
                             <>
                                 <TabPanel> <UserControl /> </TabPanel>

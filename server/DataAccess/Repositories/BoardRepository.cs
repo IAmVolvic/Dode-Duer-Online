@@ -15,7 +15,7 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
 
     public List<Board> GetBoards()
     {
-        return context.Boards.Include(b => b.Price).Include(b => b.Chosennumbers).ToList();
+        return context.Boards.Include(b => b.Game).Include(b => b.User).Include(b => b.Price).Include(b => b.Chosennumbers).ToList();
     }
 
     public List<Board> GetBoardsFromGame(Guid gameId)

@@ -11,4 +11,6 @@ public interface IBoardService
     public AutoplayBoardDTO AutoplayBoard(PlayAutoplayBoardDTO playAutoplayBoardDTO);
     public void PlayAllAutoplayBoards();
     public List<AutoplayBoardDTO> GetAutoplayBoards(Guid userId);
+    
+    public MyBoards[] GetAllMyBoards(Guid userId);
 }

@@ -128,4 +128,36 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var autoplay = boardRepository.GetAutoplayBoards(userId);
         return autoplay.Select(b => new AutoplayBoardDTO().FromBoard(b)).ToList();
     }
+    
+    
+    public MyBoards[] GetAllMyBoards(Guid userId)
+    {
+        var userBoards = boardRepository.GetBoards().Where(b => b.Userid == userId).ToList();
+        var gameIds = new HashSet<Guid>();
+        var myBoardsList = new List<MyBoards>();
+        
+        // Check if user has played any boards
+        if (!userBoards.Any()) { return null; }
+        
+        // foreach games are played under this user
+        foreach (var board in userBoards)
+        {
+            if (!gameIds.Contains(board.Gameid))
+            {
+                gameIds.Add(board.Gameid);
+
+                var game = board.Game;
+                var playerBoardsUnderGame = new List<UserBoard>();
+
+                foreach (var userBoard in userBoards)
+                {
+                    playerBoardsUnderGame.Add(UserBoard.FromEntity(userBoard, 100));
+                }
+                
+                myBoardsList.Add(MyBoards.FromEntity(game, playerBoardsUnderGame));
+            }
+        }
+
+        return myBoardsList.ToArray();
+    }
 }
