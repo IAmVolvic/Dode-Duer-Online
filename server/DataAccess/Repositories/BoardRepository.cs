@@ -50,11 +50,15 @@ public class BoardRepository(LotteryContext context) : IBoardRepository
 
     public void DeleteBoardLeftToPlay(BoardAutoplay board)
     {
-        // Ensure related entities are loaded
-        context.Entry(board)
-            .Collection(b => b.ChosenNumbersAutoplays)
-            .Load();
+        // Delete the related ChosenNumbersAutoplays where BoardId matches
+        var chosenNumbersAutoplays = context.ChosenNumbersAutoplays
+            .Where(cna => cna.BoardId == board.Id);
 
+        // Remove the filtered ChosenNumbersAutoplays
+        context.ChosenNumbersAutoplays.RemoveRange(chosenNumbersAutoplays);
+
+        // Save changes to persist the deletion
+        context.SaveChanges();
         // Remove the parent entity
         context.BoardAutoplays.Remove(board);
 
