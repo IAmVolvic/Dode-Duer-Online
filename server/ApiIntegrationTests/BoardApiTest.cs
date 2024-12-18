@@ -5,6 +5,7 @@ using Xunit;
 using Xunit.Abstractions;
 using System.Net.Http.Json;
 using ApiInterationTests;
+using DataAccess.Types.Enums;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using Service.TransferModels.Responses;
@@ -29,7 +30,7 @@ public async Task Play_Board_Works_When_All_Parameters_Are_Valid()
 
     var guidUser = Guid.NewGuid();
     MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
-        .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = "User" });
+        .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = UserRole.User });
 
     await PgCtxSetup.DbContextInstance.Database.ExecuteSqlRawAsync(@"
 INSERT INTO prices (id, price, numbers)
@@ -97,7 +98,7 @@ VALUES
         // Arrange
         var guidUser = Guid.NewGuid();
         MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
-            .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = "User" });
+            .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = UserRole.User });
 
         var player = new User
         {
@@ -138,7 +139,7 @@ VALUES
         // Arrange
         var guidUser = Guid.NewGuid();
         MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
-            .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = "User" });
+            .Returns(new AuthorizedUserResponseDTO { Id = guidUser, Name = "John Doe", Role = UserRole.User });
 
         var player = new User
         {

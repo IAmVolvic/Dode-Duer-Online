@@ -17,7 +17,16 @@ public class BoardController(IBoardService boardService) : ControllerBase
     public ActionResult<BoardResponseDTO> PlayBoard([FromBody] PlayBoardDTO playBoardDTO)
     {
         var response = boardService.PlayBoard(playBoardDTO);
-        return  Ok(response);
+        return Ok(response);
+    }
+
+    [HttpPost]
+    [Route("Autoplay")]
+    [Authenticated]
+    public ActionResult<AutoplayBoardDTO> AutoplayBoard([FromBody] PlayAutoplayBoardDTO playAutoplayBoardDTO)
+    {
+        var response = boardService.AutoplayBoard(playAutoplayBoardDTO);
+        return Ok(response);
     }
 
     [HttpGet]
@@ -36,6 +45,24 @@ public class BoardController(IBoardService boardService) : ControllerBase
     {
         var response = boardService.GetBoardsFromGame(gameId);
         return Ok(response);
+    }
+
+    [HttpGet]
+    [Route("GetAutoplayBoards/{userId}")]
+    [Authenticated]
+    public ActionResult<List<AutoplayBoardDTO>> GetAutoplayBoards([FromRoute] Guid userId)
+    {
+        var response = boardService.GetAutoplayBoards(userId);
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [Route("@me/History")]
+    [Authenticated]
+    public ActionResult<MyBoards[]> UserBoardHistory()
+    {
+        var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
+        return Ok(boardService.GetAllMyBoards(authUser.Id));
     }
     [HttpGet]
     [Route("getWinners/{gameId}")]

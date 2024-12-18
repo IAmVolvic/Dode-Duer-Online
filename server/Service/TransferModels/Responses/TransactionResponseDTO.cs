@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using DataAccess.Models;
 using DataAccess.Types.Enums;
 
@@ -15,7 +16,8 @@ public class TransactionResponseDTO
     
     public string TransactionNumber { get; set; } = null!;
     
-    public string TransactionStatus { get; set; }
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public TransactionStatusA TransactionStatus { get; set; }
     
     
     public static TransactionResponseDTO FromEntity(Transaction transaction, User user)
@@ -27,7 +29,7 @@ public class TransactionResponseDTO
             Username = user.Name,
             PhoneNumber = user.Phonenumber,
             TransactionNumber = transaction.Transactionnumber,
-            TransactionStatus = transaction.Transactionstatus.ToString()
+            TransactionStatus = transaction.Transactionstatus
         };
     }
 }

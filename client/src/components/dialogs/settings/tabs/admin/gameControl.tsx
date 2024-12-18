@@ -1,6 +1,5 @@
 import { GameResponseDTO, GameStatus } from "@Api";
 import { GameEditDialog } from "@components/dialogs/gameEdit";
-import { CustomSelect } from "@components/inputs/multiSelect";
 import { useGetCurrentGame } from "@hooks/game/useGetCurrentGame";
 import { useBoolean } from "@hooks/utils/useBoolean";
 import { useEffect, useState } from "react";
@@ -55,7 +54,7 @@ export const GameControl = () => {
 
                 <table className="w-full">
                     <thead>
-                        <tr className="bg-base-300 h-12 hidden lg:table-row">
+                        <tr className="bg-base-300 h-12 hidden text-start lg:table-row">
                             <th className="text-xs rounded-l-xl">Id</th>
                             <th className="text-xs text-start">Date</th>
                             <th className="text-xs text-start">Status</th>
@@ -63,17 +62,17 @@ export const GameControl = () => {
                         </tr>
                     </thead>
 
-                    <tbody className="before:content-['\200C'] before:leading-4 before:block ">
+                    <tbody className="before:content-['\200C'] before:leading-4 before:block">
 
                         {!isLoading && data && 
                             Object.values(data as GameResponseDTO[]).map((value: GameResponseDTO) => {
                                 return (
-                                    <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:h-16 lg:table-row border-b-0.05r border-base-content/50 text-sm">
+                                    <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm h-12">
                                         <td >{value.id}</td>
                                         <td >{value.date}</td>
                                         <td >{value.status}</td>
                                         <td >
-                                            <button onClick={() => handleGameEdit(value)} className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-12 h-7"> 
+                                            <button onClick={() => handleGameEdit(value)} className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-12 h-6"> 
                                                 <FiEdit /> 
                                             </button>
                                         </td>

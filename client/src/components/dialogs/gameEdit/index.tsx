@@ -3,6 +3,7 @@ import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
 import { Api, GameResponseDTO,} from "@Api";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { ErrorToast } from "@components/errorToast";
 
 
 interface GameEditDialogProps extends IBaseDialog {
@@ -32,12 +33,16 @@ export const GameEditDialog = (props: GameEditDialogProps) => {
             return
         }
 
-        API.game.gameSetWinningNumbers({gameId: props.game.id?.toString()!, winningNumbers: selectedItems.map(item => Number(item.value))})
+        API.game.gameSetWinningNumbers({gameId: props.game.id?.toString()!, winningNumbers: selectedItems.map(item => Number(item.value))}).then(() => {
+            toast.success("Winning numbers set successfully")
+        }).catch((error) => {
+            ErrorToast(error)
+        })
     }
     
     return (
         <>
-            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="User Edit" dialogSize={DialogSizeEnum.mediumFixed} >
+            <BaseDialog isOpen={props.isOpen} close={props.close} dialogTitle="Game View" dialogSize={DialogSizeEnum.mediumFixed} >
                 <div className="flex flex-col w-full h-full gap-16 p-5 overflow-y-auto">
                     <div className="flex flex-col gap-7">
                         <CustomSelect options={options} placeHolder="Select 3 Winning Numbers" selectClassName="w-full bg-base-300 p-3 rounded-xl" onSelectionChange={handleOnChange} />

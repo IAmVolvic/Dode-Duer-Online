@@ -9,4 +9,9 @@ public interface IBoardService
     public List<BoardResponseDTO> GetBoards();
     public List<BoardGameResponseDTO> GetBoardsFromGame(Guid gameId);
     public List<WinnersDto> EstablishWinners(Guid gameId);
+    public AutoplayBoardDTO AutoplayBoard(PlayAutoplayBoardDTO playAutoplayBoardDTO);
+    public void PlayAllAutoplayBoards();
+    public List<AutoplayBoardDTO> GetAutoplayBoards(Guid userId);
+    
+    public MyBoards[] GetAllMyBoards(Guid userId);
 }

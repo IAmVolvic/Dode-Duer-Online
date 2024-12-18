@@ -14,6 +14,10 @@ public interface IGameService
     
     public void UpdatePrizePool(decimal newPrizePool);
     public List<GameResponseDTO> GetAllGames();
+
+    public GameResponseDTO GetActiveGame();
+
+    public WinningNumbersResponseDTO SetWinningNumbers(WinningNumbersRequestDTO data);
     public GameResponseDTO getGameById(Guid gameId);
     public List<WinningNumbers> GetWinningNumbers(Guid gameId);
 }

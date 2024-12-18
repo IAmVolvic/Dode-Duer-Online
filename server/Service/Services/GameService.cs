@@ -47,6 +47,10 @@ public class GameService(IGameRepository gameRepository) : IGameService
         
         game.Id = Guid.NewGuid();
         game.Date = DateOnly.FromDateTime(DateTime.Now);
+        DateTime now = DateTime.Now;
+        int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)now.DayOfWeek + 7) % 7;
+        DateTime nextSaturday = now.AddDays(daysUntilSaturday).Date.AddHours(17); // Add 17:00 (5 PM)
+        game.Enddate = nextSaturday;
         game.Prizepool = prize;
         game.Status = GameStatus.Active;
         
@@ -57,6 +61,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
         }
         
         var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
+        
         return gameResponse;
     }
 
@@ -101,6 +106,12 @@ public class GameService(IGameRepository gameRepository) : IGameService
         var games = gameRepository.GetAllGames();
         var gamesDto = games.Select(g => new GameResponseDTO().FromGame(g)).ToList();
         return gamesDto;
+    }
+
+    public GameResponseDTO GetActiveGame()
+    {
+        var game = gameRepository.GetActiveGame();
+        return new GameResponseDTO().FromGame(game);
     }
 
     public GameResponseDTO getGameById(Guid gameId)

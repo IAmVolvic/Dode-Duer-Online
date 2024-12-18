@@ -16,7 +16,9 @@ public class GameController(IGameService gameService, IBoardService boardService
     [Rolepolicy("Admin")]
     public ActionResult<GameResponseDTO> NewGame([FromBody] int prize)
     {
-        return Ok(gameService.NewGame(prize));
+        var game = gameService.NewGame(prize);
+        boardService.PlayAllAutoplayBoards();
+        return Ok(game);
     }
 
     [HttpPost]
