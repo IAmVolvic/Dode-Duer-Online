@@ -126,7 +126,7 @@ public partial class LotteryContext : DbContext
 
             entity.HasOne(d => d.BoardAutoplay).WithMany(p => p.ChosenNumbersAutoplays)
                 .HasForeignKey(d => d.BoardId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("chosennumbersautoplay_boardid_fkey");
         });
 
@@ -145,6 +145,9 @@ public partial class LotteryContext : DbContext
             entity.Property(e => e.Prizepool)
                 .HasPrecision(10, 2)
                 .HasColumnName("prizepool");
+            entity.Property(e => e.StartingPrizepool)
+                .HasPrecision(10, 2)
+                .HasColumnName("startingprizepool");
             entity.Property(e => e.Status)
                 .HasConversion(
                     v => v.ToString(),

@@ -18,15 +18,14 @@ CREATE TABLE Prices (
 
 create table game
 (
-    id             uuid not null
+    id                uuid not null
         primary key,
-    prizepool      numeric(10, 2),
-    date           date not null,
-    winningnumbers varchar(50),
-    status         varchar(255) default 'Active'::character varying,
-    enddate        timestamp
+    prizepool         numeric(10, 2),
+    date              date not null,
+    status            varchar(255) default 'Active'::character varying,
+    enddate           timestamp,
+    startingprizepool numeric(10, 2)
 );
-
 CREATE TABLE Board (
                        Id UUID PRIMARY KEY,
                        UserId UUID NOT NULL,
@@ -79,6 +78,6 @@ CREATE TABLE ChosenNumbersAutoplay (
                                Id UUID PRIMARY KEY,
                                BoardId UUID NOT NULL,
                                Number INT DEFAULT 0,
-                               FOREIGN KEY (BoardId) REFERENCES BoardAutoplay(Id)
+                               FOREIGN KEY (BoardId) REFERENCES BoardAutoplay(Id) ON DELETE CASCADE 
 );
 
