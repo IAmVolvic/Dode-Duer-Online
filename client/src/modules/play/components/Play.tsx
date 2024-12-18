@@ -96,8 +96,13 @@ export const PlayPage = () => {
                     <div className="flex justify-center items-center form-control">
                         <label className="label cursor-pointer w-32 ">
                             <span className="label-text text-xl">Autoplay</span>
-                            <input type="checkbox" onChange={(e) => setAutoplay(e.target.checked)} defaultChecked
-                                   className="checkbox"/>
+                            <input
+                                type="checkbox"
+                                onChange={(e) => setAutoplay(e.target.checked)}
+                                defaultChecked={false}
+                                className="checkbox"
+                            />
+
                         </label>
                     </div>
                 </div>
