@@ -2,6 +2,7 @@
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataAccess.Types.Enums;
 using Service.Services.Interfaces;
 using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
@@ -156,7 +157,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                     if (board.Gameid == userBoard.Gameid)
                     {
                         var prize = 0m;
-                        if (winningBoards.Any(b=> b.Id == userBoard.Id))
+                        if (winningBoards.Any(b=> b.Id == userBoard.Id) && game.Status == GameStatus.Inactive)
                         {
                             prize = game.Prizepool * 0.7m / winningBoards.Count();
                         }
