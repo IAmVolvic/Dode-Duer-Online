@@ -13,6 +13,8 @@ public partial class Game
 
     public DateOnly Date { get; set; }
     
+    public decimal StartingPrizepool { get; set; } 
+    
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameStatus Status { get; set; }
     

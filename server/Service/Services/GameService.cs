@@ -29,8 +29,12 @@ public class GameService(IGameRepository gameRepository) : IGameService
         game.Id = Guid.NewGuid();
         game.Date = DateOnly.FromDateTime(lastMonday);
         game.Prizepool = prize;
+        game.StartingPrizepool = prize;
         game.Status = GameStatus.Active;
-        
+        DateTime now = DateTime.Now;
+        int daysUntilSaturday = ((int)DayOfWeek.Saturday - (int)now.DayOfWeek + 7) % 7;
+        DateTime nextSaturday = now.AddDays(daysUntilSaturday).Date.AddHours(17); // Add 17:00 (5 PM)
+        game.Enddate = nextSaturday;
         var activeGame = gameRepository.GetActiveGame();
         if (activeGame != null)
         {
@@ -52,6 +56,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
         DateTime nextSaturday = now.AddDays(daysUntilSaturday).Date.AddHours(17); // Add 17:00 (5 PM)
         game.Enddate = nextSaturday;
         game.Prizepool = prize;
+        game.StartingPrizepool = prize;
         game.Status = GameStatus.Active;
         
         var activeGame = gameRepository.GetActiveGame();

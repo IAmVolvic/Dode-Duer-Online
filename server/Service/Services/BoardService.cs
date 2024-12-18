@@ -32,7 +32,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
             if (newBoard != null)
             {
                 userService.UpdateUserBalance(price,newBoard.Userid);
-                var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price);
+                var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price) + gameService.GetActiveGame().StartingPrizepool;
                 gameService.UpdatePrizePool(prize);
                 return new BoardResponseDTO().FromBoard(newBoard);
             }
@@ -176,7 +176,13 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                 winningBoards.Add(b);
             }
         }
-        var prizePerBoard = prize / winningBoards.Count;
+
+        var prizePerBoard = 0m;
+        if (winningBoards.Any())
+        {
+            prizePerBoard = prize / winningBoards.Count;
+        }
+        
         if (prizePerBoard>5000)
         {
             prizePerBoard = 5000;
@@ -225,6 +231,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
             winnersService.AddWinners(winners);
         }
         gameService.NewGame(prizeLeft);
+        PlayAllAutoplayBoards();
         return winners;
     }
 }

@@ -9,6 +9,7 @@ public class GameResponseDTO
     public Guid Id { get; set; }
     public DateOnly Date { get; set; }
     public decimal Prize { get; set; }
+    public decimal StartingPrizepool { get; set; }
     public Winner[] Winners {get; set;}
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
@@ -25,6 +26,7 @@ public class GameResponseDTO
             Status = game.Status,
             Prize = game.Prizepool,
             Enddate = game.Enddate,
+            StartingPrizepool = game.StartingPrizepool,
         };
     }
 }
