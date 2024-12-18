@@ -235,11 +235,11 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         return winners;
     }
 
-    public List<BoardResponseDTO> GetWinningBoardsFromGame(Guid gameId)
+    public List<BoardGameResponseDTO> GetWinningBoardsFromGame(Guid gameId)
     {
-        var boards = boardRepository.GetBoardsFromGame(gameId).Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
+        var boards = boardRepository.GetBoardsFromGame(gameId).Select(b => new BoardGameResponseDTO().FromBoard(b)).ToList();
         var winningNumbers = gameService.GetWinningNumbers(gameId);
-        var winningBoards = new List<BoardResponseDTO>();
+        var winningBoards = new List<BoardGameResponseDTO>();
         
         foreach (var b in boards)
         {

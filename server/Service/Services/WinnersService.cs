@@ -9,7 +9,7 @@ public class WinnersService(IWinnersRepository winnersRepository, IBoardService 
 
     public List<WinnersDto> GetWinners(Guid gameId)
     {
-        var winningBoards = boardService.GetBoardsFromGame(gameId);
+        var winningBoards  = boardService.GetWinningBoardsFromGame(gameId);
         var winners = winnersRepository.GetWinners(gameId);
         return winners.Select(w => new WinnersDto().FromWinner(w,winningBoards)).ToList();
     }
