@@ -147,11 +147,21 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                 gameIds.Add(board.Gameid);
 
                 var game = board.Game;
+                var winningBoards = GetWinningBoardsFromGame(game.Id);
+                
                 var playerBoardsUnderGame = new List<UserBoard>();
 
                 foreach (var userBoard in userBoards)
                 {
-                    playerBoardsUnderGame.Add(UserBoard.FromEntity(userBoard, 100));
+                    if (board.Gameid == userBoard.Gameid)
+                    {
+                        var prize = 0m;
+                        if (winningBoards.Any(b=> b.Id == userBoard.Id))
+                        {
+                            prize = game.Prizepool * 0.7m / winningBoards.Count();
+                        }
+                        playerBoardsUnderGame.Add(UserBoard.FromEntity(userBoard, prize));
+                    }
                 }
                 
                 myBoardsList.Add(MyBoards.FromEntity(game, playerBoardsUnderGame));

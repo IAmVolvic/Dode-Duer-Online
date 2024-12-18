@@ -41,10 +41,10 @@ namespace Service.TransferModels.Responses
         [MaxLength(8)]
         public List<int?> Numbers { get; set; }
 
-        public int WinningAmount { get; set; }
+        public decimal WinningAmount { get; set; }
         
         
-        public static UserBoard FromEntity(Board userBoard, int winAmount)
+        public static UserBoard FromEntity(Board userBoard, decimal winAmount)
         {
             return new UserBoard
             {

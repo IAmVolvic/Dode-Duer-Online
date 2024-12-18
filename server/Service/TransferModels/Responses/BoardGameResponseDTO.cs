@@ -10,7 +10,7 @@ public class BoardGameResponseDTO
     public virtual string User { get; set; }
     
     public Guid userId { get; set; }
-
+    
     public DateOnly Dateofpurchase { get; set; }
 
     [MinLength(5)]
@@ -25,7 +25,7 @@ public class BoardGameResponseDTO
             User = board.User.Name,
             Numbers = board.Chosennumbers.Select(n => n.Number).ToList(),
             Dateofpurchase = board.Dateofpurchase,
-            userId = board.Userid
+            userId = board.Userid,
         };
     }
 }
