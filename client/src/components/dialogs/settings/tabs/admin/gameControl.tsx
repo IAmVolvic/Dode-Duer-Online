@@ -62,17 +62,17 @@ export const GameControl = () => {
                         </tr>
                     </thead>
 
-                    <tbody className="before:content-['\200C'] before:leading-4 before:block ">
+                    <tbody className="before:content-['\200C'] before:leading-4 before:block">
 
                         {!isLoading && data && 
                             Object.values(data as GameResponseDTO[]).map((value: GameResponseDTO) => {
                                 return (
-                                    <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
+                                    <tr key={value.id} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm h-12">
                                         <td >{value.id}</td>
                                         <td >{value.date}</td>
                                         <td >{value.status}</td>
                                         <td >
-                                            <button onClick={() => handleGameEdit(value)} className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-full h-7"> 
+                                            <button onClick={() => handleGameEdit(value)} className="flex justify-center items-center bg-primary text-primary-content rounded-xl w-12 h-6"> 
                                                 <FiEdit /> 
                                             </button>
                                         </td>
