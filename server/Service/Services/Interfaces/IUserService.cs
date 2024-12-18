@@ -19,5 +19,6 @@ public interface IUserService
     
     public AuthorizedUserResponseDTO[] GetUsers();
     public decimal UpdateUserBalance(decimal cost, Guid userId);
+    public decimal CheckUsersBalance(Guid userId);
 
 }

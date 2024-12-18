@@ -108,6 +108,11 @@ public class Program
         builder.Services.AddControllers();
         builder.Services.AddEndpointsApiExplorer(); // Support for API Explorer
         builder.Services.AddOpenApiDocument();
+        builder.Services.AddSwaggerGen(c =>
+        {
+            // Register the Enum Schema Filter here
+            c.SchemaFilter<EnumSchemaFilter>(); // This ensures that enums are displayed as strings
+        });
         
         // ===================== * CORS SETUP * ===================== //
         builder.Services.AddCors(options =>
@@ -137,6 +142,7 @@ public class Program
             c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
             c.RoutePrefix = string.Empty;
         });
+        
         
         // ===================== * CORS CONFIGURATION * ===================== //
         app.UseCors("AllowSpecificOrigin");

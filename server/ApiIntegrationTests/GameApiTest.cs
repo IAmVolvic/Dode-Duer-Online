@@ -23,7 +23,7 @@ public class GameApiTest : ApiTestBase
     public async Task Create_Game_API_Test_Creates_Game_With_Starting_Prize_Pool(int startingPrizePool)
     {
         MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
-            .Returns(new AuthorizedUserResponseDTO() { Id = Guid.NewGuid(), Name = "TestAdmin", Role = "Admin" });
+            .Returns(new AuthorizedUserResponseDTO() { Id = Guid.NewGuid(), Name = "TestAdmin", Role = UserRole.Admin });
 
         var client = TestHttpClient;
         client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
@@ -62,7 +62,7 @@ public class GameApiTest : ApiTestBase
         var negativePrizePool = -10;
         
         MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
-            .Returns(new AuthorizedUserResponseDTO() { Id = Guid.NewGuid(), Name = "TestAdmin", Role = "Admin" });
+            .Returns(new AuthorizedUserResponseDTO() { Id = Guid.NewGuid(), Name = "TestAdmin", Role = UserRole.Admin });
 
         var client = TestHttpClient;
         client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");

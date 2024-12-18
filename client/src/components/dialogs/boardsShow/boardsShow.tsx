@@ -32,11 +32,11 @@ export const BoardsShow = (props: BoardsGetDialogProps) => {
         <div className="flex flex-col gap-5 w-full h-full max-h-[70vh] overflow-auto">
             <table className="w-full">
                 <thead>
-                <tr className="bg-base-300 h-12 hidden text-start lg:table-row">
-                    <th className="rounded-l-xl text-xs text-start lg:text-center">Player name</th>
-                    <th className="text-xs text-start lg:text-center">Date</th>
-                    <th className="text-xs rounded-r-xl text-start lg:text-center">Numbers</th>
-                </tr>
+                    <tr className="bg-base-300 h-12 hidden text-start lg:table-row">
+                        <th className="rounded-l-xl text-xs text-start lg:text-center">Player name</th>
+                        <th className="text-xs text-start lg:text-center">Date</th>
+                        <th className="text-xs rounded-r-xl text-start lg:text-center">Numbers</th>
+                    </tr>
                 </thead>
 
                 <tbody className="before:content-['\200C'] before:leading-4 before:block">

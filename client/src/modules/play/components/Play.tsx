@@ -3,7 +3,7 @@ import { Button } from "@headlessui/react";
 import { useState } from "react";
 import { useAtom } from 'jotai';
 import { PriceAtom } from "@atoms/PriceAtom";
-import { Api, BoardResponseDTO, PlayBoardDTO } from "@Api";
+import {Api, BoardResponseDTO, PlayAutoplayBoardDTO, PlayBoardDTO} from "@Api";
 import { useAuth } from "@hooks/authentication/useAuthentication";
 import { format } from 'date-fns';
 import { AxiosResponse } from "axios";
@@ -14,45 +14,56 @@ export const PlayPage = () => {
     const {user} = useAuth();
     const buttons = Array.from({ length: 16 }, (_, i) => i + 1);
     const [prices] = useAtom(PriceAtom);
+    const [autoplay, setAutoplay] = useState<boolean>(false);
+    const [timesToPlay, setTimesToPlay] = useState<number>(0);
 
     const totalPrice = () => {
         const count = pickedNumbers.length;
 
-        // Return 0 if less than 5 numbers are picked
         if (count < 5) return 0;
 
-        // Find the price object where numbers equals the count
         const priceObj = prices.find((p) => p.numbers === count);
 
-        // Return price1 if found, otherwise 0
         return priceObj?.price1 || 0;
     };
 
     const toggleNumber = (n: number) => {
         setPickedNumbers((prev) => {
             if (prev.includes(n)) {
-                // Remove the number if it's already picked
                 return prev.filter((num) => num !== n);
             } else if (prev.length < 8) {
-                // Add the number only if the picked count is less than 8
                 return [...prev, n];
             }
-            return prev; // Do nothing if already 8 numbers picked
+            return prev;
         });
     };
 
     const playBoard =() => {
         if (user != null){
-            const board : PlayBoardDTO = {
-                userid : user.id!,
-                numbers : pickedNumbers!,
-                dateofpurchase : format(new Date(), 'yyyy-MM-dd')
-            };
-            const api = new Api();
-            api.board.boardPlayBoard(board).then((r: AxiosResponse<BoardResponseDTO>) =>{
-                toast.success("Your board has been played");
-            });
+            if (!autoplay)
+            {
+                const board : PlayBoardDTO = {
+                    userid : user.id!,
+                    numbers : pickedNumbers!,
+                    dateofpurchase : format(new Date(), 'yyyy-MM-dd')
+                };
+                const api = new Api();
+                api.board.boardPlayBoard(board).then((r: AxiosResponse<BoardResponseDTO>) =>{
+                    toast.success("Your board has been played");
+                });
+            }else if(timesToPlay>0) {
+                const board : PlayAutoplayBoardDTO = {
+                    userid : user.id!,
+                    numbers : pickedNumbers!,
+                    leftToPlay : timesToPlay
+                };
+                const api = new Api();
+                api.board.boardAutoplayBoard(board).then((r: AxiosResponse<BoardResponseDTO>) =>{
+                    toast.success("You have successfully set an autoplay!");
+                })
+            }
         }
+
     }
 
 
@@ -78,9 +89,31 @@ export const PlayPage = () => {
                     </Button>
                 ))}
             </div>
-            <label className="flex justify-center lg:text-2xl text-xl">Price: {totalPrice()}</label>
+            <div className="flex justify-center items-center">
+                <div className="flex justify-between items-center w-72">
+                    <label
+                        className="flex justify-center lg:text-2xl text-xl ml-12">Price: {autoplay ? totalPrice() * timesToPlay : totalPrice()}</label>
+                    <div className="flex justify-center items-center form-control">
+                        <label className="label cursor-pointer w-32 ">
+                            <span className="label-text text-xl">Autoplay</span>
+                            <input type="checkbox" onChange={(e) => setAutoplay(e.target.checked)} defaultChecked
+                                   className="checkbox"/>
+                        </label>
+                    </div>
+                </div>
+            </div>
             <div className="flex justify-center">
-                <Button disabled={pickedNumbers.length <5} className="btn btn-primary w-48 text-center text-xl" onClick={()=> playBoard() }>
+                <div className="flex justify-center items-center form-control">
+                    <label className="label w-72">
+                        <span className="label-text text-xl">Times to play</span>
+                        <input type="number" disabled={!autoplay} onChange={(e) => setTimesToPlay(parseInt(e.target.value) || 0)} defaultChecked
+                               className="input input-bordered w-32" defaultValue={0}/>
+                    </label>
+                </div>
+            </div>
+            <div className="flex justify-center">
+                <Button disabled={pickedNumbers.length < 5} className="btn btn-primary w-48 text-center text-xl"
+                        onClick={() => playBoard()}>
                     Accept
                 </Button>
             </div>

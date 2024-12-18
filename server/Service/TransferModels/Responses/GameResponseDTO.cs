@@ -13,6 +13,8 @@ public class GameResponseDTO
     
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public GameStatus Status { get; set; }
+    
+    public DateTime? Enddate { get; set; }
 
     public GameResponseDTO FromGame(Game game)
     {
@@ -20,7 +22,8 @@ public class GameResponseDTO
         {
             Id = game.Id,
             Date = game.Date,
-            Status = game.Status
+            Status = game.Status,
+            Enddate = game.Enddate,
         };
     }
 }

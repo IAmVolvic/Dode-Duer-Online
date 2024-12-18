@@ -16,12 +16,15 @@ CREATE TABLE Prices (
                         Numbers DECIMAL(10, 2) NOT NULL
 );
 
-CREATE TABLE Game (
-                      Id UUID PRIMARY KEY,
-                      PrizePool DECIMAL(10, 2),
-                      Date DATE NOT NULL,
-                      WinningNumbers VARCHAR(50),
-                      Status VARCHAR(255) DEFAULT 'Active'
+create table game
+(
+    id             uuid not null
+        primary key,
+    prizepool      numeric(10, 2),
+    date           date not null,
+    winningnumbers varchar(50),
+    status         varchar(255) default 'Active'::character varying,
+    enddate        timestamp
 );
 
 CREATE TABLE Board (
@@ -63,6 +66,20 @@ create table WinningNumbers (
                                 GameId uuid not null,
                                 Number integer default 0,
                                 foreign key (GameId) references Game(id)
+);
+
+CREATE TABLE BoardAutoplay (
+                               Id UUID PRIMARY KEY,
+                               UserId UUID NOT NULL,
+                               LeftToPlay INT NOT NULL,
+                               FOREIGN KEY (UserId) REFERENCES Users(Id)
+);
+
+CREATE TABLE ChosenNumbersAutoplay (
+                               Id UUID PRIMARY KEY,
+                               BoardId UUID NOT NULL,
+                               Number INT DEFAULT 0,
+                               FOREIGN KEY (BoardId) REFERENCES BoardAutoplay(Id)
 );
 
 
