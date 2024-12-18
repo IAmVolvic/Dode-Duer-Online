@@ -21,4 +21,26 @@ public class WinnersDto
             Wonamount = Prize
         };
     }
+
+    public WinnersDto FromWinner(Winner winner, List<BoardGameResponseDTO> boards)
+    {
+        var winersBoards = new List<BoardGameResponseDTO>();
+        foreach (var board in boards)
+        {
+            if (board.userId == winner.Userid)
+            {
+                winersBoards.Add(board);
+            }
+        }
+
+        return new WinnersDto()
+        {
+            Gameid = winner.Gameid,
+            Prize = winner.Wonamount,
+            Name = winner.User.Name,
+            UserId = winner.Userid,
+            WinningBoards = winersBoards,
+            NumberOfWinningBoards = winersBoards.Count
+        };
+    }
 }

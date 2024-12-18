@@ -4,5 +4,5 @@ namespace Service.Services.Interfaces;
 
 public interface IWinnersService
 {
-    public void AddWinners(List<WinnersDto> winners);
+    public List<WinnersDto> GetWinners(Guid gameId);
 }

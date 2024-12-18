@@ -8,7 +8,7 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IWinnersService winnersService ,IUserService userService, IGameService gameService) : IBoardService
+public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IWinnersRepository winnersRepository ,IUserService userService, IGameService gameService) : IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
@@ -228,10 +228,27 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         {
             var prizeGiven = winners.Sum(w => w.Prize);
             prizeLeft = (prize - prizeGiven);
-            winnersService.AddWinners(winners);
+            winnersRepository.AddWinners(winners.Select(w => w.ToWinner()).ToList());
         }
         gameService.NewGame(prizeLeft);
         PlayAllAutoplayBoards();
         return winners;
+    }
+
+    public List<BoardResponseDTO> GetWinningBoardsFromGame(Guid gameId)
+    {
+        var boards = boardRepository.GetBoardsFromGame(gameId).Select(b => new BoardResponseDTO().FromBoard(b)).ToList();
+        var winningNumbers = gameService.GetWinningNumbers(gameId);
+        var winningBoards = new List<BoardResponseDTO>();
+        
+        foreach (var b in boards)
+        {
+            if (winningNumbers.All(win => b.Numbers.Contains(win.Number)))
+            {
+                winningBoards.Add(b);
+            }
+        }
+
+        return winningBoards;
     }
 }

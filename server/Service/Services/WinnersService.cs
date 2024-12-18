@@ -4,10 +4,13 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class WinnersService(IWinnersRepository winnersRepository) : IWinnersService
+public class WinnersService(IWinnersRepository winnersRepository, IBoardService boardService) : IWinnersService
 {
-    public void AddWinners(List<WinnersDto> winners)
+
+    public List<WinnersDto> GetWinners(Guid gameId)
     {
-        winnersRepository.AddWinners(winners.Select(w => w.ToWinner()).ToList());
+        var winningBoards = boardService.GetBoardsFromGame(gameId);
+        var winners = winnersRepository.GetWinners(gameId);
+        return winners.Select(w => new WinnersDto().FromWinner(w,winningBoards)).ToList();
     }
 }
