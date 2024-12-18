@@ -84,7 +84,7 @@ export const GameControl = () => {
                 </table>
             </div>
 
-            <GameEditDialog isOpen={isOpen} close={setFalse} game={selectedGame!} refresh={refetch} />
+            <GameEditDialog isOpen={isOpen} close={setFalse} game={selectedGame!} refreshMain={refetch} />
         </>
     );
 }

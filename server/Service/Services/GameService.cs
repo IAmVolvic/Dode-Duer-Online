@@ -41,8 +41,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
             activeGame.Status = GameStatus.Inactive;
         }
         
-        var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
-        return gameResponse;
+        return GameResponse(gameRepository.NewGame(game,activeGame));
     }
     
     public GameResponseDTO NewGame(decimal prize)
@@ -65,9 +64,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
             activeGame.Status = GameStatus.Inactive;
         }
         
-        var gameResponse = new GameResponseDTO().FromGame(gameRepository.NewGame(game,activeGame));
-        
-        return gameResponse;
+        return GameResponse(gameRepository.NewGame(game,activeGame));
     }
 
     public bool IsAnyGame()
@@ -109,20 +106,29 @@ public class GameService(IGameRepository gameRepository) : IGameService
     public List<GameResponseDTO> GetAllGames()
     {
         var games = gameRepository.GetAllGames();
-        var gamesDto = games.Select(g => new GameResponseDTO().FromGame(g)).ToList();
+        var gamesDto = games.Select(g => GameResponse(g)).ToList();
         return gamesDto;
     }
 
     public GameResponseDTO GetActiveGame()
     {
         var game = gameRepository.GetActiveGame();
-        return new GameResponseDTO().FromGame(game);
+        return GameResponse(game);
     }
+    
+    
+    private GameResponseDTO GameResponse(Game game)
+    {
+        var winningNumbers = GetWinningNumbers(game.Id);
+        return new GameResponseDTO().FromGame(game, winningNumbers.Select(e => e.Number).ToList());
+    }
+    
 
     public GameResponseDTO getGameById(Guid gameId)
     {
         var game = gameRepository.GetGameById(gameId);
-        return new GameResponseDTO().FromGame(game);
+        var winningNumbers = GetWinningNumbers(gameId);
+        return new GameResponseDTO().FromGame(game, winningNumbers.Select(e => e.Number).ToList());
     }
 
     public List<WinningNumbers> GetWinningNumbers(Guid gameId)
@@ -130,4 +136,6 @@ public class GameService(IGameRepository gameRepository) : IGameService
         var winningNumbers = gameRepository.GetWinningNumbers(gameId);
         return winningNumbers;
     }
+
+
 }

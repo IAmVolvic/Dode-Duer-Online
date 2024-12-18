@@ -16,8 +16,10 @@ public class GameResponseDTO
     public GameStatus Status { get; set; }
     
     public DateTime? Enddate { get; set; }
+    
+    public List<int>? WinningNumbers { get; set; }
 
-    public GameResponseDTO FromGame(Game game)
+    public GameResponseDTO FromGame(Game game, List<int>? numbers)
     {
         return new GameResponseDTO()
         {
@@ -26,6 +28,7 @@ public class GameResponseDTO
             Status = game.Status,
             Prize = game.Prizepool,
             Enddate = game.Enddate,
+            WinningNumbers = numbers ?? new List<int>(),
             StartingPrizepool = game.StartingPrizepool,
         };
     }

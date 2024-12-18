@@ -75,6 +75,8 @@ export interface BoardGameResponseDTO {
   /** @format guid */
   id?: string;
   user?: string;
+  /** @format guid */
+  userId?: string;
   /** @format date */
   dateofpurchase?: string;
   /**
@@ -110,7 +112,7 @@ export interface UserBoard {
    * @minItems 5
    */
   numbers?: (number | null)[];
-  /** @format int32 */
+  /** @format decimal */
   winningAmount?: number;
 }
 
@@ -119,10 +121,15 @@ export interface GameResponseDTO {
   id?: string;
   /** @format date */
   date?: string;
+  /** @format decimal */
+  prize?: number;
+  /** @format decimal */
+  startingPrizepool?: number;
   winners?: Winner[];
   status?: GameStatus;
   /** @format date-time */
   enddate?: string | null;
+  winningNumbers?: number[] | null;
 }
 
 export interface Winner {
@@ -145,6 +152,8 @@ export interface Game {
   prizepool?: number;
   /** @format date */
   date?: string;
+  /** @format decimal */
+  startingPrizepool?: number;
   status?: GameStatus;
   /** @format date-time */
   enddate?: string | null;
@@ -437,6 +446,19 @@ export interface UserUpdateByAdminRequestDTO {
   userRole?: UserRole | null;
 }
 
+export interface WinnersDto {
+  /** @format guid */
+  gameid?: string;
+  name?: string;
+  /** @format guid */
+  userId?: string;
+  /** @format decimal */
+  prize?: number;
+  /** @format int32 */
+  numberOfWinningBoards?: number;
+  winningBoards?: BoardGameResponseDTO[];
+}
+
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from "axios";
 import axios from "axios";
 
@@ -683,42 +705,6 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * No description
      *
      * @tags Game
-     * @name GameNewGame
-     * @request POST:/Game/NewGame
-     */
-    gameNewGame: (data: number, params: RequestParams = {}) =>
-      this.request<GameResponseDTO, any>({
-        path: `/Game/NewGame`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Game
-     * @name GameNewGameFromMonday
-     * @request POST:/Game/NewGameFromMonday
-     */
-    gameNewGameFromMonday: (data: number, params: RequestParams = {}) =>
-      this.request<GameResponseDTO, any>({
-        path: `/Game/NewGameFromMonday`,
-        method: "POST",
-        body: data,
-        type: ContentType.Json,
-        format: "json",
-        withCredentials: true,
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Game
      * @name GameGetAllGames
      * @request GET:/Game/getAllGames
      */
@@ -952,6 +938,39 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         method: "PATCH",
         body: data,
         type: ContentType.Json,
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
+  };
+  winners = {
+    /**
+     * No description
+     *
+     * @tags Winners
+     * @name WinnersEstablishWinners
+     * @request GET:/Winners/establishWinners/{gameId}
+     */
+    winnersEstablishWinners: (gameId: string, params: RequestParams = {}) =>
+      this.request<WinnersDto[], any>({
+        path: `/Winners/establishWinners/${gameId}`,
+        method: "GET",
+        format: "json",
+        withCredentials: true,
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Winners
+     * @name WinnersGetWinners
+     * @request GET:/Winners/getWinners/{gameId}
+     */
+    winnersGetWinners: (gameId: string, params: RequestParams = {}) =>
+      this.request<WinnersDto[], any>({
+        path: `/Winners/getWinners/${gameId}`,
+        method: "GET",
         format: "json",
         withCredentials: true,
         ...params,

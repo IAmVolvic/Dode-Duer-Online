@@ -11,7 +11,7 @@ namespace API.Controllers;
 [Route("[controller]")]
 public class GameController(IGameService gameService, IBoardService boardService) : ControllerBase
 {
-    [HttpPost]
+    /*[HttpPost]
     [Route("NewGame")]
     [Rolepolicy("Admin")]
     public ActionResult<GameResponseDTO> NewGame([FromBody] int prize)
@@ -27,7 +27,7 @@ public class GameController(IGameService gameService, IBoardService boardService
     public ActionResult<GameResponseDTO> NewGameFromMonday([FromBody] int prize)
     {
         return Ok(gameService.NewGameFromMonday(prize));
-    }
+    }*/
 
     [HttpGet]
     [Route("getAllGames")]

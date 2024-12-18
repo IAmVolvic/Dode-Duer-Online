@@ -191,72 +191,6 @@
         }
       }
     },
-    "/Game/NewGame": {
-      "post": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_NewGame",
-        "requestBody": {
-          "x-name": "prize",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GameResponseDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/Game/NewGameFromMonday": {
-      "post": {
-        "tags": [
-          "Game"
-        ],
-        "operationId": "Game_NewGameFromMonday",
-        "requestBody": {
-          "x-name": "prize",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "integer",
-                "format": "int32"
-              }
-            }
-          },
-          "required": true,
-          "x-position": 1
-        },
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/GameResponseDTO"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/Game/getAllGames": {
       "get": {
         "tags": [
@@ -647,6 +581,76 @@
           }
         }
       }
+    },
+    "/Winners/establishWinners/{gameId}": {
+      "get": {
+        "tags": [
+          "Winners"
+        ],
+        "operationId": "Winners_EstablishWinners",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WinnersDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/Winners/getWinners/{gameId}": {
+      "get": {
+        "tags": [
+          "Winners"
+        ],
+        "operationId": "Winners_GetWinners",
+        "parameters": [
+          {
+            "name": "gameId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "guid"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/WinnersDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -779,6 +783,10 @@
           "user": {
             "type": "string"
           },
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
           "dateofpurchase": {
             "type": "string",
             "format": "date"
@@ -858,8 +866,8 @@
             }
           },
           "winningAmount": {
-            "type": "integer",
-            "format": "int32"
+            "type": "number",
+            "format": "decimal"
           }
         }
       },
@@ -875,6 +883,14 @@
             "type": "string",
             "format": "date"
           },
+          "prize": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "startingPrizepool": {
+            "type": "number",
+            "format": "decimal"
+          },
           "winners": {
             "type": "array",
             "items": {
@@ -888,6 +904,14 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
+          },
+          "winningNumbers": {
+            "type": "array",
+            "nullable": true,
+            "items": {
+              "type": "integer",
+              "format": "int32"
+            }
           }
         }
       },
@@ -934,6 +958,10 @@
           "date": {
             "type": "string",
             "format": "date"
+          },
+          "startingPrizepool": {
+            "type": "number",
+            "format": "decimal"
           },
           "status": {
             "$ref": "#/components/schemas/GameStatus"
@@ -1586,6 +1614,37 @@
                 "$ref": "#/components/schemas/UserRole"
               }
             ]
+          }
+        }
+      },
+      "WinnersDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "gameid": {
+            "type": "string",
+            "format": "guid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string",
+            "format": "guid"
+          },
+          "prize": {
+            "type": "number",
+            "format": "decimal"
+          },
+          "numberOfWinningBoards": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "winningBoards": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BoardGameResponseDTO"
+            }
           }
         }
       }
