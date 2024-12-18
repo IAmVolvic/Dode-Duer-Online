@@ -3,6 +3,7 @@ import { BaseDialog, DialogSizeEnum, IBaseDialog } from "..";
 import { Api, GameResponseDTO,} from "@Api";
 import toast from "react-hot-toast";
 import { useState } from "react";
+import { ErrorToast } from "@components/errorToast";
 
 
 interface GameEditDialogProps extends IBaseDialog {
@@ -32,7 +33,11 @@ export const GameEditDialog = (props: GameEditDialogProps) => {
             return
         }
 
-        API.game.gameSetWinningNumbers({gameId: props.game.id?.toString()!, winningNumbers: selectedItems.map(item => Number(item.value))})
+        API.game.gameSetWinningNumbers({gameId: props.game.id?.toString()!, winningNumbers: selectedItems.map(item => Number(item.value))}).then(() => {
+            toast.success("Winning numbers set successfully")
+        }).catch((error) => {
+            ErrorToast(error)
+        })
     }
     
     return (
