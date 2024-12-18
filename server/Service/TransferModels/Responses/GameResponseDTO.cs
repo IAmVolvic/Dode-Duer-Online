@@ -23,8 +23,7 @@ public class GameResponseDTO
             Id = game.Id,
             Date = game.Date,
             Status = game.Status,
-            Prize = game.Prizepool
-            Status = game.Status,
+            Prize = game.Prizepool,
             Enddate = game.Enddate,
         };
     }

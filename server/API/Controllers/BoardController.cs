@@ -64,12 +64,5 @@ public class BoardController(IBoardService boardService) : ControllerBase
         var authUser = HttpContext.Items["AuthenticatedUser"] as AuthorizedUserResponseDTO;
         return Ok(boardService.GetAllMyBoards(authUser.Id));
     }
-    [HttpGet]
-    [Route("getWinners/{gameId}")]
-    [Rolepolicy("Admin")]
-    public ActionResult<List<WinnersDto>> GetWinners([FromRoute] Guid gameId)
-    {
-        var result = boardService.EstablishWinners(gameId);
-        return Ok(result);
-    }
+    
 }

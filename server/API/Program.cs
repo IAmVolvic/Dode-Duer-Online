@@ -98,6 +98,8 @@ public class Program
         builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
         builder.Services.AddScoped<IPriceService, PriceService>();
         builder.Services.AddScoped<IBoardService, BoardService>();
+        builder.Services.AddScoped<IWinnersRepository, WinnersRepository>();
+        builder.Services.AddScoped<IWinnersService, WinnersService>();
         builder.Services.AddScoped<IJWTManager, JWTManager>();
         builder.Services.AddScoped<AdminUser>();
         builder.Services.AddScoped<GameStart>();

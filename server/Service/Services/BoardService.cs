@@ -8,7 +8,7 @@ using Service.TransferModels.Responses;
 
 namespace Service.Services;
 
-public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IUserService userService, IGameService gameService) : IBoardService
+public class BoardService(IBoardRepository boardRepository, IPriceRepository priceRepository, IWinnersService winnersService ,IUserService userService, IGameService gameService) : IBoardService
 {
     public BoardResponseDTO PlayBoard(PlayBoardDTO playBoardDTO)
     {
@@ -168,22 +168,63 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         var boards = GetBoardsFromGame(gameId);
         var winningNumbers = gameService.GetWinningNumbers(gameId);
         var winningBoards = new List<BoardGameResponseDTO>();
-        var winners = new List<WinnersDto>();
-        var numberOfWinners = 0;
+        
         foreach (var b in boards)
         {
             if (winningNumbers.All(win => b.Numbers.Contains(win.Number)))
             {
                 winningBoards.Add(b);
-                numberOfWinners++;
             }
         }
+        var prizePerBoard = prize / winningBoards.Count;
+        if (prizePerBoard>5000)
+        {
+            prizePerBoard = 5000;
+        }
+        var winners = new List<WinnersDto>();
         foreach (var b in winningBoards)
         {
-            if (winners.First() == null || winners.Where(w => w.UserId == b.userId) == null)
+            if (!winners.Any() || !winners.Any(w => w.UserId == b.userId))
             {
-                
+                var newWinner = new WinnersDto()
+                {
+                    Gameid = gameId,
+                    Name = b.User,
+                    Prize = prizePerBoard,
+                    UserId = b.userId,
+                    NumberOfWinningBoards = 1,
+                };
+                newWinner.WinningBoards.Add(b);
+                winners.Add(newWinner);
+            }
+            else
+            {
+                var winner = winners.Find(w => w.UserId == b.userId);
+                winner.NumberOfWinningBoards += 1;
+                if (winner.Prize + prizePerBoard > 5000)
+                {
+                    winner.Prize = 5000;
+                }
+                else
+                {
+                    winner.Prize += prizePerBoard;
+                }
+                winner.WinningBoards.Add(b);
             }
         }
+
+        var prizeLeft = 0m;
+        if (!winners.Any())
+        {
+            prizeLeft = prize;
+        }
+        else
+        {
+            var prizeGiven = winners.Sum(w => w.Prize);
+            prizeLeft = (prize - prizeGiven);
+            winnersService.AddWinners(winners);
+        }
+        gameService.NewGame(prizeLeft);
+        return winners;
     }
 }

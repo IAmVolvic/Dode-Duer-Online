@@ -82,4 +82,3 @@ CREATE TABLE ChosenNumbersAutoplay (
                                FOREIGN KEY (BoardId) REFERENCES BoardAutoplay(Id)
 );
 
-

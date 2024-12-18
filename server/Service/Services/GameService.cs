@@ -41,7 +41,7 @@ public class GameService(IGameRepository gameRepository) : IGameService
         return gameResponse;
     }
     
-    public GameResponseDTO NewGame(int prize)
+    public GameResponseDTO NewGame(decimal prize)
     {
         var game = new Game();
         
