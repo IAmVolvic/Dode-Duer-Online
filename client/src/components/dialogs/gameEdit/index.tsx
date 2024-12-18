@@ -14,10 +14,10 @@ interface GameEditDialogProps extends IBaseDialog {
 
 
 export const GameEditDialog = (props: GameEditDialogProps) => {
-    const [selectedGameId, setSelectedGameId] = useState<string>("");
-    const [winningNumbersIsSet, setWinningNumbersIsSet] = useState<boolean>(true);
+    const [selectedGameId, setSelectedGameId] = useState<string>();
+    const [winningNumbersIsSet, setWinningNumbersIsSet] = useState<boolean>(false);
     const [selectedItems, setSelectedItems] = useState<Option[]>([]);
-    const { data, isLoading, refetch } = useGetWinnersOfGame(selectedGameId);
+    const { data, isLoading, refetch } = useGetWinnersOfGame(selectedGameId!);
 
     const API = new Api();
 
@@ -32,9 +32,13 @@ export const GameEditDialog = (props: GameEditDialogProps) => {
 
         refetch();
         setSelectedGameId(props.game.id!)
+        console.log(props.game.winningNumbers!.length)
         if(props.game.winningNumbers!.length > 0){
+            setWinningNumbersIsSet(true);
+        }else{
             setWinningNumbersIsSet(false);
         }
+
     }, [props.game])
 
 
@@ -71,11 +75,11 @@ export const GameEditDialog = (props: GameEditDialogProps) => {
                         <CustomSelect options={options} placeHolder="Select 3 Winning Numbers" selectClassName="w-full bg-base-300 p-3 rounded-xl" onSelectionChange={handleOnChange} />
                         
                         <div className="flex flex-row items-center gap-5">
-                            <button onClick={handleWinningNumbers} className={`flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10 ${!winningNumbersIsSet ? 'opacity-50':''}`} disabled={!winningNumbersIsSet}> 
+                            <button onClick={handleWinningNumbers} className={`flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10 ${winningNumbersIsSet ? 'opacity-50':''}`} disabled={winningNumbersIsSet}> 
                                 <div>Set winning numbers</div>
                             </button>
 
-                            <button onClick={handleWinners} className={`flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10 ${winningNumbersIsSet ? 'opacity-50':''}`} disabled={winningNumbersIsSet}> 
+                            <button onClick={handleWinners} className={`flex flex-row justify-center items-center gap-5 bg-primary text-primary-content rounded-xl w-full h-10 ${!winningNumbersIsSet ? 'opacity-50':''}`} disabled={!winningNumbersIsSet}> 
                                 <div>Establish The Winners</div>
                             </button>
                         </div>
