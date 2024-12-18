@@ -31,7 +31,7 @@ export const BoardHistory = () => {
                     {!isLoading && data &&
                     Object.values(data as MyBoards[]).map((value: MyBoards) => {
                         return (
-                            <tr key={value.gameId} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm">
+                            <tr key={value.gameId} className="flex flex-col gap-2 pb-5 lg:table-row border-b-0.05r border-base-content/50 text-sm h-12">
                                 <td >{formatDate(value.startDate)}</td>
                                 <td >{formatDate(value.endDate)}</td>
                                 <td >{value.status}</td>
