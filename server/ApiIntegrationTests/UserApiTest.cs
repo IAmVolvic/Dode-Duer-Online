@@ -193,4 +193,107 @@ public class UserApiTest : ApiTestBase
         Assert.Equal(userToSignUp.Name, responseBody.Name);
         Assert.Equal(userToSignUp.PhoneNumber, responseBody.PhoneNumber);
     }
+    
+    [Fact]
+    public async Task GGetUsers_Gets_Users()
+    {
+        var adminId = Guid.NewGuid();
+        
+        Assert.NotNull(PgCtxSetup.DbContextInstance);
+
+        MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO { Id = adminId, Name = "TestAdmin", Role = UserRole.Admin });
+
+        var admin = new User
+        {
+            Id = adminId,
+            Passwordhash = "adminpasswordhash",
+            Phonenumber = "01234561",
+            Balance = 1000,
+            Name = "TestAdmin",
+            Role = UserRole.Admin,
+            Email = "admin@gmail.com",
+            Status = UserStatus.Active,
+            Enrolled = UserEnrolled.True
+        };
+
+        PgCtxSetup.DbContextInstance.Users.Add(admin);
+        PgCtxSetup.DbContextInstance.SaveChanges();
+        var client = TestHttpClient;
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+        var response = await client.GetAsync("/User/@admin/users");
+
+    
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var responseBody = await response.Content.ReadFromJsonAsync<List<AuthorizedUserResponseDTO>>();
+        
+        var resposneUser = responseBody.Find(x => x.Id == adminId);
+        
+        Assert.NotNull(responseBody);
+        Assert.Equal("TestAdmin", resposneUser.Name);
+        Assert.Equal(UserRole.Admin, resposneUser.Role);
+        Assert.Equal(UserStatus.Active, resposneUser.Status);
+        Assert.Equal(UserEnrolled.True, resposneUser.Enrolled);
+    }
+    
+    [Fact]
+    public async Task Update_User_By_Admin_Updates_User()
+    {
+        var adminId = Guid.NewGuid();
+        
+        Assert.NotNull(PgCtxSetup.DbContextInstance);
+
+        MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO { Id = adminId, Name = "TestAdmin", Role = UserRole.Admin });
+
+        var admin = new User
+        {
+            Id = adminId,
+            Passwordhash = "adminpasswordhash",
+            Phonenumber = "01234561",
+            Balance = 1000,
+            Name = "TestAdmin",
+            Role = UserRole.Admin,
+            Email = "admin@gmail.com",
+            Status = UserStatus.Active,
+            Enrolled = UserEnrolled.True
+        };
+        var userId = Guid.NewGuid();
+        var user = new User
+        {
+            Id = userId,
+            Passwordhash = "awdawdsadaw",
+            Phonenumber = "01234564",
+            Balance = 1000,
+            Name = "TestUser",
+            Role = UserRole.User,
+            Email = "user@gmail.com",
+            Status = UserStatus.Active,
+            Enrolled = UserEnrolled.True
+        };
+        
+        PgCtxSetup.DbContextInstance.Users.Add(admin);
+        PgCtxSetup.DbContextInstance.Users.Add(user);
+        PgCtxSetup.DbContextInstance.SaveChanges();
+        var client = TestHttpClient;
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+        var userUpdate = new UserUpdateByAdminRequestDTO()
+        {
+            Id = userId,
+            Email = "user@outlook.com",
+            Name = "John",
+            Password = "userdwadwa",
+            PhoneNumber = "05213146"
+        };
+        var response = await client.PatchAsJsonAsync("/User/@admin/user",userUpdate);
+        var responseBody = await response.Content.ReadFromJsonAsync<AuthorizedUserResponseDTO>();
+        
+        
+        Assert.NotNull(responseBody);
+        Assert.Equal(userUpdate.Email, responseBody.Email);
+        Assert.Equal(userUpdate.Name, responseBody.Name);
+        Assert.Equal(userUpdate.PhoneNumber, responseBody.PhoneNumber);
+    }
 }
