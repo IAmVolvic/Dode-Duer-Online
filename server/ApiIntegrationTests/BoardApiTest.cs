@@ -474,5 +474,69 @@ public async Task Get_Boards_From_Game_Returns_Correct_Boards()
             retrievedBoard.Numbers.OrderBy(x => x)
         );
     }
-    
+
+    [Fact]
+    public async Task Get_My_Boards_Returns_Correct_Boards()
+    {
+        var adminId = Guid.NewGuid();
+        
+        Assert.NotNull(PgCtxSetup.DbContextInstance);
+        MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO() { Id = adminId, Name = "TestAdmin", Role = UserRole.Admin });
+        var admin = new User()
+        {
+            Id = adminId,
+            Passwordhash = "waoudahowdwahduaoiwd",
+            Phonenumber = "01234561",
+            Balance = 1000,
+            Name = "TestAdmin",
+            Role = UserRole.Admin,
+            Email = "admin@gmail.com",
+            Status = UserStatus.Active,
+            Enrolled = UserEnrolled.True
+        };
+        PgCtxSetup.DbContextInstance.Users.Add(admin);
+        PgCtxSetup.DbContextInstance.SaveChanges();
+        await PgCtxSetup.DbContextInstance.Database.ExecuteSqlRawAsync(@"
+    INSERT INTO prices (id, price, numbers)
+    VALUES
+        ('95f9a200-4538-4e43-8674-38b67579b8a7', 20.00, 5.00),
+        ('1cd3f690-2eeb-405c-b8a7-922c80f0cb3d', 40.00, 6.00),
+        ('af8c5461-d9ec-4ede-9bf0-abf2ffac9895', 80.00, 7.00),
+        ('ac6f719f-e9e0-4fde-9b31-a12562f7ce01', 160.00, 8.00);
+    ");
+        PgCtxSetup.DbContextInstance.SaveChanges();
+        
+        var board = new PlayBoardDTO()
+        {
+            Dateofpurchase = DateOnly.FromDateTime(DateTime.Now),
+            Numbers = new List<int> { 1, 2, 3, 4, 5 },
+            Userid = adminId
+        };
+        var client = TestHttpClient;
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+
+        // Act
+        var boardResponse = await client.PostAsJsonAsync("/Board/Play", board);
+        Assert.NotNull(boardResponse);
+        Assert.Equal(HttpStatusCode.OK, boardResponse.StatusCode);
+
+        var historyResponse = await client.GetAsync("/Board/@me/History");
+        Assert.NotNull(historyResponse);
+        Assert.Equal(HttpStatusCode.OK, historyResponse.StatusCode);
+
+        var history = await historyResponse.Content.ReadFromJsonAsync<List<MyBoards>>();
+        Assert.NotNull(history);
+        Assert.Single(history);
+
+        // Assert the returned board history
+        var myBoards = history.First();
+        Assert.NotNull(myBoards);
+        Assert.Equal(DateOnly.FromDateTime(DateTime.Now), myBoards.Boards.First().DateOfPurchase);
+
+        var returnedNumbers = myBoards.Boards.First().Numbers.OrderBy(x => x).ToList();
+        Assert.NotNull(returnedNumbers);
+        Assert.Equal(new List<int?> { 1, 2, 3, 4, 5 }, returnedNumbers);
+        Assert.Equal(0, myBoards.Boards.First().WinningAmount); // Assuming no winnings at this stage
+    }
 }
