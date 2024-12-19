@@ -2,6 +2,7 @@
 using System.Net;
 using ApiInterationTests;
 using DataAccess;
+using DataAccess.Models;
 using DataAccess.Types.Enums;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Moq;
 using Program = API.Program;
 using PgCtx;
 using Service.Services.Interfaces;
+using Service.TransferModels.Requests;
 using Service.TransferModels.Responses;
 using Xunit;
 using Xunit.Abstractions;
@@ -73,5 +75,38 @@ public class GameApiTest : ApiTestBase
         // Expecting Bad Request (400) due to validation failure
         Assert.True(response.StatusCode == HttpStatusCode.BadRequest,
             "API should return BadRequest when prize pool is negative.");
+    }
+
+    [Fact]
+    public async Task Set_Winning_Numbers_Sets_Winning_Numbers()
+    {
+        var adminId = Guid.NewGuid();
+        
+        Assert.NotNull(PgCtxSetup.DbContextInstance);
+        MockAuthService.Setup(s => s.GetAuthorizedUser(It.IsAny<string>()))
+            .Returns(new AuthorizedUserResponseDTO() { Id = adminId, Name = "TestAdmin", Role = UserRole.Admin });
+        var client = TestHttpClient;
+        client.DefaultRequestHeaders.Add("Cookie", "Authentication=valid-token");
+
+        var response = await client.PostAsJsonAsync("/Game/NewGame", 0);
+        Assert.True(response.StatusCode == HttpStatusCode.OK);
+        
+        var returnedGame = await response.Content.ReadFromJsonAsync<GameResponseDTO>();
+        Assert.NotNull(returnedGame);
+
+        var gameId = returnedGame.Id;
+
+        var winningNumbers = new WinningNumbersRequestDTO()
+        {
+            GameId = gameId,
+            WinningNumbers = [1, 2, 3]
+        };
+        var winningNumbersResponse = await client.PostAsJsonAsync("/Game/winningNumbers", winningNumbers);
+        
+        var returnedNumbers = await winningNumbersResponse.Content.ReadFromJsonAsync<WinningNumbersResponseDTO>();
+        
+        Assert.NotNull(returnedNumbers);
+        Assert.Equal(returnedNumbers.Gameid,gameId);
+        Assert.Equal(returnedNumbers.Winningnumbers.OrderBy(x => x), winningNumbers.WinningNumbers.OrderBy(x => x));
     }
 }
