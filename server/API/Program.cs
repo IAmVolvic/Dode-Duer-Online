@@ -5,6 +5,7 @@ using DataAccess;
 using DataAccess.Interfaces;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -31,6 +32,13 @@ public class Program
 
         // ===================== * BUILD & MIDDLEWARE PIPELINE * ===================== //
         var app = builder.Build();
+
+        app.UseForwardedHeaders(
+            new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+        
         ConfigureMiddleware(app);
         
         using (var scope = app.Services.CreateScope())
