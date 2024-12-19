@@ -9,6 +9,11 @@
  * ---------------------------------------------------------------
  */
 
+const token = document.cookie
+  .split('; ')
+  .find(row => row.startsWith('Authentication='))?.split('=')[1] || undefined;
+
+
 export interface BoardResponseDTO {
   /** @format guid */
   id?: string;
@@ -504,7 +509,7 @@ export class HttpClient<SecurityDataType = unknown> {
   private format?: ResponseType;
 
   constructor({ securityWorker, secure, format, ...axiosConfig }: ApiConfig<SecurityDataType> = {}) {
-    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "http://localhost:5001" });
+    this.instance = axios.create({ ...axiosConfig, baseURL: axiosConfig.baseURL || "https://hazel-cedar-444209-d3.ew.r.appspot.com" });
     this.secure = secure;
     this.format = format;
     this.securityWorker = securityWorker;
@@ -614,7 +619,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -632,7 +639,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -648,7 +657,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetBoards`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -664,7 +675,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetBoardsFromGame/${gameId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -680,7 +693,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/GetAutoplayBoards/${userId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -696,7 +711,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Board/@me/History`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
@@ -713,7 +730,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Game/getAllGames`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -731,7 +750,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
@@ -748,7 +769,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Price/GetPrices`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
@@ -767,7 +790,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -783,7 +808,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@user/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -801,7 +828,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -817,7 +846,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Transaction/@admin/balance/history`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
@@ -834,7 +865,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@user`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -869,7 +902,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -887,7 +922,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -905,7 +942,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -921,7 +960,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/User/@admin/users`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -939,7 +980,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         body: data,
         type: ContentType.Json,
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
@@ -956,7 +999,9 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Winners/establishWinners/${gameId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
 
@@ -972,8 +1017,11 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
         path: `/Winners/getWinners/${gameId}`,
         method: "GET",
         format: "json",
-        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,  // Add Bearer token from cookie here
+        },
         ...params,
       }),
   };
 }
+
