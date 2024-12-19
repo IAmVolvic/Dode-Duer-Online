@@ -8,7 +8,7 @@ const API = new Api();
 const localUser = window.localStorage.getItem("user");
 const userSignal = new Signal<AuthorizedUserResponseDTO | undefined>( localUser ? JSON.parse(localUser) : undefined );
 const loggedIn = new Signal<boolean>(!!localUser);
-export const bToken = document.cookie.split('; ').find(row => row.startsWith('Authentication='))?.split('=')[1] || undefined;
+
 
 const updateCache = (user: AuthorizedUserResponseDTO) => {
     window.localStorage.setItem("user", JSON.stringify(user));
@@ -59,9 +59,6 @@ export const useAuth = () => {
             return response.data;
         },
         retry: false,
-
-        enabled: (bToken !== undefined)? true : false,
-
         refetchInterval: 10 * 3000,
         refetchOnWindowFocus: true,
         refetchOnMount: false,
