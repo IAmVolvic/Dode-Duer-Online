@@ -16,6 +16,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         if (gameService.GetActiveGame().Enddate > DateTime.Now)
         {
             var board = new Board();
+            var balance = userService.CheckUsersBalance(playBoardDTO.Userid)
             board.Userid = playBoardDTO.Userid;
             board.Dateofpurchase = playBoardDTO.Dateofpurchase;
             board.Gameid = gameService.GetActiveGame().Id;
@@ -29,15 +30,23 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
                 })
                 .ToList();
             var price = priceRepository.GetPrice(playBoardDTO.Numbers.Count).Price1;
-            var newBoard = boardRepository.PlayBoard(board);
-            if (newBoard != null)
+            if (price < balance)
             {
-                userService.UpdateUserBalance(price,newBoard.Userid);
-                var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price) + gameService.GetActiveGame().StartingPrizepool;
-                gameService.UpdatePrizePool(prize);
-                return new BoardResponseDTO().FromBoard(newBoard);
+                var newBoard = boardRepository.PlayBoard(board);
+                if (newBoard != null)
+                {
+                    userService.UpdateUserBalance(price,newBoard.Userid);
+                    var prize = GetBoards().Where(b=> b.Gameid == gameService.GetActiveGame().Id).Sum(b => b.Price) + gameService.GetActiveGame().StartingPrizepool;
+                    gameService.UpdatePrizePool(prize);
+                    return new BoardResponseDTO().FromBoard(newBoard);
+                }
+                throw new ErrorException("BoardService","Board could not be played");
             }
-            throw new ErrorException("BoardService","Board could not be played");
+            else
+            {
+                throw new ErrorException("BoardService","Board could not be played");
+            }
+            
         }
         else
         {
