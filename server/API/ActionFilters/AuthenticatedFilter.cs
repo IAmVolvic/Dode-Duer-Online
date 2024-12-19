@@ -1,7 +1,6 @@
 using API.Attributes;
 using API.Exceptions;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Logging;
 using Service.Services.Interfaces;
 
 namespace API.ActionFilters;
@@ -35,39 +34,41 @@ public class AuthenticatedFilter : IActionFilter
         }
     }
     
+    
     public void OnActionExecuted(ActionExecutedContext context)
     {
         // You can add logging or other post-execution logic here if needed.
     }
 
+
     private void IsAuthenticated(ActionExecutingContext context)
     {
-        var accessToken = GetBearerToken(context);
-        _authService.IsUserAuthenticated(accessToken);
-        context.HttpContext.Items["AuthenticatedUser"] = _authService.GetAuthorizedUser(accessToken);
+        var cookies = GetCookies(context);
+        _authService.IsUserAuthenticated(cookies["Authentication"]!);
+        context.HttpContext.Items["AuthenticatedUser"] = _authService.GetAuthorizedUser(cookies["Authentication"]!);
     }
-
+    
+    
     private void HasAuthorization(ActionExecutingContext context)
     {
-        var accessToken = GetBearerToken(context);
+        var cookies = GetCookies(context);
         IsAuthenticated(context);
         
         var rolepolicyAttribute =
             context.ActionDescriptor.EndpointMetadata.OfType<RolepolicyAttribute>().FirstOrDefault();
 
-        _authService.IsUserAuthorized(rolepolicyAttribute!.Roles, accessToken);
+        _authService.IsUserAuthorized(rolepolicyAttribute!.Roles, cookies["Authentication"]!);
     }
-
-    private string GetBearerToken(ActionExecutingContext context)
+    
+    
+    private IRequestCookieCollection GetCookies(ActionExecutingContext context)
     {
-        var authorizationHeader = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault();
-        
-        if (string.IsNullOrEmpty(authorizationHeader) || !authorizationHeader.StartsWith("Bearer "))
+        var cookies = context.HttpContext.Request.Cookies;
+        if (!cookies.TryGetValue("Authentication", out var accessToken) || string.IsNullOrEmpty(accessToken))
         {
-            throw new ErrorException("Authorization", "Missing or invalid Bearer token.");
+            throw new ErrorException("Authentication", "Missing authentication token.");
         }
-
-        // Extract the token by removing "Bearer " prefix.
-        return authorizationHeader.Substring("Bearer ".Length).Trim();
+        
+        return cookies;
     }
 }
