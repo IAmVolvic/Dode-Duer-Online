@@ -54,7 +54,7 @@ export const GameEditDialog = (props: GameEditDialogProps) => {
 
         API.game.gameSetWinningNumbers({gameId: props.game.id?.toString()!, winningNumbers: selectedItems.map(item => Number(item.value))}).then(() => {
             toast.success("Winning numbers set successfully")
-            setWinningNumbersIsSet(false);
+            setWinningNumbersIsSet(true);
         }).catch((error) => {
             ErrorToast(error)
         })

@@ -9,7 +9,7 @@ export const useLogin = (data: UserLoginRequestDTO) => {
 
   const login = () => {
     api.user.userPLogin(data).then((res) => { 
-      setCookie('Authentication', res.data.jwt, { path: '/', expires: new Date(Date.now() + 1000*60*60*24*7) });
+      setCookie('Authentication', res.data.jwt, { domain: ".xn--xck.dev", path: '/', expires: new Date(Date.now() + 1000*60*60*24*7) });
       setAuth();
     }).catch((err) => {
       ErrorToast(err);

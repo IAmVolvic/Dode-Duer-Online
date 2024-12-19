@@ -4,18 +4,27 @@ import { useAuth } from "@hooks/authentication/useAuthentication"
 import { useBoolean } from "@hooks/utils/useBoolean"
 import { FiLogIn, FiUser } from "react-icons/fi"
 import { Link } from "react-router-dom"
+import { useEffect } from "react"
 
 
 export const UserNavButton = () => { 
     const {user, isLoggedIn} = useAuth()
     const isEnrolled = (user?.enrolled === "False") ? false : true;
 
-    const [isOpen,, setTrue, setFalse] = useBoolean(false);
-    const [isOpenE,, setFalseE] = useBoolean(!isEnrolled);
+    const [isOpen1, toggle1, setTrue1, setFalse1] = useBoolean(false);
+    const [isOpen2, toggle2, setTrue2, setFalse2] = useBoolean(true);
+
+    useEffect(() => {
+        if (!isEnrolled) {
+            setTrue2();
+        }
+
+        console.log(isEnrolled)
+    }, [isEnrolled])
 
     return(<>
         {isLoggedIn ? (
-            <button onClick={setTrue} className="w-full h-full flex justify-center items-center">
+            <button onClick={setTrue1} className="w-full h-full flex justify-center items-center">
                 <FiUser className="w-7 h-7"/>
             </button>
         ) : (
@@ -24,8 +33,8 @@ export const UserNavButton = () => {
             </Link>
         )}
 
-        <UserSettingsDialog isOpen={isOpen} close={setFalse} />
+        <UserSettingsDialog isOpen={isOpen1} close={setFalse1} />
 
-        {isLoggedIn && isEnrolled === false && <UserEnrollmentDialog isOpen={isOpenE} close={setFalseE}  />}
+        {isLoggedIn && isEnrolled === false && <UserEnrollmentDialog isOpen={isOpen2} close={setFalse2}  />}
     </>)
 }

@@ -130,7 +130,7 @@ public class Program
             options.AddPolicy("AllowSpecificOrigin", policy =>
             {
                 // Replace with the exact origin of your front-end application
-                policy.WithOrigins("http://localhost:4200")
+                policy.WithOrigins("https://game.xn--xck.dev")
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials(); // Allows credentials (cookies, headers, etc.)
