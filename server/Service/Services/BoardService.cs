@@ -16,7 +16,7 @@ public class BoardService(IBoardRepository boardRepository, IPriceRepository pri
         if (gameService.GetActiveGame().Enddate > DateTime.Now)
         {
             var board = new Board();
-            var balance = userService.CheckUsersBalance(playBoardDTO.Userid)
+            var balance = userService.CheckUsersBalance(playBoardDTO.Userid);
             board.Userid = playBoardDTO.Userid;
             board.Dateofpurchase = playBoardDTO.Dateofpurchase;
             board.Gameid = gameService.GetActiveGame().Id;
